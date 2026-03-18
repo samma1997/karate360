@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" data-theme="light">
+<html lang="it" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -759,9 +759,6 @@
       Fondamenti del Karate
     </div>
     <div class="header-actions">
-      <button class="theme-btn" id="themeBtn" title="Cambia tema">
-        <i class="fa-solid fa-sun" id="themeIcon"></i>
-      </button>
       <button class="icon-btn" onclick="loadData()" title="Aggiorna dati">
         <i class="fa-solid fa-rotate-right"></i>
       </button>
@@ -1360,23 +1357,8 @@ Conferma presenza: ${confirmLink}`;
      THEME
   ═══════════════════════════════════════════════════ */
   function initTheme() {
-    const saved = localStorage.getItem('karate360-theme') || 'light';
-    setTheme(saved, false);
+    /* Dark mode only */
   }
-
-  function setTheme(mode, save = true) {
-    document.documentElement.setAttribute('data-theme', mode);
-    const icon = document.getElementById('themeIcon');
-    icon.className = mode === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-    if (save) localStorage.setItem('karate360-theme', mode);
-  }
-
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    setTheme(current === 'dark' ? 'light' : 'dark');
-  }
-
-  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
 
   /* ═══════════════════════════════════════════════════
      SERVICE WORKER

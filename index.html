@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" data-theme="light">
+<html lang="it" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -656,7 +656,6 @@
   <header class="site-header">
     <div class="header-inner">
       <span class="header-title">Fondamenti del Karate</span>
-      <button class="theme-btn" id="themeBtn" aria-label="Cambia tema" title="Cambia tema">🌙</button>
     </div>
   </header>
 
@@ -915,28 +914,7 @@
     (function () {
       'use strict';
 
-      /* ─── THEME ─────────────────────────────────────────── */
-      var themeBtn = document.getElementById('themeBtn');
-      var root     = document.documentElement;
-
-      function getTheme() {
-        return localStorage.getItem('karate360-theme') || 'light';
-      }
-
-      function applyTheme(mode) {
-        root.setAttribute('data-theme', mode);
-        themeBtn.textContent = mode === 'dark' ? '☀️' : '🌙';
-        themeBtn.setAttribute('aria-label', mode === 'dark' ? 'Passa alla modalità chiara' : 'Passa alla modalità scura');
-        localStorage.setItem('karate360-theme', mode);
-      }
-
-      // init from stored preference
-      applyTheme(getTheme());
-
-      themeBtn.addEventListener('click', function () {
-        var current = root.getAttribute('data-theme') || 'light';
-        applyTheme(current === 'dark' ? 'light' : 'dark');
-      });
+      /* Dark mode only */
 
       /* ─── FORM ──────────────────────────────────────────── */
       var form       = document.getElementById('regForm');
