@@ -4,8 +4,8 @@
   "description": "Dashboard admin per gestire le prenotazioni",
   "start_url": "/karate360/dashboard.html",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
   "orientation": "portrait",
   "icons": [
     {

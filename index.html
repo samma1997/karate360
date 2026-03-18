@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#191919" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-title" content="Fondamenti del Karate" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" />
@@ -26,21 +27,36 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ─── TOKENS ─────────────────────────────────────────── */
+    /* ─── COLOR TOKENS ───────────────────────────────────── */
     :root {
-      --bg:          #000000;
-      --s1:          #0D0D0D;
-      --s2:          #151515;
-      --s3:          #1E1E1E;
-      --text:        #FFFFFF;
-      --text2:       #8A8A8A;
-      --muted:       #4A4A4A;
-      --amber:       #D4A574;
-      --amber-glow:  rgba(212,165,116,0.08);
-      --amber-dim:   rgba(212,165,116,0.15);
-      --border:      rgba(255,255,255,0.06);
-      --error:       #C75050;
-      --r:           12px;
+      --bg:           #FFFFFF;
+      --bg-2:         #F7F7F5;
+      --bg-3:         #EDEDED;
+      --text:         #37352F;
+      --text-2:       #787774;
+      --text-3:       #B4B4B0;
+      --accent:       #2383E2;
+      --accent-bg:    rgba(35,131,226,0.08);
+      --border:       rgba(55,53,47,0.09);
+      --selected-bg:  #37352F;
+      --selected-text:#FFFFFF;
+      --error:        #C73B3B;
+      --r:            10px;
+    }
+
+    [data-theme="dark"] {
+      --bg:           #191919;
+      --bg-2:         #202020;
+      --bg-3:         #2F2F2F;
+      --text:         #E8E8E3;
+      --text-2:       #9B9A97;
+      --text-3:       #5A5A58;
+      --accent:       #529CCA;
+      --accent-bg:    rgba(82,156,202,0.1);
+      --border:       rgba(255,255,255,0.07);
+      --selected-bg:  #E8E8E3;
+      --selected-text:#191919;
+      --error:        #E06060;
     }
 
     /* ─── BASE ───────────────────────────────────────────── */
@@ -58,9 +74,27 @@
       min-height: 100dvh;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
       opacity: 0;
-      transform: translateY(8px);
-      animation: page-enter 0.4s ease 0.05s forwards;
+      transform: translateY(6px);
+      animation: page-enter 0.35s ease 0.05s forwards;
+    }
+
+    * {
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* override transition for interactive elements that need snappy feedback */
+    .slot-card,
+    .submit-btn,
+    .theme-btn,
+    .success-close-btn {
+      transition:
+        background 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease,
+        opacity 0.15s ease,
+        transform 0.12s cubic-bezier(0.34,1.56,0.64,1) !important;
     }
 
     @keyframes page-enter {
@@ -72,9 +106,9 @@
 
     /* ─── LAYOUT ─────────────────────────────────────────── */
     .wrap {
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 24px;
     }
 
     /* ─── HEADER ─────────────────────────────────────────── */
@@ -83,16 +117,14 @@
       top: 0;
       z-index: 100;
       height: 48px;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
     }
 
     .header-inner {
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 24px;
       height: 100%;
       display: flex;
       align-items: center;
@@ -101,32 +133,44 @@
 
     .header-title {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text);
-      letter-spacing: -0.2px;
+      letter-spacing: -0.1px;
     }
 
-    .header-dot {
-      width: 7px;
-      height: 7px;
+    /* ─── THEME TOGGLE ───────────────────────────────────── */
+    .theme-btn {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: var(--amber);
-      animation: pulse-dot 2.4s ease-in-out infinite;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      outline: none;
+      font-size: 16px;
+      line-height: 1;
     }
 
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.55; transform: scale(0.78); }
+    .theme-btn:hover {
+      background: var(--bg-3);
+    }
+
+    .theme-btn:active {
+      transform: scale(0.93);
     }
 
     /* ─── HERO ───────────────────────────────────────────── */
     .hero {
-      padding: 48px 20px 40px;
-      max-width: 480px;
+      padding: 40px 24px 36px;
+      max-width: 520px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 22px;
     }
 
     .hero-img-wrap {
@@ -138,7 +182,6 @@
       height: auto;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      filter: drop-shadow(0 0 40px rgba(212,165,116,0.10));
       display: block;
     }
 
@@ -146,116 +189,100 @@
       flex: 1;
     }
 
-    .hero-title {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      line-height: 1.12;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
     .hero-discipline {
       font-size: 12px;
-      font-weight: 600;
-      color: var(--amber);
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 6px;
+      letter-spacing: 0.1px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      color: var(--text);
       margin-bottom: 8px;
     }
 
     .hero-desc {
       font-size: 13px;
-      color: var(--text2);
+      color: var(--text-2);
       line-height: 1.55;
     }
 
     /* ─── DIVIDER ─────────────────────────────────────────── */
-    .gradient-rule {
+    .rule {
       height: 1px;
-      background: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(212,165,116,0.15) 50%,
-        transparent 100%
-      );
-      max-width: 480px;
+      background: var(--border);
+      max-width: 520px;
       margin: 0 auto;
     }
 
     /* ─── FORM SECTION ────────────────────────────────────── */
     .form-section {
-      padding: 40px 20px calc(env(safe-area-inset-bottom, 24px) + 40px);
-      max-width: 480px;
+      padding: 36px 24px calc(env(safe-area-inset-bottom, 24px) + 48px);
+      max-width: 520px;
       margin: 0 auto;
     }
 
-    .section-heading {
-      margin-bottom: 28px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.4px;
-      margin-bottom: 6px;
-    }
-
-    .section-subtitle {
-      font-size: 14px;
-      color: var(--text2);
+    /* ─── FORM CARD ───────────────────────────────────────── */
+    .form-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
     }
 
     /* ─── FIELD ──────────────────────────────────────────── */
     .field {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+    }
+
+    .field:last-of-type {
+      margin-bottom: 0;
     }
 
     .field-label {
       display: flex;
       align-items: baseline;
       gap: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--amber);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 6px;
     }
 
     .label-opt {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 400;
-      color: var(--muted);
-      text-transform: none;
-      letter-spacing: 0;
+      color: var(--text-3);
     }
 
     .field-input {
       width: 100%;
-      height: 50px;
-      background: var(--s1);
+      height: 48px;
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: var(--r);
       color: var(--text);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 400;
-      padding: 0 16px;
+      padding: 0 14px;
       outline: none;
       appearance: none;
       -webkit-appearance: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
     .field-input::placeholder {
-      color: var(--muted);
+      color: var(--text-3);
     }
 
     .field-input:focus {
-      border-color: var(--amber);
-      box-shadow: 0 0 0 3px var(--amber-glow);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-bg);
     }
 
     /* phone */
@@ -269,90 +296,87 @@
       position: absolute;
       left: 0;
       top: 0;
-      height: 50px;
-      width: 52px;
+      height: 48px;
+      width: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
-      color: var(--text2);
+      color: var(--text-2);
       pointer-events: none;
       border-right: 1px solid var(--border);
       z-index: 1;
     }
 
     .phone-wrap .field-input {
-      padding-left: 68px;
+      padding-left: 64px;
     }
 
     textarea.field-input {
       height: auto;
-      min-height: 88px;
-      padding: 14px 16px;
+      min-height: 84px;
+      padding: 12px 14px;
       resize: none;
       line-height: 1.6;
     }
 
     .field-err {
       display: none;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--error);
       font-weight: 500;
-      margin-top: 6px;
-      letter-spacing: 0.1px;
+      margin-top: 5px;
     }
 
     .field.invalid .field-input {
       border-color: var(--error);
-      box-shadow: 0 0 0 3px rgba(199,80,80,0.08);
+      box-shadow: 0 0 0 2px rgba(199,59,59,0.08);
     }
 
     .field.invalid .phone-prefix {
-      border-right-color: rgba(199,80,80,0.3);
+      border-right-color: rgba(199,59,59,0.2);
     }
 
     .field.invalid .field-err {
       display: block;
     }
 
-    /* ─── SLOTS ──────────────────────────────────────────── */
+    /* ─── SLOTS BLOCK ────────────────────────────────────── */
     .slots-block {
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
-    .slots-top-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--amber);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-bottom: 6px;
+    .slots-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 4px;
     }
 
     .slots-hint {
-      font-size: 14px;
-      color: var(--text2);
-      margin-bottom: 22px;
+      font-size: 13px;
+      color: var(--text-3);
+      margin-bottom: 18px;
     }
 
     .day-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .day-sep {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .day-sep-text {
       font-size: 11px;
       font-weight: 600;
-      color: var(--muted);
+      color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.8px;
       white-space: nowrap;
     }
 
@@ -365,7 +389,7 @@
     .slots-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
     }
 
     .slot-item {
@@ -385,56 +409,48 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 56px;
-      border-radius: var(--r);
+      height: 52px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--s1);
+      background: var(--bg);
       cursor: pointer;
       user-select: none;
       text-align: center;
-      gap: 3px;
-      transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        color 0.15s ease,
-        transform 0.15s ease;
+      gap: 2px;
       -webkit-user-select: none;
-    }
-
-    .slot-time {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1;
-      transition: color 0.15s ease;
-    }
-
-    .slot-day {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--text2);
-      line-height: 1;
-      transition: color 0.15s ease;
     }
 
     .slot-card:active {
       transform: scale(0.97);
     }
 
+    .slot-time {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .slot-day {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1;
+    }
+
     .slot-cb:checked + .slot-card {
-      background: var(--amber);
-      border-color: transparent;
-      transform: scale(1.02);
+      background: var(--selected-bg);
+      border-color: var(--selected-bg);
     }
 
     .slot-cb:checked + .slot-card .slot-time,
     .slot-cb:checked + .slot-card .slot-day {
-      color: #000000;
+      color: var(--selected-text);
     }
 
     .slots-err {
       display: none;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--error);
       font-weight: 500;
       margin-top: 8px;
@@ -444,16 +460,16 @@
 
     /* ─── SUBMIT ─────────────────────────────────────────── */
     .submit-area {
-      margin-top: 8px;
+      margin-top: 24px;
     }
 
     .submit-btn {
       width: 100%;
-      height: 54px;
-      background: #FFFFFF;
+      height: 50px;
+      background: var(--accent);
       border: none;
       border-radius: var(--r);
-      color: #000000;
+      color: #FFFFFF;
       font-family: inherit;
       font-size: 15px;
       font-weight: 600;
@@ -463,24 +479,23 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      transition: opacity 0.15s ease, transform 0.12s cubic-bezier(0.34,1.56,0.64,1);
       -webkit-font-smoothing: antialiased;
     }
 
-    .submit-btn:hover  { opacity: 0.9; }
-    .submit-btn:active { transform: scale(0.97); }
+    .submit-btn:hover  { opacity: 0.88; }
+    .submit-btn:active { transform: scale(0.98); }
     .submit-btn:disabled {
-      opacity: 0.35;
+      opacity: 0.4;
       cursor: not-allowed;
       transform: none;
     }
 
     .btn-spinner {
       display: none;
-      width: 18px;
-      height: 18px;
-      border: 2px solid rgba(0,0,0,0.18);
-      border-top-color: #000;
+      width: 17px;
+      height: 17px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #FFFFFF;
       border-radius: 50%;
       animation: spin 0.65s linear infinite;
       flex-shrink: 0;
@@ -489,26 +504,26 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .submit-btn.loading .btn-spinner { display: block; }
-    .submit-btn.loading .btn-label  { opacity: 0.5; }
+    .submit-btn.loading .btn-label  { opacity: 0.6; }
 
     .submit-note {
       text-align: center;
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-3);
+      margin-top: 12px;
       line-height: 1.5;
     }
 
     /* ─── FOOTER ─────────────────────────────────────────── */
     .site-footer {
       border-top: 1px solid var(--border);
-      padding: 20px 20px calc(env(safe-area-inset-bottom, 0px) + 20px);
+      padding: 18px 24px calc(env(safe-area-inset-bottom, 0px) + 18px);
       text-align: center;
     }
 
     .footer-text {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-3);
     }
 
     /* ─── SUCCESS OVERLAY ────────────────────────────────── */
@@ -516,9 +531,9 @@
       position: fixed;
       inset: 0;
       z-index: 400;
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -527,7 +542,7 @@
 
     .success-overlay.show {
       display: flex;
-      animation: fade-in-overlay 0.22s ease forwards;
+      animation: fade-in-overlay 0.2s ease forwards;
     }
 
     @keyframes fade-in-overlay {
@@ -536,32 +551,32 @@
     }
 
     .success-card {
-      background: var(--s1);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 48px 28px 40px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 44px 28px 36px;
       width: 100%;
-      max-width: 360px;
+      max-width: 340px;
       text-align: center;
-      animation: card-pop 0.34s cubic-bezier(0.34,1.4,0.64,1) forwards;
+      animation: card-pop 0.3s cubic-bezier(0.34,1.4,0.64,1) forwards;
     }
 
     @keyframes card-pop {
-      from { transform: scale(0.86); opacity: 0; }
+      from { transform: scale(0.88); opacity: 0; }
       to   { transform: scale(1);    opacity: 1; }
     }
 
     .check-ring {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
-      border: 2px solid var(--amber);
-      background: var(--amber-glow);
+      border: 2px solid var(--accent);
+      background: var(--accent-bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      animation: ring-pop 0.36s cubic-bezier(0.34,1.56,0.64,1) 0.06s both;
+      margin: 0 auto 22px;
+      animation: ring-pop 0.32s cubic-bezier(0.34,1.56,0.64,1) 0.06s both;
     }
 
     @keyframes ring-pop {
@@ -570,14 +585,14 @@
     }
 
     .check-svg {
-      width: 34px;
-      height: 34px;
-      stroke: var(--amber);
+      width: 32px;
+      height: 32px;
+      stroke: var(--accent);
       stroke-width: 2.5;
       fill: none;
       stroke-dasharray: 55;
       stroke-dashoffset: 55;
-      animation: draw-check 0.4s ease 0.28s forwards;
+      animation: draw-check 0.38s ease 0.26s forwards;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -587,42 +602,42 @@
     }
 
     .success-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--text);
       letter-spacing: -0.4px;
-      margin-bottom: 10px;
-      animation: rise-in 0.28s ease 0.22s both;
+      margin-bottom: 8px;
+      animation: rise-in 0.26s ease 0.22s both;
     }
 
     .success-body {
-      font-size: 15px;
-      color: var(--text2);
+      font-size: 14px;
+      color: var(--text-2);
       line-height: 1.65;
-      margin-bottom: 32px;
-      animation: rise-in 0.28s ease 0.32s both;
+      margin-bottom: 28px;
+      animation: rise-in 0.26s ease 0.3s both;
     }
 
     .success-close-btn {
       width: 100%;
-      height: 52px;
-      background: #FFFFFF;
+      height: 48px;
+      background: var(--accent);
       border: none;
       border-radius: var(--r);
-      color: #000000;
+      color: #FFFFFF;
       font-family: inherit;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.15s ease, transform 0.12s cubic-bezier(0.34,1.56,0.64,1);
-      animation: rise-in 0.28s ease 0.4s both;
+      animation: rise-in 0.26s ease 0.36s both;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .success-close-btn:hover  { opacity: 0.9; }
-    .success-close-btn:active { transform: scale(0.97); opacity: 0.85; }
+    .success-close-btn:hover  { opacity: 0.88; }
+    .success-close-btn:active { transform: scale(0.97); }
 
     @keyframes rise-in {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(7px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
@@ -641,7 +656,7 @@
   <header class="site-header">
     <div class="header-inner">
       <span class="header-title">Fondamenti del Karate</span>
-      <span class="header-dot" aria-hidden="true"></span>
+      <button class="theme-btn" id="themeBtn" aria-label="Cambia tema" title="Cambia tema">🌙</button>
     </div>
   </header>
 
@@ -652,218 +667,217 @@
     </div>
     <div class="hero-text">
       <p class="hero-discipline">Karate &middot; Aikido &middot; Judo</p>
-      <h1 class="hero-title">Fondamenti<br>del Karate</h1>
-      <p class="hero-desc">Lezione di 1 ora per tutti i livelli<br>con Salvatore</p>
+      <h1 class="hero-title">Fondamenti del Karate</h1>
+      <p class="hero-desc">1 ora &middot; Tutti i livelli &middot; Con Salvatore</p>
     </div>
   </section>
 
-  <div class="gradient-rule"></div>
+  <div class="rule"></div>
 
   <!-- FORM -->
   <section class="form-section">
-    <div class="section-heading">
-      <h2 class="section-title">Scegli quando sei disponibile</h2>
-      <p class="section-subtitle">Seleziona uno o pi&ugrave; orari</p>
-    </div>
 
     <form id="regForm" novalidate>
+      <div class="form-card">
 
-      <!-- Nome -->
-      <div class="field" id="field-name">
-        <label class="field-label" for="inputName">Nome</label>
-        <input
-          class="field-input"
-          type="text"
-          id="inputName"
-          name="name"
-          placeholder="Il tuo nome"
-          autocomplete="given-name"
-          autocapitalize="words"
-          inputmode="text"
-        />
-        <span class="field-err" id="err-name">Inserisci il tuo nome.</span>
-      </div>
-
-      <!-- WhatsApp -->
-      <div class="field" id="field-phone">
-        <label class="field-label" for="inputPhone">WhatsApp</label>
-        <div class="phone-wrap">
-          <span class="phone-prefix" aria-hidden="true">+39</span>
+        <!-- Nome -->
+        <div class="field" id="field-name">
+          <label class="field-label" for="inputName">Nome</label>
           <input
             class="field-input"
-            type="tel"
-            id="inputPhone"
-            name="phone"
-            placeholder="333 123 4567"
-            autocomplete="tel-national"
-            inputmode="tel"
-            maxlength="15"
+            type="text"
+            id="inputName"
+            name="name"
+            placeholder="Il tuo nome"
+            autocomplete="given-name"
+            autocapitalize="words"
+            inputmode="text"
           />
-        </div>
-        <span class="field-err" id="err-phone">Inserisci un numero valido.</span>
-      </div>
-
-      <!-- Time Slots -->
-      <div class="slots-block" id="slots-block">
-        <div class="slots-top-label">Orari</div>
-        <p class="slots-hint">Seleziona tutti gli orari in cui sei libero</p>
-
-        <!-- Lunedi -->
-        <div class="day-group">
-          <div class="day-sep">
-            <span class="day-sep-text">Luned&igrave;</span>
-            <span class="day-sep-line"></span>
-          </div>
-          <div class="slots-grid">
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="lun-18" name="slots" value="Lunedi 18:00-19:00" />
-              <label class="slot-card" for="lun-18">
-                <span class="slot-time">18:00</span>
-                <span class="slot-day">Luned&igrave;</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="lun-19" name="slots" value="Lunedi 19:00-20:00" />
-              <label class="slot-card" for="lun-19">
-                <span class="slot-time">19:00</span>
-                <span class="slot-day">Luned&igrave;</span>
-              </label>
-            </div>
-          </div>
+          <span class="field-err" id="err-name">Inserisci il tuo nome.</span>
         </div>
 
-        <!-- Mercoledi -->
-        <div class="day-group">
-          <div class="day-sep">
-            <span class="day-sep-text">Mercoled&igrave;</span>
-            <span class="day-sep-line"></span>
+        <!-- WhatsApp -->
+        <div class="field" id="field-phone">
+          <label class="field-label" for="inputPhone">WhatsApp</label>
+          <div class="phone-wrap">
+            <span class="phone-prefix" aria-hidden="true">+39</span>
+            <input
+              class="field-input"
+              type="tel"
+              id="inputPhone"
+              name="phone"
+              placeholder="333 123 4567"
+              autocomplete="tel-national"
+              inputmode="tel"
+              maxlength="15"
+            />
           </div>
-          <div class="slots-grid">
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="mer-18" name="slots" value="Mercoledi 18:00-19:00" />
-              <label class="slot-card" for="mer-18">
-                <span class="slot-time">18:00</span>
-                <span class="slot-day">Mercoled&igrave;</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="mer-19" name="slots" value="Mercoledi 19:00-20:00" />
-              <label class="slot-card" for="mer-19">
-                <span class="slot-time">19:00</span>
-                <span class="slot-day">Mercoled&igrave;</span>
-              </label>
-            </div>
-          </div>
+          <span class="field-err" id="err-phone">Inserisci un numero valido.</span>
         </div>
 
-        <!-- Venerdi -->
-        <div class="day-group">
-          <div class="day-sep">
-            <span class="day-sep-text">Venerd&igrave;</span>
-            <span class="day-sep-line"></span>
-          </div>
-          <div class="slots-grid">
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="ven-18" name="slots" value="Venerdi 18:00-19:00" />
-              <label class="slot-card" for="ven-18">
-                <span class="slot-time">18:00</span>
-                <span class="slot-day">Venerd&igrave;</span>
-              </label>
+        <!-- Slots -->
+        <div class="slots-block" id="slots-block">
+          <div class="slots-label">Orari disponibili</div>
+          <p class="slots-hint">Seleziona tutti gli orari in cui sei libero</p>
+
+          <!-- Lunedi -->
+          <div class="day-group">
+            <div class="day-sep">
+              <span class="day-sep-text">Luned&igrave;</span>
+              <span class="day-sep-line"></span>
             </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="ven-19" name="slots" value="Venerdi 19:00-20:00" />
-              <label class="slot-card" for="ven-19">
-                <span class="slot-time">19:00</span>
-                <span class="slot-day">Venerd&igrave;</span>
-              </label>
+            <div class="slots-grid">
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="lun-18" name="slots" value="Lunedi 18:00-19:00" />
+                <label class="slot-card" for="lun-18">
+                  <span class="slot-time">18:00</span>
+                  <span class="slot-day">Luned&igrave;</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="lun-19" name="slots" value="Lunedi 19:00-20:00" />
+                <label class="slot-card" for="lun-19">
+                  <span class="slot-time">19:00</span>
+                  <span class="slot-day">Luned&igrave;</span>
+                </label>
+              </div>
             </div>
           </div>
+
+          <!-- Mercoledi -->
+          <div class="day-group">
+            <div class="day-sep">
+              <span class="day-sep-text">Mercoled&igrave;</span>
+              <span class="day-sep-line"></span>
+            </div>
+            <div class="slots-grid">
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="mer-18" name="slots" value="Mercoledi 18:00-19:00" />
+                <label class="slot-card" for="mer-18">
+                  <span class="slot-time">18:00</span>
+                  <span class="slot-day">Mercoled&igrave;</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="mer-19" name="slots" value="Mercoledi 19:00-20:00" />
+                <label class="slot-card" for="mer-19">
+                  <span class="slot-time">19:00</span>
+                  <span class="slot-day">Mercoled&igrave;</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Venerdi -->
+          <div class="day-group">
+            <div class="day-sep">
+              <span class="day-sep-text">Venerd&igrave;</span>
+              <span class="day-sep-line"></span>
+            </div>
+            <div class="slots-grid">
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="ven-18" name="slots" value="Venerdi 18:00-19:00" />
+                <label class="slot-card" for="ven-18">
+                  <span class="slot-time">18:00</span>
+                  <span class="slot-day">Venerd&igrave;</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="ven-19" name="slots" value="Venerdi 19:00-20:00" />
+                <label class="slot-card" for="ven-19">
+                  <span class="slot-time">19:00</span>
+                  <span class="slot-day">Venerd&igrave;</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sabato -->
+          <div class="day-group">
+            <div class="day-sep">
+              <span class="day-sep-text">Sabato</span>
+              <span class="day-sep-line"></span>
+            </div>
+            <div class="slots-grid">
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="sab-09" name="slots" value="Sabato 09:00-10:00" />
+                <label class="slot-card" for="sab-09">
+                  <span class="slot-time">09:00</span>
+                  <span class="slot-day">Sabato</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="sab-10" name="slots" value="Sabato 10:00-11:00" />
+                <label class="slot-card" for="sab-10">
+                  <span class="slot-time">10:00</span>
+                  <span class="slot-day">Sabato</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="sab-11" name="slots" value="Sabato 11:00-12:00" />
+                <label class="slot-card" for="sab-11">
+                  <span class="slot-time">11:00</span>
+                  <span class="slot-day">Sabato</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domenica -->
+          <div class="day-group">
+            <div class="day-sep">
+              <span class="day-sep-text">Domenica</span>
+              <span class="day-sep-line"></span>
+            </div>
+            <div class="slots-grid">
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="dom-09" name="slots" value="Domenica 09:00-10:00" />
+                <label class="slot-card" for="dom-09">
+                  <span class="slot-time">09:00</span>
+                  <span class="slot-day">Domenica</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="dom-10" name="slots" value="Domenica 10:00-11:00" />
+                <label class="slot-card" for="dom-10">
+                  <span class="slot-time">10:00</span>
+                  <span class="slot-day">Domenica</span>
+                </label>
+              </div>
+              <div class="slot-item">
+                <input class="slot-cb" type="checkbox" id="dom-11" name="slots" value="Domenica 11:00-12:00" />
+                <label class="slot-card" for="dom-11">
+                  <span class="slot-time">11:00</span>
+                  <span class="slot-day">Domenica</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="slots-err" id="err-slots">Seleziona almeno un orario.</div>
         </div>
 
-        <!-- Sabato -->
-        <div class="day-group">
-          <div class="day-sep">
-            <span class="day-sep-text">Sabato</span>
-            <span class="day-sep-line"></span>
-          </div>
-          <div class="slots-grid">
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="sab-09" name="slots" value="Sabato 09:00-10:00" />
-              <label class="slot-card" for="sab-09">
-                <span class="slot-time">09:00</span>
-                <span class="slot-day">Sabato</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="sab-10" name="slots" value="Sabato 10:00-11:00" />
-              <label class="slot-card" for="sab-10">
-                <span class="slot-time">10:00</span>
-                <span class="slot-day">Sabato</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="sab-11" name="slots" value="Sabato 11:00-12:00" />
-              <label class="slot-card" for="sab-11">
-                <span class="slot-time">11:00</span>
-                <span class="slot-day">Sabato</span>
-              </label>
-            </div>
-          </div>
+        <!-- Note -->
+        <div class="field">
+          <label class="field-label" for="inputNotes">
+            Note <span class="label-opt">(opzionale)</span>
+          </label>
+          <textarea
+            class="field-input"
+            id="inputNotes"
+            name="notes"
+            rows="3"
+            placeholder="Esperienza, domande, esigenze particolari..."
+          ></textarea>
         </div>
 
-        <!-- Domenica -->
-        <div class="day-group">
-          <div class="day-sep">
-            <span class="day-sep-text">Domenica</span>
-            <span class="day-sep-line"></span>
-          </div>
-          <div class="slots-grid">
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="dom-09" name="slots" value="Domenica 09:00-10:00" />
-              <label class="slot-card" for="dom-09">
-                <span class="slot-time">09:00</span>
-                <span class="slot-day">Domenica</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="dom-10" name="slots" value="Domenica 10:00-11:00" />
-              <label class="slot-card" for="dom-10">
-                <span class="slot-time">10:00</span>
-                <span class="slot-day">Domenica</span>
-              </label>
-            </div>
-            <div class="slot-item">
-              <input class="slot-cb" type="checkbox" id="dom-11" name="slots" value="Domenica 11:00-12:00" />
-              <label class="slot-card" for="dom-11">
-                <span class="slot-time">11:00</span>
-                <span class="slot-day">Domenica</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="slots-err" id="err-slots">Seleziona almeno un orario.</div>
-      </div>
-
-      <!-- Note -->
-      <div class="field">
-        <label class="field-label" for="inputNotes">
-          Note <span class="label-opt">(opzionale)</span>
-        </label>
-        <textarea
-          class="field-input"
-          id="inputNotes"
-          name="notes"
-          rows="3"
-          placeholder="Esperienza, domande, esigenze particolari..."
-        ></textarea>
-      </div>
+      </div><!-- /form-card -->
 
       <!-- Submit -->
       <div class="submit-area">
         <button type="submit" class="submit-btn" id="submitBtn">
           <div class="btn-spinner" aria-hidden="true"></div>
-          <span class="btn-label">Conferma</span>
+          <span class="btn-label">Conferma disponibilit&agrave;</span>
         </button>
         <p class="submit-note">Salvatore ti ricontatter&agrave; su WhatsApp</p>
       </div>
@@ -901,16 +915,40 @@
     (function () {
       'use strict';
 
-      var form        = document.getElementById('regForm');
-      var inputName   = document.getElementById('inputName');
-      var inputPhone  = document.getElementById('inputPhone');
-      var inputNotes  = document.getElementById('inputNotes');
-      var fieldName   = document.getElementById('field-name');
-      var fieldPhone  = document.getElementById('field-phone');
-      var errSlots    = document.getElementById('err-slots');
-      var submitBtn   = document.getElementById('submitBtn');
-      var overlay     = document.getElementById('successOverlay');
-      var closeBtn    = document.getElementById('successCloseBtn');
+      /* ─── THEME ─────────────────────────────────────────── */
+      var themeBtn = document.getElementById('themeBtn');
+      var root     = document.documentElement;
+
+      function getTheme() {
+        return localStorage.getItem('karate360-theme') || 'light';
+      }
+
+      function applyTheme(mode) {
+        root.setAttribute('data-theme', mode);
+        themeBtn.textContent = mode === 'dark' ? '☀️' : '🌙';
+        themeBtn.setAttribute('aria-label', mode === 'dark' ? 'Passa alla modalità chiara' : 'Passa alla modalità scura');
+        localStorage.setItem('karate360-theme', mode);
+      }
+
+      // init from stored preference
+      applyTheme(getTheme());
+
+      themeBtn.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme') || 'light';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+
+      /* ─── FORM ──────────────────────────────────────────── */
+      var form       = document.getElementById('regForm');
+      var inputName  = document.getElementById('inputName');
+      var inputPhone = document.getElementById('inputPhone');
+      var inputNotes = document.getElementById('inputNotes');
+      var fieldName  = document.getElementById('field-name');
+      var fieldPhone = document.getElementById('field-phone');
+      var errSlots   = document.getElementById('err-slots');
+      var submitBtn  = document.getElementById('submitBtn');
+      var overlay    = document.getElementById('successOverlay');
+      var closeBtn   = document.getElementById('successCloseBtn');
 
       /* Live cleanup */
       inputName.addEventListener('input', function () {
@@ -974,8 +1012,8 @@
         };
 
         try {
-          var getRes  = await fetch(API_URL);
-          var db      = await getRes.json();
+          var getRes = await fetch(API_URL);
+          var db     = await getRes.json();
           if (!Array.isArray(db.registrations)) db.registrations = [];
           db.registrations.push(newReg);
 
@@ -995,7 +1033,7 @@
           console.error('[Karate360]', err);
           submitBtn.classList.remove('loading');
           submitBtn.disabled = false;
-          alert('Si è verificato un errore. Riprova o contatta Salvatore direttamente su WhatsApp.');
+          alert('Si \u00e8 verificato un errore. Riprova o contatta Salvatore direttamente su WhatsApp.');
         }
       });
 
@@ -1012,6 +1050,7 @@
       overlay.addEventListener('click', function (e) {
         if (e.target === overlay) closeSuccess();
       });
+
     })();
   </script>
 
