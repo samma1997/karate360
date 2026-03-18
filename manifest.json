@@ -4,8 +4,8 @@
   "description": "Prenota la tua lezione di arti marziali",
   "start_url": "/karate360/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
+  "background_color": "#191919",
+  "theme_color": "#191919",
   "orientation": "portrait",
   "icons": [
     {
