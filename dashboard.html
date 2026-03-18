@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#0A0A0A" />
   <link rel="manifest" href="manifest-admin.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
@@ -14,1900 +14,1342 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <script src="config.js"></script>
 
   <style>
-    /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #000000;
-      --bg-1:        #111111;
-      --bg-2:        #1a1a1a;
-      --bg-3:        #222222;
-      --sep:         rgba(255,255,255,0.06);
-      --sep-strong:  rgba(255,255,255,0.10);
-      --sand:        #B8A58C;
-      --sand-dim:    rgba(184,165,140,0.12);
-      --sand-dim2:   rgba(184,165,140,0.06);
-      --green-muted: #6B8F71;
-      --amber-muted: #C9A84C;
-      --gray-muted:  #555555;
-      --text:        #F0F0F0;
-      --text-2:      #888888;
-      --text-3:      #444444;
-      --r-lg:        14px;
-      --r-md:        10px;
-      --r-sm:        8px;
-      --tab-h:       calc(58px + env(safe-area-inset-bottom, 0px));
+      --bg:     #0A0A0A;
+      --card:   #1A1A1A;
+      --card2:  #222222;
+      --sep:    rgba(255,255,255,0.08);
+      --sep2:   rgba(255,255,255,0.13);
+      --sand:   #C8A87C;
+      --sand-d: rgba(200,168,124,0.15);
+      --sand-l: rgba(200,168,124,0.08);
+      --green:  #4CAF6E;
+      --yellow: #E8B84B;
+      --gray:   #555555;
+      --white:  #FFFFFF;
+      --dim:    #AAAAAA;
+      --dim2:   #666666;
+      --r:      16px;
     }
 
-    html, body {
-      height: 100%;
+    html { background: var(--bg); }
+
+    body {
       background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, sans-serif;
-      font-size: 15px;
-      line-height: 1.5;
+      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 17px;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    /* ── SCROLLBAR HIDE ── */
     ::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; }
 
-    /* ── LAYOUT ── */
-    #app {
-      display: flex;
-      flex-direction: column;
-      height: 100dvh;
-      position: relative;
-    }
-
-    /* ── TAB CONTENT ── */
-    .tab-content {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: var(--tab-h);
-    }
-
-    .tab-panel {
-      display: none;
-      animation: fadeUp 0.22s ease both;
-    }
-    .tab-panel.active { display: block; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── PAGE HEADER ── */
-    .page-header {
+    /* ── STICKY HEADER ── */
+    #header {
       position: sticky;
       top: 0;
-      z-index: 20;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      z-index: 100;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
       border-bottom: 1px solid var(--sep);
-      padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px 14px;
+      padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+    }
+
+    #header-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--white);
+    }
+
+    #header-actions {
+      display: flex;
+      align-items: center;
       gap: 10px;
     }
 
-    .page-title {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.4px;
-      color: var(--text);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
+    .hbtn {
+      height: 44px;
+      min-width: 44px;
+      border-radius: 22px;
+      border: 1px solid var(--sep2);
+      background: var(--card);
+      color: var(--dim);
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       cursor: pointer;
-      color: var(--text-2);
-      font-size: 14px;
+      padding: 0 14px;
+      -webkit-tap-highlight-color: transparent;
       transition: background 0.15s, color 0.15s;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .hbtn:active { background: var(--card2); color: var(--sand); }
+    .hbtn i { font-size: 15px; }
+
+    /* ── NOTIFICATION BANNER ── */
+    #notif-banner {
+      display: none;
+      background: var(--sand-d);
+      border-bottom: 1px solid rgba(200,168,124,0.2);
+      padding: 14px 20px;
+      font-size: 15px;
+      color: var(--sand);
+      align-items: center;
+      gap: 12px;
+    }
+    #notif-banner i { font-size: 18px; flex-shrink: 0; }
+    #notif-banner-text { flex: 1; }
+    #notif-close {
+      background: none;
+      border: none;
+      color: var(--sand);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px;
       -webkit-tap-highlight-color: transparent;
     }
-    .icon-btn:active { background: var(--bg-3); color: var(--sand); }
-
-    /* ── SECTION ── */
-    .section {
-      padding: 20px 16px 0;
-    }
-
-    .section-label {
-      font-size: 11px;
+    #notif-enable-btn {
+      background: var(--sand);
+      color: #000;
+      border: none;
+      border-radius: 22px;
+      padding: 8px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── STAT CARDS ── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 16px 16px 0;
+    /* ── MAIN SCROLL ── */
+    #main {
+      padding: 0 0 60px;
     }
 
-    .stat-card {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      padding: 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    /* ── SECTIONS ── */
+    .section {
+      padding: 28px 20px 0;
     }
 
-    .stat-value {
-      font-size: 26px;
+    .section-title {
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: -1px;
-      color: var(--text);
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: var(--dim2);
+      margin-bottom: 16px;
+    }
+
+    /* ── BIG COUNTER ── */
+    #big-counter {
+      padding: 32px 20px 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    #big-number {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -3px;
+      color: var(--sand);
       line-height: 1;
     }
 
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-2);
-      font-weight: 400;
-      margin-top: 2px;
-    }
-
-    .stat-accent { color: var(--sand); }
-
-    /* ── CHART ── */
-    .chart-wrap {
-      padding: 16px 16px 0;
-    }
-
-    .chart-container {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      padding: 16px;
-      overflow-x: auto;
-    }
-
-    .chart-title {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      color: var(--text-2);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .chart-bar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 9px;
-    }
-
-    .chart-bar-row:last-child { margin-bottom: 0; }
-
-    .chart-label {
-      font-size: 11px;
-      color: var(--text-2);
-      width: 90px;
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .chart-bar-track {
-      flex: 1;
-      height: 6px;
-      background: var(--bg-3);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .chart-bar-fill {
-      height: 100%;
-      background: var(--sand);
-      border-radius: 99px;
-      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .chart-count {
-      font-size: 11px;
-      color: var(--text-2);
-      width: 16px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    /* ── RECENTI ── */
-    .recent-list {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      overflow: hidden;
-    }
-
-    .recent-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--sep);
-    }
-    .recent-item:last-child { border-bottom: none; }
-
-    /* ── AVATAR ── */
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 600;
-      flex-shrink: 0;
-      background: var(--sand-dim);
-      color: var(--sand);
-    }
-
-    .recent-info { flex: 1; min-width: 0; }
-    .recent-name {
-      font-size: 14px;
+    #big-label {
+      font-size: 22px;
       font-weight: 500;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .recent-meta { font-size: 12px; color: var(--text-2); margin-top: 1px; }
-    .recent-time { font-size: 11px; color: var(--text-3); flex-shrink: 0; }
-
-    /* ── ORARI ── */
-    .day-group {
-      padding: 20px 16px 0;
+      color: var(--dim);
+      padding-bottom: 8px;
     }
 
-    .day-header {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 8px;
-      padding: 0 2px;
-    }
-
-    .day-card {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      overflow: hidden;
-    }
-
-    .slot-row {
-      border-bottom: 1px solid var(--sep);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .slot-row:last-child { border-bottom: none; }
-
-    .slot-header {
-      display: flex;
-      align-items: center;
-      padding: 13px 14px;
-      gap: 12px;
-      transition: background 0.12s;
-    }
-    .slot-header:active { background: var(--bg-2); }
-
-    .slot-time {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .count-pill {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 99px;
-      line-height: 1.4;
-    }
-    .pill-green  { background: rgba(107,143,113,0.18); color: var(--green-muted); }
-    .pill-amber  { background: rgba(201,168,76,0.18);  color: var(--amber-muted); }
-    .pill-gray   { background: rgba(85,85,85,0.25);    color: var(--gray-muted);  }
-
-    .slot-chevron {
-      font-size: 12px;
-      color: var(--text-3);
-      transition: transform 0.2s;
-      width: 14px;
-    }
-    .slot-row.open .slot-chevron { transform: rotate(90deg); }
-
-    .slot-detail {
-      display: none;
-      background: var(--bg-2);
-      border-top: 1px solid var(--sep);
-      padding: 10px 14px 14px;
-    }
-    .slot-row.open .slot-detail { display: block; }
-
-    .slot-person {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--sep);
-    }
-    .slot-person:last-child { border-bottom: none; }
-
-    .slot-person-info { flex: 1; min-width: 0; }
-    .slot-person-name {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-    }
-    .slot-person-phone {
-      font-size: 12px;
-      color: var(--text-2);
-      margin-top: 1px;
-    }
-
-    .wa-btn-sm {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(107,143,113,0.15);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--green-muted);
-      font-size: 15px;
-      flex-shrink: 0;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s;
-    }
-    .wa-btn-sm:active { background: rgba(107,143,113,0.28); }
-
-    .slot-empty {
-      font-size: 13px;
-      color: var(--text-3);
-      padding: 6px 0 2px;
-      font-style: italic;
-    }
-
-    /* ── PERSONE ── */
-    .search-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding: 10px 16px;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--sep);
-    }
-
-    .search-input-wrap {
-      position: relative;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-3);
-      font-size: 13px;
-      pointer-events: none;
-    }
-
-    .search-input {
-      width: 100%;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-md);
-      padding: 10px 12px 10px 34px;
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      color: var(--text);
-      outline: none;
-      -webkit-appearance: none;
-      min-height: 44px;
-    }
-    .search-input::placeholder { color: var(--text-3); }
-    .search-input:focus { border-color: var(--sand); }
-
-    .person-list {
-      padding: 12px 16px 0;
+    /* ── TOP SLOTS CARDS ── */
+    #top-slots {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-    }
-
-    .person-card {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      padding: 14px;
-    }
-
-    .person-top {
-      display: flex;
-      align-items: flex-start;
       gap: 12px;
-      margin-bottom: 10px;
+      padding: 16px 20px 0;
     }
+
+    .top-slot-card {
+      background: var(--card);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .top-slot-left { flex: 1; min-width: 0; }
+
+    .top-slot-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.3px;
+    }
+
+    .top-slot-count {
+      font-size: 15px;
+      color: var(--dim);
+      margin-top: 3px;
+    }
+
+    .slot-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-green  { background: var(--green); box-shadow: 0 0 8px rgba(76,175,110,0.5); }
+    .dot-yellow { background: var(--yellow); box-shadow: 0 0 8px rgba(232,184,75,0.5); }
+    .dot-gray   { background: var(--gray); }
+
+    /* ── PROSSIMA LEZIONE ── */
+    #next-lesson-card {
+      background: var(--card);
+      border: 1px solid var(--sep2);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    #next-lesson-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--sep);
+    }
+
+    #next-lesson-slot {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    #next-lesson-subtitle {
+      font-size: 16px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    #next-people-list {
+      padding: 16px 20px;
+    }
+
+    .person-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--sep);
+    }
+    .person-row:last-child { border-bottom: none; }
 
     .person-avatar {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: var(--sand-dim);
+      background: var(--sand-d);
       color: var(--sand);
+      font-size: 16px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
-      font-weight: 600;
       flex-shrink: 0;
     }
 
     .person-info { flex: 1; min-width: 0; }
+
     .person-name {
-      font-size: 15px;
+      font-size: 18px;
       font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.2px;
+      color: var(--white);
     }
+
     .person-phone {
-      font-size: 13px;
-      color: var(--text-2);
-      margin-top: 2px;
-    }
-    .person-date {
-      font-size: 11px;
-      color: var(--text-3);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .person-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .slot-tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 8px;
-      border-radius: 99px;
-      background: var(--sand-dim2);
+      font-size: 15px;
       color: var(--sand);
-      border: 1px solid rgba(184,165,140,0.2);
-    }
-
-    .person-note {
-      font-size: 13px;
-      color: var(--text-2);
-      font-style: italic;
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-
-    .person-actions {
-      display: flex;
-      gap: 8px;
       margin-top: 2px;
-    }
-
-    .btn-wa {
-      flex: 1;
-      height: 40px;
-      background: rgba(107,143,113,0.12);
-      border: 1px solid rgba(107,143,113,0.25);
-      border-radius: var(--r-md);
-      color: var(--green-muted);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s;
-    }
-    .btn-wa:active { background: rgba(107,143,113,0.22); }
-
-    .btn-delete {
-      width: 40px;
-      height: 40px;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-md);
-      color: var(--text-3);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s, color 0.12s;
-    }
-    .btn-delete:active { background: rgba(184,165,140,0.1); color: var(--sand); }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 24px;
-      color: var(--text-3);
-    }
-    .empty-state i { font-size: 32px; margin-bottom: 12px; display: block; }
-    .empty-state p { font-size: 15px; }
-
-    /* ── MESSAGGI ── */
-    .msg-section {
-      padding: 20px 16px 0;
-    }
-
-    .msg-card {
-      background: var(--bg-1);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-lg);
-      padding: 16px;
-    }
-
-    .msg-card-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 14px;
-      letter-spacing: -0.1px;
-    }
-
-    .form-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 6px;
+      text-decoration: none;
       display: block;
     }
 
-    .form-select, .form-textarea {
-      width: 100%;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-md);
-      padding: 10px 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      color: var(--text);
-      outline: none;
-      -webkit-appearance: none;
-      min-height: 44px;
+    .confirmed-badge {
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 600;
+      flex-shrink: 0;
     }
-    .form-select { cursor: pointer; }
-    .form-textarea {
-      resize: none;
-      line-height: 1.5;
-      min-height: 90px;
-    }
-    .form-select:focus, .form-textarea:focus { border-color: var(--sand); }
 
-    .form-group { margin-bottom: 14px; }
-    .form-group:last-child { margin-bottom: 0; }
-
-    .msg-recipients {
+    #next-lesson-actions {
+      padding: 0 20px 20px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 14px;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .recipient-pill {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 5px 10px;
-      border-radius: 99px;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      color: var(--text-2);
+    /* ── CONFIRMED SUMMARY ── */
+    #confirmed-summary {
+      background: rgba(76,175,110,0.1);
+      border: 1px solid rgba(76,175,110,0.25);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 17px;
+      color: var(--green);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-big {
+      width: 100%;
+      height: 60px;
+      border-radius: 14px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-      min-height: 32px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      gap: 10px;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, opacity 0.1s;
     }
-    .recipient-pill.selected {
-      background: var(--sand-dim);
-      border-color: rgba(184,165,140,0.35);
-      color: var(--sand);
+    .btn-big:active { transform: scale(0.97); opacity: 0.9; }
+
+    .btn-sand {
+      background: var(--sand);
+      color: #000000;
     }
 
-    .btn-primary {
-      width: 100%;
-      height: 46px;
-      background: var(--sand);
+    .btn-outline {
+      background: transparent;
+      color: var(--sand);
+      border: 1.5px solid var(--sand);
+    }
+
+    .btn-medium {
+      height: 52px;
+      border-radius: 12px;
       border: none;
-      border-radius: var(--r-md);
-      color: #000;
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: opacity 0.12s;
-      letter-spacing: 0.1px;
-    }
-    .btn-primary:active { opacity: 0.82; }
-    .btn-primary:disabled { opacity: 0.35; cursor: default; }
-
-    .btn-secondary {
-      width: 100%;
-      height: 46px;
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-md);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin-top: 10px;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, opacity 0.1s;
     }
-    .btn-secondary:active { background: var(--bg-3); }
+    .btn-medium:active { transform: scale(0.97); opacity: 0.9; }
 
-    .invite-box {
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-md);
-      padding: 14px;
-      font-size: 13px;
-      color: var(--text-2);
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    /* ── BOTTOM TAB BAR ── */
-    .tab-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      height: var(--tab-h);
-      background: rgba(10,10,10,0.92);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border-top: 1px solid var(--sep);
+    .btn-small-text {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 0;
+      -webkit-tap-highlight-color: transparent;
+      text-align: center;
+      width: 100%;
       display: flex;
-      align-items: flex-start;
-      padding-top: 8px;
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    .tab-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      padding: 2px 0;
-      min-height: 44px;
-      transition: opacity 0.12s;
+      justify-content: center;
+      gap: 6px;
     }
-    .tab-item:active { opacity: 0.7; }
+    .btn-small-text:active { opacity: 0.6; }
 
-    .tab-icon {
-      font-size: 20px;
-      color: var(--gray-muted);
-      transition: color 0.18s;
-    }
-
-    .tab-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-      color: var(--gray-muted);
-      transition: color 0.18s;
-    }
-
-    .tab-item.active .tab-icon,
-    .tab-item.active .tab-label {
-      color: var(--sand);
-    }
-
-    /* ── BOTTOM SHEET ── */
-    .sheet-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 200;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.22s;
-    }
-    .sheet-overlay.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .bottom-sheet {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 201;
-      background: var(--bg-1);
-      border-top: 1px solid var(--sep-strong);
-      border-radius: 20px 20px 0 0;
-      padding: 8px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
-      transform: translateY(100%);
-      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-    }
-    .bottom-sheet.open { transform: translateY(0); }
-
-    .sheet-handle {
-      width: 36px;
-      height: 4px;
-      background: var(--bg-3);
-      border-radius: 99px;
-      margin: 0 auto 20px;
-    }
-
-    .sheet-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 6px;
-      letter-spacing: -0.3px;
-    }
-
-    .sheet-body {
-      font-size: 14px;
-      color: var(--text-2);
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    .sheet-actions {
+    /* ── TUTTI GLI ORARI ── */
+    #all-slots-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .btn-danger {
-      width: 100%;
-      height: 50px;
-      background: rgba(184,165,140,0.08);
-      border: 1px solid rgba(184,165,140,0.2);
-      border-radius: var(--r-md);
+    .slot-row {
+      background: var(--card);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .slot-row-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .slot-row-name {
+      flex: 1;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .slot-badge {
+      background: var(--sand-d);
       color: var(--sand);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+
+    .slot-chevron {
+      color: var(--dim2);
+      font-size: 14px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .slot-row.open .slot-chevron { transform: rotate(180deg); }
+
+    .slot-row-body {
+      display: none;
+      border-top: 1px solid var(--sep);
+      padding: 0 20px 16px;
+    }
+    .slot-row.open .slot-row-body { display: block; }
+
+    .slot-person-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--sep);
+      font-size: 16px;
+    }
+    .slot-person-item:last-of-type { border-bottom: none; }
+    .slot-person-item i { color: var(--dim2); font-size: 14px; flex-shrink: 0; }
+
+    .slot-send-btn {
+      width: 100%;
+      margin-top: 14px;
+      height: 52px;
+      background: var(--sand-d);
+      color: var(--sand);
+      border: 1.5px solid rgba(200,168,124,0.3);
+      border-radius: 12px;
       font-family: 'Inter', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, opacity 0.1s;
     }
-    .btn-danger:active { background: rgba(184,165,140,0.14); }
+    .slot-send-btn:active { transform: scale(0.97); opacity: 0.9; }
 
-    .btn-cancel {
-      width: 100%;
-      height: 50px;
-      background: var(--bg-2);
-      border: 1px solid var(--sep);
-      border-radius: var(--r-md);
-      color: var(--text-2);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
+    /* ── TUTTI GLI ISCRITTI ── */
+    #all-people-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .btn-cancel:active { background: var(--bg-3); }
+
+    .person-card {
+      background: var(--card);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .person-card-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--sand-d);
+      color: var(--sand);
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .person-card-info { flex: 1; min-width: 0; }
+
+    .person-card-name {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-card-phone {
+      font-size: 16px;
+      color: var(--sand);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .person-card-slots {
+      font-size: 14px;
+      color: var(--dim);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .delete-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,59,48,0.12);
+      border: 1px solid rgba(255,59,48,0.2);
+      color: #FF3B30;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s;
+    }
+    .delete-btn:active { background: rgba(255,59,48,0.25); }
+
+    /* ── TESTO INVITO ── */
+    #invite-box {
+      background: var(--card);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      padding: 20px;
+    }
+
+    #invite-text-preview {
+      font-size: 17px;
+      color: var(--dim);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    #invite-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
     /* ── TOAST ── */
     #toast {
       position: fixed;
-      bottom: calc(var(--tab-h) + 12px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
       left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: var(--bg-2);
-      border: 1px solid var(--sep-strong);
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 500;
-      padding: 10px 18px;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(255,255,255,0.95);
+      color: #000;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 24px;
       border-radius: 99px;
       white-space: nowrap;
-      z-index: 300;
-      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.18s, transform 0.18s;
+      opacity: 0;
+      z-index: 9999;
+      transition: opacity 0.2s, transform 0.2s;
+      max-width: calc(100vw - 40px);
+      text-align: center;
     }
     #toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ── NOTIF BANNER ── */
-    #notif-banner {
-      position: fixed;
-      top: calc(env(safe-area-inset-top, 0px) + 60px);
-      left: 16px;
-      right: 16px;
-      z-index: 150;
-      background: var(--bg-1);
-      border: 1px solid var(--sep-strong);
-      border-radius: var(--r-lg);
-      padding: 14px 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      opacity: 0;
-      transform: translateY(-8px);
-      pointer-events: none;
-      transition: opacity 0.22s, transform 0.22s;
-    }
-    #notif-banner.show { opacity: 1; transform: translateY(0); pointer-events: all; }
-
-    .notif-icon { color: var(--sand); font-size: 18px; margin-top: 1px; }
-    .notif-body { flex: 1; }
-    .notif-title { font-size: 14px; font-weight: 600; color: var(--text); }
-    .notif-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
-    .notif-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .notif-btn-yes {
-      flex: 1; height: 34px; background: var(--sand); border: none;
-      border-radius: var(--r-sm); color: #000; font-size: 13px; font-weight: 600;
-      cursor: pointer; -webkit-tap-highlight-color: transparent;
-    }
-    .notif-btn-no {
-      height: 34px; padding: 0 14px; background: var(--bg-2);
-      border: 1px solid var(--sep); border-radius: var(--r-sm);
-      color: var(--text-2); font-size: 13px; cursor: pointer;
-    }
-
     /* ── LOADING ── */
-    .loading-wrap {
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px 24px;
+      gap: 20px;
+      z-index: 9999;
+    }
+
+    #loading-screen .spin {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--sep2);
+      border-top-color: var(--sand);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    #loading-screen p {
+      font-size: 16px;
+      color: var(--dim);
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    .spinner {
-      width: 24px; height: 24px;
-      border: 2px solid var(--sep-strong);
-      border-top-color: var(--sand);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--dim2);
+      font-size: 16px;
+    }
+    .empty-state i {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 12px;
+      color: var(--dim2);
     }
 
-    /* ── MISC ── */
-    a { color: inherit; text-decoration: none; }
-    button { font-family: 'Inter', sans-serif; }
-    .mt-4 { margin-top: 4px; }
-    .mt-8 { margin-top: 8px; }
-    .pb-20 { padding-bottom: 20px; }
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--sep);
+      margin: 28px 20px 0;
+    }
+
+    /* ── LAST UPDATE ── */
+    #last-update {
+      text-align: center;
+      font-size: 13px;
+      color: var(--dim2);
+      padding: 20px 20px 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (min-width: 480px) {
+      #big-number { font-size: 80px; }
+    }
   </style>
 </head>
 <body>
 
-<div id="app">
-
-  <!-- ── TAB CONTENT ── -->
-  <div class="tab-content" id="tab-content">
-
-    <!-- TAB 1: PANORAMICA -->
-    <div class="tab-panel active" id="panel-panoramica">
-      <div class="page-header">
-        <span class="page-title">Panoramica</span>
-        <div class="header-actions">
-          <div class="icon-btn" id="btn-refresh" title="Aggiorna">
-            <i class="fa-solid fa-arrows-rotate"></i>
-          </div>
-          <div class="icon-btn" id="btn-export" title="Esporta CSV">
-            <i class="fa-solid fa-arrow-down-to-line"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- AZIONE RAPIDA -->
-      <div id="quick-action" style="display:none;padding:16px 16px 0">
-        <div style="background:var(--sand-dim);border:1px solid rgba(184,165,140,0.25);border-radius:var(--r-lg);padding:16px;position:relative">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--sand);margin-bottom:8px">Slot migliore</div>
-          <div id="qa-slot" style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.4px;margin-bottom:4px"></div>
-          <div id="qa-count" style="font-size:13px;color:var(--text-2);margin-bottom:14px"></div>
-          <button id="qa-create-btn" class="btn-primary" style="height:46px;font-size:14px" onclick="quickCreateAndShare()">
-            <i class="fa-brands fa-whatsapp" style="margin-right:6px"></i> Crea lezione e invia su WhatsApp
-          </button>
-          <div id="qa-link-row" style="display:none;margin-top:10px">
-            <div style="display:flex;gap:8px">
-              <button class="btn-secondary" style="flex:1;margin-top:0;height:42px;font-size:13px" id="qa-copy-btn">
-                <i class="fa-regular fa-copy"></i> Copia link
-              </button>
-              <button class="btn-wa" style="flex:1;height:42px;font-size:13px;border-radius:var(--r-md)" id="qa-wa-btn">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="stat-grid" id="stat-grid">
-        <div class="stat-card">
-          <div class="stat-value stat-accent" id="stat-iscritti">—</div>
-          <div class="stat-label">Iscritti</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-top-slot" style="font-size:14px;letter-spacing:-0.3px;margin-top:4px">—</div>
-          <div class="stat-label">Slot Top</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value stat-accent" id="stat-max-gruppo">—</div>
-          <div class="stat-label">Max Gruppo</div>
-        </div>
-      </div>
-
-      <div class="chart-wrap">
-        <div class="chart-container">
-          <div class="chart-title">Popolarità orari</div>
-          <div id="chart-bars"></div>
-        </div>
-      </div>
-
-      <div class="section pb-20">
-        <div class="section-label">Ultimi iscritti</div>
-        <div class="recent-list" id="recent-list">
-          <div class="loading-wrap"><div class="spinner"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: ORARI -->
-    <div class="tab-panel" id="panel-orari">
-      <div class="page-header">
-        <span class="page-title">Orari</span>
-      </div>
-      <div id="orari-content" class="pb-20">
-        <div class="loading-wrap"><div class="spinner"></div></div>
-      </div>
-    </div>
-
-    <!-- TAB 3: PERSONE -->
-    <div class="tab-panel" id="panel-persone">
-      <div class="page-header" style="padding-top: calc(env(safe-area-inset-top, 0px) + 14px);">
-        <span class="page-title">Persone</span>
-      </div>
-      <div class="search-wrap">
-        <div class="search-input-wrap">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="search" class="search-input" id="search-input" placeholder="Cerca per nome, telefono…" autocomplete="off" autocorrect="off" spellcheck="false" />
-        </div>
-      </div>
-      <div class="person-list pb-20" id="person-list">
-        <div class="loading-wrap"><div class="spinner"></div></div>
-      </div>
-    </div>
-
-    <!-- TAB 4: MESSAGGI -->
-    <div class="tab-panel" id="panel-messaggi">
-      <div class="page-header">
-        <span class="page-title">Messaggi</span>
-      </div>
-
-      <!-- Sezione 1: Follow-up slot -->
-      <div class="msg-section">
-        <div class="section-label">Messaggio per slot</div>
-        <div class="msg-card">
-          <div class="form-group">
-            <label class="form-label">Slot</label>
-            <select class="form-select" id="msg-slot-select">
-              <option value="">— Seleziona orario —</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Testo</label>
-            <textarea class="form-textarea" id="msg-slot-text" rows="4" placeholder="Scrivi il tuo messaggio…"></textarea>
-          </div>
-          <div id="slot-recipient-list" style="display:none">
-            <label class="form-label">Invia a</label>
-            <div id="slot-recipient-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sezione 2: Messaggio personalizzato -->
-      <div class="msg-section">
-        <div class="section-label">Messaggio personalizzato</div>
-        <div class="msg-card">
-          <div class="form-group">
-            <label class="form-label">Destinatari</label>
-            <div class="msg-recipients" id="msg-custom-recipients"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Messaggio</label>
-            <textarea class="form-textarea" id="msg-custom-text" rows="4" placeholder="Scrivi il tuo messaggio…"></textarea>
-          </div>
-          <button class="btn-primary" id="btn-send-custom" disabled>
-            <i class="fa-brands fa-whatsapp" style="margin-right:6px"></i>Apri WhatsApp
-          </button>
-        </div>
-      </div>
-
-      <!-- Sezione 3: Testo invito -->
-      <div class="msg-section pb-20">
-        <div class="section-label">Testo invito</div>
-        <div class="msg-card">
-          <div class="invite-box" id="invite-text">Ciao! Ti invito a iscriverti alle lezioni di *Fondamenti del Karate*. Scegli il tuo orario preferito e prenota il tuo posto: [LINK]. A presto! 🥋</div>
-          <button class="btn-secondary" onclick="copyInvite()">
-            <i class="fa-regular fa-copy"></i> Copia testo
-          </button>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end tab-content -->
-
-  <!-- ── BOTTOM TAB BAR ── -->
-  <nav class="tab-bar" id="tab-bar">
-    <div class="tab-item active" data-tab="panoramica">
-      <i class="fa-solid fa-chart-simple tab-icon"></i>
-      <span class="tab-label">Panoramica</span>
-    </div>
-    <div class="tab-item" data-tab="orari">
-      <i class="fa-regular fa-clock tab-icon"></i>
-      <span class="tab-label">Orari</span>
-    </div>
-    <div class="tab-item" data-tab="persone">
-      <i class="fa-solid fa-users tab-icon"></i>
-      <span class="tab-label">Persone</span>
-    </div>
-    <div class="tab-item" data-tab="messaggi">
-      <i class="fa-regular fa-comment tab-icon"></i>
-      <span class="tab-label">Messaggi</span>
-    </div>
-  </nav>
-
-</div><!-- end app -->
-
-<!-- ── DELETE BOTTOM SHEET ── -->
-<div class="sheet-overlay" id="sheet-overlay" onclick="closeDeleteSheet()"></div>
-<div class="bottom-sheet" id="delete-sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">Elimina iscritto</div>
-  <div class="sheet-body" id="sheet-body">Sei sicuro di voler eliminare questo iscritto? L'azione non può essere annullata.</div>
-  <div class="sheet-actions">
-    <button class="btn-danger" id="btn-confirm-delete">Elimina</button>
-    <button class="btn-cancel" onclick="closeDeleteSheet()">Annulla</button>
-  </div>
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="spin"></div>
+  <p>Caricamento...</p>
 </div>
 
-<!-- ── NOTIF BANNER ── -->
-<div id="notif-banner">
-  <i class="fa-regular fa-bell notif-icon"></i>
-  <div class="notif-body">
-    <div class="notif-title">Abilita notifiche</div>
-    <div class="notif-sub">Ricevi una notifica ogni volta che arriva un nuovo iscritto.</div>
-    <div class="notif-actions">
-      <button class="notif-btn-yes" onclick="requestNotifPermission()">Abilita</button>
-      <button class="notif-btn-no" onclick="dismissNotifBanner()">Non ora</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── TOAST ── -->
+<!-- TOAST -->
 <div id="toast"></div>
 
+<!-- NOTIFICATION BANNER -->
+<div id="notif-banner">
+  <i class="fa-solid fa-bell"></i>
+  <span id="notif-banner-text">Attiva le notifiche per sapere quando si iscrive qualcuno</span>
+  <button id="notif-enable-btn" onclick="enableNotifications()">Attiva</button>
+  <button id="notif-close" onclick="dismissNotifBanner()"><i class="fa-solid fa-xmark"></i></button>
+</div>
+
+<!-- STICKY HEADER -->
+<div id="header">
+  <div id="header-title">Fondamenti del Karate</div>
+  <div id="header-actions">
+    <button class="hbtn" onclick="exportCSV()" title="Esporta CSV">
+      <i class="fa-solid fa-file-csv"></i>
+    </button>
+    <button class="hbtn" onclick="loadData(true)" id="refresh-btn" title="Aggiorna">
+      <i class="fa-solid fa-rotate" id="refresh-icon"></i>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- 1. RIEPILOGO -->
+  <div id="big-counter">
+    <div id="big-number">—</div>
+    <div id="big-label">iscritti</div>
+  </div>
+  <div id="top-slots"></div>
+
+  <div class="divider"></div>
+
+  <!-- 2. PROSSIMA LEZIONE -->
+  <div class="section">
+    <div class="section-title">Prossima lezione</div>
+    <div id="next-lesson-card">
+      <div id="next-lesson-header">
+        <div id="next-lesson-slot">—</div>
+        <div id="next-lesson-subtitle">—</div>
+      </div>
+      <div id="next-people-list"></div>
+      <div id="next-lesson-actions">
+        <div id="confirmed-summary" style="display:none"></div>
+        <button class="btn-big btn-sand" id="wa-btn" onclick="sendWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i>
+          INVIA SU WHATSAPP
+        </button>
+        <button class="btn-small-text" onclick="copyLessonLink()">
+          <i class="fa-solid fa-link"></i>
+          Copia link conferma
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3. TUTTI GLI ORARI -->
+  <div class="section">
+    <div class="section-title">Tutti gli orari</div>
+    <div id="all-slots-list"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 4. TUTTI GLI ISCRITTI -->
+  <div class="section">
+    <div class="section-title">Tutti gli iscritti</div>
+    <div id="all-people-list"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 5. TESTO INVITO -->
+  <div class="section">
+    <div class="section-title">Testo invito</div>
+    <div id="invite-box">
+      <div id="invite-text-preview"></div>
+      <div id="invite-actions">
+        <button class="btn-big btn-sand" onclick="copyInviteText()">
+          <i class="fa-solid fa-copy"></i>
+          COPIA TESTO
+        </button>
+        <button class="btn-big btn-outline" onclick="sendInviteWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i>
+          INVIA SU WHATSAPP
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="last-update"></div>
+
+  <div style="height: 40px;"></div>
+
+</div><!-- /main -->
+
 <script>
-/* ══════════════════════════════════════════════
-   SLOTS
-══════════════════════════════════════════════ */
-const SLOTS = [
-  { day: 'Lunedì',    time: '18:00-19:00' },
-  { day: 'Lunedì',    time: '19:00-20:00' },
-  { day: 'Mercoledì', time: '18:00-19:00' },
-  { day: 'Mercoledì', time: '19:00-20:00' },
-  { day: 'Venerdì',   time: '18:00-19:00' },
-  { day: 'Venerdì',   time: '19:00-20:00' },
-  { day: 'Sabato',    time: '09:00-10:00' },
-  { day: 'Sabato',    time: '10:00-11:00' },
-  { day: 'Sabato',    time: '11:00-12:00' },
-  { day: 'Domenica',  time: '09:00-10:00' },
-  { day: 'Domenica',  time: '10:00-11:00' },
-  { day: 'Domenica',  time: '11:00-12:00' },
-];
+  // ─────────────────────────────────────────────
+  // SLOTS
+  // ─────────────────────────────────────────────
+  const SLOTS = [
+    { day: 'Lunedì',    time: '18:00-19:00' },
+    { day: 'Lunedì',    time: '19:00-20:00' },
+    { day: 'Mercoledì', time: '18:00-19:00' },
+    { day: 'Mercoledì', time: '19:00-20:00' },
+    { day: 'Venerdì',   time: '18:00-19:00' },
+    { day: 'Venerdì',   time: '19:00-20:00' },
+    { day: 'Sabato',    time: '09:00-10:00' },
+    { day: 'Sabato',    time: '10:00-11:00' },
+    { day: 'Sabato',    time: '11:00-12:00' },
+    { day: 'Domenica',  time: '09:00-10:00' },
+    { day: 'Domenica',  time: '10:00-11:00' },
+    { day: 'Domenica',  time: '11:00-12:00' },
+  ];
 
-/* ══════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════ */
-let allRegistrations = [];
-let lastCount = -1;
-let pendingDeleteId = null;
-let activeTab = 'panoramica';
-let searchQuery = '';
+  // ─────────────────────────────────────────────
+  // STATE
+  // ─────────────────────────────────────────────
+  let _data = { registrations: [], lessons: [] };
+  let _bestSlot = null;
+  let _lastCount = null;
+  let _notifDismissed = false;
+  let _openSlots = new Set();
 
-/* ══════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════ */
-function esc(s) {
-  if (!s) return '';
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function waLink(phone, msg) {
-  const p = String(phone || '').replace(/\D/g, '');
-  const num = p.startsWith('39') ? p : '39' + p;
-  return 'https://wa.me/' + num + (msg ? '?text=' + encodeURIComponent(msg) : '');
-}
-
-function timeAgo(ts) {
-  if (!ts) return '';
-  const now = Date.now();
-  const d = now - new Date(ts).getTime();
-  const s = Math.floor(d / 1000);
-  if (s < 60)   return 'ora';
-  const m = Math.floor(s / 60);
-  if (m < 60)   return m + ' min fa';
-  const h = Math.floor(m / 60);
-  if (h < 24)   return h + ' ore fa';
-  const days = Math.floor(h / 24);
-  if (days === 1) return 'ieri';
-  if (days < 7)  return days + ' giorni fa';
-  const weeks = Math.floor(days / 7);
-  if (weeks < 5) return weeks + ' sett. fa';
-  const months = Math.floor(days / 30);
-  return months + ' mesi fa';
-}
-
-function initial(name) {
-  if (!name) return '?';
-  return name.trim().charAt(0).toUpperCase();
-}
-
-let _toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-function copyToClipboard(text, successMsg) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => showToast(successMsg || 'Copiato!'));
-  } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast(successMsg || 'Copiato!');
+  // ─────────────────────────────────────────────
+  // HELPERS
+  // ─────────────────────────────────────────────
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
   }
-}
 
-function copyInvite() {
-  const txt = document.getElementById('invite-text').textContent;
-  copyToClipboard(txt, 'Testo copiato!');
-}
-
-function exportCSV() {
-  if (!allRegistrations.length) { showToast('Nessun dato da esportare'); return; }
-  const BOM = '\uFEFF';
-  const header = ['Nome', 'Telefono', 'Slot', 'Note', 'Data'];
-  const rows = allRegistrations.map(r => {
-    const slots = Array.isArray(r.slots) ? r.slots.join(' | ') : (r.slot || '');
-    return [
-      r.name || '', r.phone || '', slots, r.notes || '',
-      r.timestamp ? new Date(r.timestamp).toLocaleString('it-IT') : ''
-    ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',');
-  });
-  const csv = BOM + [header.join(','), ...rows].join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'iscritti_fondamenti_karate_' + new Date().toISOString().slice(0, 10) + '.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('CSV esportato');
-}
-
-/* ══════════════════════════════════════════════
-   DATA
-══════════════════════════════════════════════ */
-async function loadData() {
-  try {
-    const res = await fetch(API_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const regs = data.registrations || [];
-    allRegistrations = regs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    renderAll();
-    rotateRefresh(false);
-  } catch (e) {
-    console.error('loadData:', e);
-    showToast('Errore caricamento dati');
-    rotateRefresh(false);
+  function waLink(phone, msg) {
+    const p = phone.replace(/\D/g, '');
+    const num = p.startsWith('39') ? p : (p.startsWith('0') ? '39' + p.slice(1) : '39' + p);
+    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
   }
-}
 
-function rotateRefresh(on) {
-  const btn = document.getElementById('btn-refresh');
-  if (on) btn.style.animation = 'spin 0.7s linear infinite';
-  else    btn.style.animation = '';
-}
+  function timeAgo(ts) {
+    if (!ts) return '';
+    const diff = Date.now() - new Date(ts).getTime();
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'adesso';
+    if (m < 60) return `${m} min fa`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h} ore fa`;
+    const d = Math.floor(h / 24);
+    return `${d} giorni fa`;
+  }
 
-async function deleteRegistration(id) {
-  try {
-    const res = await fetch(API_URL, { cache: 'no-store' });
-    const data = await res.json();
-    data.registrations = (data.registrations || []).filter(r => r.id !== id);
+  function initials(name) {
+    if (!name) return '?';
+    return name.trim().split(' ').map(w => w[0] || '').join('').toUpperCase().slice(0, 2);
+  }
+
+  function slotKey(s) {
+    return `${s.day} ${s.time}`;
+  }
+
+  function slotLabel(s) {
+    return `${s.day} ${s.time}`;
+  }
+
+  function formatSlotForMessage(s) {
+    const startTime = s.time.split('-')[0];
+    return `${s.day} alle ${startTime}`;
+  }
+
+  function showToast(msg, duration = 2400) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  async function copyToClipboard(text, msg) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(msg || 'Copiato!');
+    } catch {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast(msg || 'Copiato!'); } catch {}
+      document.body.removeChild(ta);
+    }
+  }
+
+  function getRegistrationLink() {
+    const base = window.location.href.replace('dashboard.html', 'index.html');
+    return base;
+  }
+
+  function getLessonConfirmLink(lessonId) {
+    const base = window.location.href.replace('dashboard.html', 'index.html');
+    return `${base}?confirm=${lessonId}`;
+  }
+
+  // ─────────────────────────────────────────────
+  // DATA LOADING
+  // ─────────────────────────────────────────────
+  async function loadData(manual = false) {
+    if (manual) {
+      const icon = document.getElementById('refresh-icon');
+      icon.style.animation = 'spin 0.8s linear infinite';
+    }
+    try {
+      const res = await fetch(API_URL, {
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        cache: 'no-store'
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      _data = await res.json();
+      if (!Array.isArray(_data.registrations)) _data.registrations = [];
+      if (!Array.isArray(_data.lessons)) _data.lessons = [];
+      render();
+      checkNewRegistrations();
+      document.getElementById('last-update').textContent =
+        'Aggiornato: ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    } catch (err) {
+      if (manual) showToast('Errore di rete. Riprova.');
+      console.error(err);
+    } finally {
+      if (manual) {
+        setTimeout(() => {
+          const icon = document.getElementById('refresh-icon');
+          icon.style.animation = '';
+        }, 400);
+      }
+    }
+    document.getElementById('loading-screen').style.display = 'none';
+  }
+
+  async function putData() {
     await fetch(API_URL, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(_data)
     });
-    showToast('Iscritto eliminato');
-    await loadData();
-  } catch (e) {
-    console.error('deleteRegistration:', e);
-    showToast('Errore eliminazione');
-  }
-}
-
-/* ══════════════════════════════════════════════
-   RENDER ALL
-══════════════════════════════════════════════ */
-function renderAll() {
-  renderQuickAction();
-  renderPanoramica();
-  renderOrari();
-  renderPersone();
-  renderMessaggiRecipients();
-}
-
-/* ── PANORAMICA ── */
-function renderPanoramica() {
-  const total = allRegistrations.length;
-  document.getElementById('stat-iscritti').textContent = total;
-
-  // Count per slot
-  const slotMap = {};
-  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
-  allRegistrations.forEach(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
-    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
-  });
-
-  let topKey = '', topVal = 0, maxGroup = 0;
-  Object.entries(slotMap).forEach(([k, v]) => {
-    if (v > topVal) { topVal = v; topKey = k; }
-    if (v > maxGroup) maxGroup = v;
-  });
-
-  const topParts = topKey.split(' ');
-  const topLabel = topKey ? topParts.slice(-1)[0] : '—';
-  document.getElementById('stat-top-slot').textContent = topKey ? topKey : '—';
-  document.getElementById('stat-top-slot').style.fontSize = topKey.length > 12 ? '11px' : '14px';
-  document.getElementById('stat-max-gruppo').textContent = maxGroup || '—';
-
-  // Chart
-  const maxVal = Math.max(...Object.values(slotMap), 1);
-  const chartHtml = SLOTS.map(s => {
-    const key = s.day + ' ' + s.time;
-    const count = slotMap[key] || 0;
-    const pct = Math.round((count / maxVal) * 100);
-    return `<div class="chart-bar-row">
-      <div class="chart-label">${esc(s.day)} ${esc(s.time)}</div>
-      <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
-      <div class="chart-count">${count}</div>
-    </div>`;
-  }).join('');
-  document.getElementById('chart-bars').innerHTML = chartHtml;
-
-  // Recent 5
-  const recent = allRegistrations.slice(0, 5);
-  if (!recent.length) {
-    document.getElementById('recent-list').innerHTML = '<div class="loading-wrap" style="padding:28px"><p style="color:var(--text-3);font-size:14px">Nessun iscritto</p></div>';
-    return;
-  }
-  document.getElementById('recent-list').innerHTML = recent.map(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
-    return `<div class="recent-item">
-      <div class="avatar">${esc(initial(r.name))}</div>
-      <div class="recent-info">
-        <div class="recent-name">${esc(r.name)}</div>
-        <div class="recent-meta">${esc(slots[0] || '—')}</div>
-      </div>
-      <div class="recent-time">${esc(timeAgo(r.timestamp))}</div>
-    </div>`;
-  }).join('');
-}
-
-/* ── ORARI ── */
-function renderOrari() {
-  const slotMap = {};
-  SLOTS.forEach(s => { slotMap[s.day + '_' + s.time] = []; });
-  allRegistrations.forEach(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
-    slots.forEach(sl => {
-      const [day, time] = sl.split(' ');
-      const key = day + '_' + time;
-      if (slotMap[key] !== undefined) slotMap[key].push(r);
-    });
-  });
-
-  const days = [...new Set(SLOTS.map(s => s.day))];
-  const html = days.map(day => {
-    const daySlots = SLOTS.filter(s => s.day === day);
-    const rows = daySlots.map(s => {
-      const key = s.day + '_' + s.time;
-      const people = slotMap[key] || [];
-      const n = people.length;
-      const pillClass = n >= 3 ? 'pill-green' : n === 2 ? 'pill-amber' : 'pill-gray';
-      const uid = 'slot-' + key.replace(/[^a-z0-9]/gi, '-');
-
-      const slotKey = s.day + ' ' + s.time;
-      const createBtn = people.length > 0
-        ? `<button class="btn-primary" style="margin-top:12px;height:42px;font-size:13px" onclick="event.stopPropagation();createLesson('${esc(slotKey)}')">
-            Crea lezione e ottieni link
-          </button>`
-        : '';
-
-      const peopleHtml = people.length
-        ? people.map(p => `<div class="slot-person">
-            <div class="avatar" style="width:32px;height:32px;font-size:12px">${esc(initial(p.name))}</div>
-            <div class="slot-person-info">
-              <div class="slot-person-name">${esc(p.name)}</div>
-              <div class="slot-person-phone">${esc(p.phone)}</div>
-            </div>
-            <a href="${waLink(p.phone, 'Ciao ' + (p.name||'') + ', ti scrivo riguardo alla lezione di Fondamenti del Karate del ' + s.day + ' ore ' + s.time + '.')}" target="_blank">
-              <button class="wa-btn-sm"><i class="fa-brands fa-whatsapp"></i></button>
-            </a>
-          </div>`).join('') + createBtn
-        : '<div class="slot-empty">Nessun iscritto</div>';
-
-      return `<div class="slot-row" id="${uid}" onclick="toggleSlot('${uid}')">
-        <div class="slot-header">
-          <div class="slot-time">${esc(s.time)}</div>
-          <span class="count-pill ${pillClass}">${n}</span>
-          <i class="fa-solid fa-chevron-right slot-chevron"></i>
-        </div>
-        <div class="slot-detail">${peopleHtml}</div>
-      </div>`;
-    }).join('');
-
-    return `<div class="day-group">
-      <div class="day-header">${esc(day.toUpperCase())}</div>
-      <div class="day-card">${rows}</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('orari-content').innerHTML = html + '<div style="height:8px"></div>';
-}
-
-function toggleSlot(uid) {
-  const el = document.getElementById(uid);
-  if (el) el.classList.toggle('open');
-}
-
-/* ── PERSONE ── */
-function renderPersone(query) {
-  query = (query || searchQuery || '').toLowerCase().trim();
-  let list = allRegistrations;
-  if (query) {
-    list = list.filter(r =>
-      (r.name  || '').toLowerCase().includes(query) ||
-      (r.phone || '').toLowerCase().includes(query)
-    );
   }
 
-  if (!list.length) {
-    document.getElementById('person-list').innerHTML = `<div class="empty-state">
-      <i class="fa-regular fa-user"></i>
-      <p>${query ? 'Nessun risultato per "' + esc(query) + '"' : 'Nessun iscritto'}</p>
-    </div>`;
-    return;
-  }
-
-  document.getElementById('person-list').innerHTML = list.map(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
-    const tags = slots.map(sl => `<span class="slot-tag">${esc(sl)}</span>`).join('');
-    const note = r.notes ? `<div class="person-note">${esc(r.notes)}</div>` : '';
-    const msg = 'Ciao ' + (r.name || '') + ', ti scrivo riguardo alle lezioni di Fondamenti del Karate.';
-    return `<div class="person-card">
-      <div class="person-top">
-        <div class="person-avatar">${esc(initial(r.name))}</div>
-        <div class="person-info">
-          <div class="person-name">${esc(r.name)}</div>
-          <div class="person-phone">${esc(r.phone)}</div>
-        </div>
-        <div class="person-date">${esc(timeAgo(r.timestamp))}</div>
-      </div>
-      ${tags ? '<div class="person-tags">' + tags + '</div>' : ''}
-      ${note}
-      <div class="person-actions">
-        <a href="${waLink(r.phone, msg)}" target="_blank" style="flex:1">
-          <button class="btn-wa" style="width:100%">
-            <i class="fa-brands fa-whatsapp"></i> WhatsApp
-          </button>
-        </a>
-        <button class="btn-delete" onclick="openDeleteSheet('${esc(r.id)}', '${esc(r.name)}')">
-          <i class="fa-regular fa-trash-can"></i>
-        </button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ── MESSAGGI RECIPIENTS ── */
-function renderMessaggiRecipients() {
-  // Slot select
-  const sel = document.getElementById('msg-slot-select');
-  const prev = sel.value;
-  sel.innerHTML = '<option value="">— Seleziona orario —</option>';
-  SLOTS.forEach(s => {
-    const key = s.day + ' ' + s.time;
-    const opt = document.createElement('option');
-    opt.value = key;
-    opt.textContent = key;
-    sel.appendChild(opt);
-  });
-  if (prev) sel.value = prev;
-
-  // Custom recipients pills
-  const wrap = document.getElementById('msg-custom-recipients');
-  wrap.innerHTML = allRegistrations.map(r => {
-    return `<div class="recipient-pill" data-id="${esc(r.id)}" data-phone="${esc(r.phone)}" data-name="${esc(r.name)}" onclick="toggleRecipient(this)">${esc(r.name)}</div>`;
-  }).join('');
-
-  updateSendCustomBtn();
-}
-
-function onSlotSelect() {
-  const key = document.getElementById('msg-slot-select').value;
-  const container = document.getElementById('slot-recipient-list');
-  const rows = document.getElementById('slot-recipient-rows');
-
-  if (!key) { container.style.display = 'none'; return; }
-
-  const people = allRegistrations.filter(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
-    return slots.includes(key);
-  });
-
-  // Auto-fill message text
-  document.getElementById('msg-slot-text').value =
-    'Ciao! Siamo in ' + people.length + ' per la lezione di Fondamenti del Karate ' + key + '. Ci sei? Rispondi a questo messaggio! — Salvatore';
-
-  if (!people.length) {
-    rows.innerHTML = '<p style="font-size:13px;color:var(--text-3);padding:4px 0">Nessun iscritto in questo slot</p>';
-    container.style.display = 'block';
-    return;
-  }
-
-  rows.innerHTML = people.map(p => {
-    return `<div style="display:flex;align-items:center;gap:10px">
-      <div style="flex:1;font-size:13px;color:var(--text)">${esc(p.name)}</div>
-      <a href="javascript:void(0)" onclick="sendSlotMsg('${esc(p.phone)}', '${esc(p.name)}')">
-        <button class="btn-wa" style="width:auto;padding:0 14px;height:36px;font-size:12px">
-          <i class="fa-brands fa-whatsapp"></i> ${esc(p.name.split(' ')[0])}
-        </button>
-      </a>
-    </div>`;
-  }).join('');
-  container.style.display = 'block';
-}
-
-function sendSlotMsg(phone, name) {
-  const key = document.getElementById('msg-slot-select').value;
-  let text = document.getElementById('msg-slot-text').value.trim();
-  if (!text) text = 'Ciao ' + name + ', ti scrivo riguardo alla lezione di Fondamenti del Karate (' + key + ').';
-  window.open(waLink(phone, text), '_blank');
-}
-
-function toggleRecipient(el) {
-  el.classList.toggle('selected');
-  updateSendCustomBtn();
-}
-
-function updateSendCustomBtn() {
-  const selected = document.querySelectorAll('.recipient-pill.selected');
-  document.getElementById('btn-send-custom').disabled = selected.length === 0;
-}
-
-function sendCustomMsg() {
-  const selected = [...document.querySelectorAll('.recipient-pill.selected')];
-  const text = document.getElementById('msg-custom-text').value.trim();
-  if (!selected.length) { showToast('Seleziona almeno un destinatario'); return; }
-  if (!text) { showToast('Scrivi un messaggio'); return; }
-  // Open first, show toast for rest
-  selected.forEach((el, i) => {
-    setTimeout(() => {
-      window.open(waLink(el.dataset.phone, text.replace('{nome}', el.dataset.name || '')), '_blank');
-    }, i * 600);
-  });
-}
-
-/* ══════════════════════════════════════════════
-   AZIONE RAPIDA (Panoramica)
-══════════════════════════════════════════════ */
-function renderQuickAction() {
-  const slotMap = {};
-  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
-  allRegistrations.forEach(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : [];
-    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
-  });
-
-  const sorted = Object.entries(slotMap).sort((a,b) => b[1] - a[1]);
-  const best = sorted[0];
-  const qa = document.getElementById('quick-action');
-
-  if (!best || best[1] === 0) {
-    qa.style.display = 'none';
-    return;
-  }
-
-  qa.style.display = 'block';
-  document.getElementById('qa-slot').textContent = best[0];
-  document.getElementById('qa-count').textContent = best[1] + ' persone disponibili';
-
-  // Reset button state
-  document.getElementById('qa-create-btn').style.display = '';
-  document.getElementById('qa-link-row').style.display = 'none';
-}
-
-async function quickCreateAndShare() {
-  const slotMap = {};
-  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
-  allRegistrations.forEach(r => {
-    const slots = Array.isArray(r.slots) ? r.slots : [];
-    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
-  });
-  const sorted = Object.entries(slotMap).sort((a,b) => b[1] - a[1]);
-  const bestSlot = sorted[0] ? sorted[0][0] : null;
-  if (!bestSlot) return;
-
-  const btn = document.getElementById('qa-create-btn');
-  btn.textContent = 'Creazione...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch(API_URL, { cache: 'no-store' });
-    const data = await res.json();
-    if (!data.lessons) data.lessons = [];
-
-    let lesson = data.lessons.find(l => l.slot === bestSlot);
-    if (!lesson) {
-      lesson = {
-        id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
-        slot: bestSlot,
-        createdAt: new Date().toISOString(),
-        confirmed: [],
-        declined: []
-      };
-      data.lessons.push(lesson);
-      await fetch(API_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+  function checkNewRegistrations() {
+    const count = _data.registrations.length;
+    if (_lastCount !== null && count > _lastCount) {
+      const diff = count - _lastCount;
+      const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
+      showToast(msg, 3500);
+      if (Notification.permission === 'granted') {
+        try {
+          new Notification('Fondamenti del Karate', {
+            body: msg,
+            icon: 'icon-192.png'
+          });
+        } catch {}
+      }
     }
-
-    const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + lesson.id;
-    const count = sorted[0][1];
-    const waMsg = 'Ciao a tutti! La lezione di Fondamenti del Karate di ' + bestSlot + ' sta prendendo forma — siamo gia\' in ' + count + '! Conferma la tua presenza con un tap: ' + link + ' — Salvatore';
-
-    // Show link row, hide create button
-    btn.style.display = 'none';
-    const linkRow = document.getElementById('qa-link-row');
-    linkRow.style.display = 'block';
-
-    document.getElementById('qa-copy-btn').onclick = function() {
-      copyToClipboard(link, 'Link copiato!');
-    };
-    document.getElementById('qa-wa-btn').onclick = function() {
-      window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
-    };
-
-    // Auto-open WhatsApp
-    window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
-
-  } catch (e) {
-    console.error('quickCreate:', e);
-    btn.textContent = 'Crea lezione e invia su WhatsApp';
-    btn.disabled = false;
-    showToast('Errore — riprova');
+    _lastCount = count;
   }
-}
 
-/* ══════════════════════════════════════════════
-   CREA LEZIONE
-══════════════════════════════════════════════ */
-async function createLesson(slotKey) {
-  try {
-    showToast('Creazione lezione...');
-    const res = await fetch(API_URL, { cache: 'no-store' });
-    const data = await res.json();
-    if (!data.lessons) data.lessons = [];
+  // ─────────────────────────────────────────────
+  // LESSON MANAGEMENT
+  // ─────────────────────────────────────────────
+  async function createLesson(slot) {
+    const key = slotKey(slot);
+    let lesson = _data.lessons.find(l => l.slotKey === key);
+    if (lesson) return lesson;
+    lesson = {
+      id: 'lesson_' + Date.now(),
+      slotKey: key,
+      slotDay: slot.day,
+      slotTime: slot.time,
+      createdAt: new Date().toISOString(),
+      confirmedIds: []
+    };
+    _data.lessons.push(lesson);
+    await putData();
+    return lesson;
+  }
 
-    // Check if lesson already exists for this slot
-    const existing = data.lessons.find(l => l.slot === slotKey);
-    if (existing) {
-      const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + existing.id;
-      showLessonLink(slotKey, link);
+  function getLessonForSlot(slot) {
+    return _data.lessons.find(l => l.slotKey === slotKey(slot)) || null;
+  }
+
+  // ─────────────────────────────────────────────
+  // SLOT COUNTS
+  // ─────────────────────────────────────────────
+  function getSlotCounts() {
+    const counts = {};
+    SLOTS.forEach(s => { counts[slotKey(s)] = []; });
+    _data.registrations.forEach(r => {
+      if (Array.isArray(r.slots)) {
+        r.slots.forEach(sk => {
+          if (counts[sk] !== undefined) counts[sk].push(r);
+        });
+      }
+    });
+    return counts;
+  }
+
+  function getBestSlot(counts) {
+    let best = null, bestCount = 0;
+    SLOTS.forEach(s => {
+      const c = (counts[slotKey(s)] || []).length;
+      if (c > bestCount) { bestCount = c; best = s; }
+    });
+    return best;
+  }
+
+  // ─────────────────────────────────────────────
+  // RENDER
+  // ─────────────────────────────────────────────
+  function render() {
+    const counts = getSlotCounts();
+    _bestSlot = getBestSlot(counts);
+
+    renderBigCounter();
+    renderTopSlots(counts);
+    renderNextLesson(counts);
+    renderAllSlots(counts);
+    renderAllPeople();
+    renderInviteText();
+  }
+
+  function renderBigCounter() {
+    document.getElementById('big-number').textContent = _data.registrations.length;
+  }
+
+  function renderTopSlots(counts) {
+    const sorted = SLOTS
+      .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
+      .sort((a, b) => b.people.length - a.people.length)
+      .slice(0, 3);
+
+    const container = document.getElementById('top-slots');
+    if (sorted.every(x => x.people.length === 0)) {
+      container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-calendar-xmark"></i>Nessun iscritto ancora</div>';
       return;
     }
 
-    const lessonId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-    data.lessons.push({
-      id: lessonId,
-      slot: slotKey,
-      createdAt: new Date().toISOString(),
-      confirmed: [],
-      declined: []
-    });
-
-    await fetch(API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + lessonId;
-    showLessonLink(slotKey, link);
-
-  } catch (e) {
-    console.error('createLesson:', e);
-    showToast('Errore nella creazione');
+    container.innerHTML = sorted.map(({ slot, people }) => {
+      const n = people.length;
+      let dotClass = 'dot-gray';
+      if (n >= 5) dotClass = 'dot-green';
+      else if (n >= 3) dotClass = 'dot-yellow';
+      return `
+        <div class="top-slot-card">
+          <div class="top-slot-left">
+            <div class="top-slot-name">${esc(slotLabel(slot))}</div>
+            <div class="top-slot-count">${n} ${n === 1 ? 'persona' : 'persone'}</div>
+          </div>
+          <div class="slot-dot ${dotClass}"></div>
+        </div>
+      `;
+    }).join('');
   }
-}
 
-function showLessonLink(slotKey, link) {
-  // Show bottom sheet with the link
-  const overlay = document.getElementById('sheet-overlay');
-  const sheet = document.getElementById('delete-sheet');
-  document.getElementById('sheet-body').innerHTML = `
-    <div style="margin-bottom:12px;font-size:13px;color:var(--text-2)">
-      Lezione creata per <strong style="color:var(--text)">${esc(slotKey)}</strong>
-    </div>
-    <div style="background:var(--bg-2);border:1px solid var(--sep-strong);border-radius:var(--r-md);padding:12px;font-size:12px;color:var(--sand);word-break:break-all;margin-bottom:12px">
-      ${esc(link)}
-    </div>
-    <div style="font-size:12px;color:var(--text-3)">
-      Condividi questo link nel gruppo WhatsApp. Le persone potranno confermare con un tap.
-    </div>
-  `;
-  document.querySelector('.sheet-title').textContent = 'Link lezione';
-  document.getElementById('btn-confirm-delete').textContent = 'Copia link';
-  document.getElementById('btn-confirm-delete').onclick = function() {
+  function renderNextLesson(counts) {
+    if (!_bestSlot) {
+      document.getElementById('next-lesson-slot').textContent = 'Nessuno slot disponibile';
+      document.getElementById('next-lesson-subtitle').textContent = 'Aspetta le prime iscrizioni';
+      document.getElementById('next-people-list').innerHTML = '';
+      return;
+    }
+
+    const key = slotKey(_bestSlot);
+    const people = counts[key] || [];
+    const lesson = getLessonForSlot(_bestSlot);
+
+    document.getElementById('next-lesson-slot').textContent = slotLabel(_bestSlot);
+    document.getElementById('next-lesson-subtitle').textContent =
+      `${people.length} ${people.length === 1 ? 'persona disponibile' : 'persone disponibili'}`;
+
+    // People list
+    const listEl = document.getElementById('next-people-list');
+    if (people.length === 0) {
+      listEl.innerHTML = '<div class="empty-state" style="padding:20px 0"><i class="fa-solid fa-users-slash" style="font-size:28px;margin-bottom:8px;display:block;color:var(--dim2)"></i>Nessuno per questo orario</div>';
+    } else {
+      listEl.innerHTML = people.map(p => {
+        const confirmed = lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.includes(p.id);
+        return `
+          <div class="person-row">
+            <div class="person-avatar">${esc(initials(p.name))}</div>
+            <div class="person-info">
+              <div class="person-name">${esc(p.name)}</div>
+              ${p.phone ? `<a class="person-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank"><i class="fa-brands fa-whatsapp"></i> ${esc(p.phone)}</a>` : '<span class="person-phone" style="color:var(--dim2)">Nessun numero</span>'}
+            </div>
+            ${confirmed ? '<div class="confirmed-badge"><i class="fa-solid fa-check-circle"></i> Confermato</div>' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Confirmed summary
+    const summaryEl = document.getElementById('confirmed-summary');
+    if (lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.length > 0) {
+      summaryEl.style.display = 'block';
+      summaryEl.textContent = `${lesson.confirmedIds.length} su ${people.length} hanno confermato`;
+    } else {
+      summaryEl.style.display = 'none';
+    }
+  }
+
+  function renderAllSlots(counts) {
+    const container = document.getElementById('all-slots-list');
+    const sorted = SLOTS
+      .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
+      .sort((a, b) => b.people.length - a.people.length);
+
+    container.innerHTML = sorted.map(({ slot, people }) => {
+      const key = slotKey(slot);
+      const isOpen = _openSlots.has(key);
+      const n = people.length;
+      return `
+        <div class="slot-row${isOpen ? ' open' : ''}" id="slot-row-${encodeURIComponent(key)}">
+          <div class="slot-row-header" onclick="toggleSlot('${esc(key)}')">
+            <div class="slot-row-name">${esc(slotLabel(slot))}</div>
+            <div class="slot-badge">${n}</div>
+            <i class="fa-solid fa-chevron-down slot-chevron"></i>
+          </div>
+          <div class="slot-row-body">
+            ${n === 0
+              ? '<div style="padding:12px 0;color:var(--dim2);font-size:15px">Nessuno per questo orario</div>'
+              : people.map(p => `
+                  <div class="slot-person-item">
+                    <i class="fa-solid fa-user"></i>
+                    <span style="flex:1;font-size:16px;color:var(--white)">${esc(p.name)}</span>
+                    ${p.phone ? `<a href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" style="color:var(--sand);font-size:15px" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+                  </div>
+                `).join('')
+            }
+            <button class="slot-send-btn" onclick="sendSlotWhatsApp('${esc(key)}')">
+              <i class="fa-brands fa-whatsapp"></i>
+              Invia messaggio
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleSlot(key) {
+    if (_openSlots.has(key)) _openSlots.delete(key);
+    else _openSlots.add(key);
+    const el = document.getElementById('slot-row-' + encodeURIComponent(key));
+    if (el) el.classList.toggle('open');
+  }
+
+  function renderAllPeople() {
+    const container = document.getElementById('all-people-list');
+    const people = [..._data.registrations].sort((a, b) =>
+      (a.name || '').localeCompare(b.name || '', 'it')
+    );
+
+    if (people.length === 0) {
+      container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-user-slash"></i>Nessun iscritto</div>';
+      return;
+    }
+
+    container.innerHTML = people.map(p => {
+      const slotsText = Array.isArray(p.slots) && p.slots.length > 0
+        ? p.slots.join(', ')
+        : 'Nessun orario';
+      return `
+        <div class="person-card">
+          <div class="person-card-avatar">${esc(initials(p.name))}</div>
+          <div class="person-card-info">
+            <div class="person-card-name">${esc(p.name)}</div>
+            ${p.phone
+              ? `<a class="person-card-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank"><i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}</a>`
+              : '<span style="font-size:15px;color:var(--dim2)">Nessun numero</span>'
+            }
+            <div class="person-card-slots">${esc(slotsText)}</div>
+          </div>
+          <button class="delete-btn" onclick="deleteRegistration('${esc(p.id)}', '${esc(p.name)}')">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderInviteText() {
+    const link = getRegistrationLink();
+    const text = `Ciao! Ti va di partecipare alle lezioni di Fondamenti del Karate? Scegli quando sei disponibile: ${link} — Salvatore`;
+    document.getElementById('invite-text-preview').textContent = `"${text}"`;
+    document.getElementById('invite-box').dataset.inviteText = text;
+  }
+
+  // ─────────────────────────────────────────────
+  // ACTIONS
+  // ─────────────────────────────────────────────
+  async function sendWhatsApp() {
+    if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
+
+    const btn = document.getElementById('wa-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparazione...';
+
+    try {
+      const lesson = await createLesson(_bestSlot);
+      const counts = getSlotCounts();
+      const key = slotKey(_bestSlot);
+      const people = counts[key] || [];
+      const n = people.length;
+      const link = getLessonConfirmLink(lesson.id);
+      const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(_bestSlot)}. Siamo in ${n}! Conferma qui: ${link} — Salvatore`;
+      window.open(waLink('', msg).replace('wa.me//', 'api.whatsapp.com/send?text=').replace('?text=', ''), '_blank');
+      // fallback: direct wa.me without number for group share
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+      showToast('Messaggio pronto!');
+      await loadData();
+    } catch(e) {
+      showToast('Errore. Riprova.');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> INVIA SU WHATSAPP';
+    }
+  }
+
+  async function copyLessonLink() {
+    if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
+    const lesson = await createLesson(_bestSlot);
+    const link = getLessonConfirmLink(lesson.id);
     copyToClipboard(link, 'Link copiato!');
-  };
-
-  // Add WhatsApp share button
-  const actions = document.querySelector('.sheet-actions');
-  const waBtn = document.createElement('button');
-  waBtn.className = 'btn-wa';
-  waBtn.style.cssText = 'height:50px;font-size:15px;font-weight:600;border-radius:var(--r-md)';
-  waBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="margin-right:6px"></i> Invia su WhatsApp';
-  waBtn.onclick = function() {
-    const msg = 'Ciao! Lezione di Fondamenti del Karate — ' + slotKey + '. Conferma la tua presenza: ' + link;
-    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
-  };
-
-  // Remove old wa btn if exists
-  const oldWa = actions.querySelector('.btn-wa');
-  if (oldWa) oldWa.remove();
-  actions.insertBefore(waBtn, actions.firstChild);
-
-  overlay.classList.add('visible');
-  sheet.classList.add('open');
-}
-
-/* ══════════════════════════════════════════════
-   DELETE SHEET
-══════════════════════════════════════════════ */
-function openDeleteSheet(id, name) {
-  pendingDeleteId = id;
-  document.querySelector('.sheet-title').textContent = 'Elimina iscritto';
-  document.getElementById('sheet-body').textContent =
-    'Vuoi eliminare ' + (name || 'questo iscritto') + '? L\'azione non può essere annullata.';
-  const btn = document.getElementById('btn-confirm-delete');
-  btn.textContent = 'Elimina';
-  btn.onclick = async function() {
-    if (!pendingDeleteId) return;
-    closeDeleteSheet();
-    await deleteRegistration(pendingDeleteId);
-  };
-  // Remove WhatsApp button if present
-  const oldWa = document.querySelector('.sheet-actions .btn-wa');
-  if (oldWa) oldWa.remove();
-  document.getElementById('sheet-overlay').classList.add('visible');
-  document.getElementById('delete-sheet').classList.add('open');
-}
-
-function closeDeleteSheet() {
-  pendingDeleteId = null;
-  document.getElementById('sheet-overlay').classList.remove('visible');
-  document.getElementById('delete-sheet').classList.remove('open');
-}
-
-// Delete handler is set in openDeleteSheet()
-
-/* ══════════════════════════════════════════════
-   TAB NAVIGATION
-══════════════════════════════════════════════ */
-function switchTab(name) {
-  if (activeTab === name) return;
-  activeTab = name;
-
-  document.querySelectorAll('.tab-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.tab === name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(el => {
-    const isActive = el.id === 'panel-' + name;
-    el.classList.toggle('active', isActive);
-  });
-
-  // Reset scroll
-  document.getElementById('tab-content').scrollTop = 0;
-}
-
-document.querySelectorAll('.tab-item').forEach(el => {
-  el.addEventListener('click', () => switchTab(el.dataset.tab));
-});
-
-/* ══════════════════════════════════════════════
-   SEARCH
-══════════════════════════════════════════════ */
-document.getElementById('search-input').addEventListener('input', function() {
-  searchQuery = this.value;
-  renderPersone(searchQuery);
-});
-
-/* ══════════════════════════════════════════════
-   HEADER BUTTONS
-══════════════════════════════════════════════ */
-document.getElementById('btn-refresh').addEventListener('click', () => {
-  rotateRefresh(true);
-  loadData();
-});
-
-document.getElementById('btn-export').addEventListener('click', exportCSV);
-
-document.getElementById('msg-slot-select').addEventListener('change', onSlotSelect);
-document.getElementById('msg-slot-text').addEventListener('input', () => {});
-document.getElementById('btn-send-custom').addEventListener('click', sendCustomMsg);
-
-/* ══════════════════════════════════════════════
-   NOTIFICATIONS
-══════════════════════════════════════════════ */
-function showNotifBanner() {
-  const banner = document.getElementById('notif-banner');
-  banner.classList.add('show');
-}
-
-function dismissNotifBanner() {
-  document.getElementById('notif-banner').classList.remove('show');
-  localStorage.setItem('notif-dismissed', '1');
-}
-
-function requestNotifPermission() {
-  if (!('Notification' in window)) {
-    showToast('Notifiche non supportate');
-    dismissNotifBanner();
-    return;
   }
-  Notification.requestPermission().then(p => {
-    if (p === 'granted') showToast('Notifiche abilitate');
-    dismissNotifBanner();
-  });
-}
 
-function checkForNewRegistrations() {
-  fetch(API_URL, { cache: 'no-store' })
-    .then(r => r.json())
-    .then(data => {
-      const regs = data.registrations || [];
-      const count = regs.length;
-      if (lastCount === -1) { lastCount = count; return; }
-      if (count > lastCount) {
-        const diff = count - lastCount;
-        lastCount = count;
-        allRegistrations = regs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        renderAll();
-        showToast((diff === 1 ? 'Nuovo iscritto!' : diff + ' nuovi iscritti!'));
-        if (Notification.permission === 'granted') {
-          new Notification('Fondamenti del Karate', {
-            body: diff === 1 ? 'Nuovo iscritto!' : diff + ' nuovi iscritti!',
-            icon: 'icon-192.png'
-          });
-        }
+  async function sendSlotWhatsApp(key) {
+    const slot = SLOTS.find(s => slotKey(s) === key);
+    if (!slot) return;
+    const lesson = await createLesson(slot);
+    const counts = getSlotCounts();
+    const people = counts[key] || [];
+    const n = people.length;
+    const link = getLessonConfirmLink(lesson.id);
+    const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(slot)}. Siamo in ${n}! Conferma qui: ${link} — Salvatore`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    showToast('Messaggio pronto!');
+    await loadData();
+  }
+
+  async function deleteRegistration(id, name) {
+    if (!confirm(`Eliminare ${name}?`)) return;
+    _data.registrations = _data.registrations.filter(r => r.id !== id);
+    await putData();
+    showToast(`${name} eliminato`);
+    await loadData();
+  }
+
+  function copyInviteText() {
+    const text = document.getElementById('invite-box').dataset.inviteText;
+    copyToClipboard(text, 'Testo copiato!');
+  }
+
+  function sendInviteWhatsApp() {
+    const text = document.getElementById('invite-box').dataset.inviteText;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  }
+
+  // ─────────────────────────────────────────────
+  // EXPORT CSV
+  // ─────────────────────────────────────────────
+  function exportCSV() {
+    const rows = [['Nome', 'Telefono', 'Orari', 'Iscritto il']];
+    _data.registrations.forEach(r => {
+      rows.push([
+        r.name || '',
+        r.phone || '',
+        Array.isArray(r.slots) ? r.slots.join(' | ') : '',
+        r.createdAt ? new Date(r.createdAt).toLocaleString('it-IT') : ''
+      ]);
+    });
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `karate_iscritti_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('CSV esportato!');
+  }
+
+  // ─────────────────────────────────────────────
+  // NOTIFICATIONS
+  // ─────────────────────────────────────────────
+  function showNotifBanner() {
+    if (_notifDismissed) return;
+    if (Notification.permission === 'granted') return;
+    if (Notification.permission === 'denied') return;
+    if (localStorage.getItem('notif_dismissed')) return;
+    const banner = document.getElementById('notif-banner');
+    banner.style.display = 'flex';
+  }
+
+  function dismissNotifBanner() {
+    document.getElementById('notif-banner').style.display = 'none';
+    _notifDismissed = true;
+    localStorage.setItem('notif_dismissed', '1');
+  }
+
+  async function enableNotifications() {
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm === 'granted') {
+        dismissNotifBanner();
+        showToast('Notifiche attivate!');
+      } else {
+        dismissNotifBanner();
+        showToast('Notifiche non attivate');
       }
+    } catch {
+      dismissNotifBanner();
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // SERVICE WORKER
+  // ─────────────────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // ─────────────────────────────────────────────
+  // AUTO REFRESH
+  // ─────────────────────────────────────────────
+  setInterval(() => loadData(false), 30000);
+  setInterval(() => {
+    // silent poll for new registrations
+    fetch(API_URL, {
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      cache: 'no-store'
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (!Array.isArray(d.registrations)) return;
+      const count = d.registrations.length;
+      if (_lastCount !== null && count > _lastCount) {
+        const diff = count - _lastCount;
+        const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
+        showToast(msg, 3500);
+        if (Notification.permission === 'granted') {
+          try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
+        }
+        _data = d;
+        if (!Array.isArray(_data.lessons)) _data.lessons = [];
+        render();
+      }
+      _lastCount = count;
     })
     .catch(() => {});
-}
+  }, 15000);
 
-/* ══════════════════════════════════════════════
-   SERVICE WORKER
-══════════════════════════════════════════════ */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
-
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-(function init() {
-  loadData();
-  setInterval(loadData, 30000);
-  setInterval(checkForNewRegistrations, 15000);
-
-  // Notif banner
-  if (!localStorage.getItem('notif-dismissed') && 'Notification' in window && Notification.permission === 'default') {
+  // ─────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    loadData(false);
     setTimeout(showNotifBanner, 3000);
-  }
-})();
+  });
 </script>
+
 </body>
 </html>

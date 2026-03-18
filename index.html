@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0A0A0A" />
   <meta name="apple-mobile-web-app-title" content="Fondamenti del Karate" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
@@ -15,10 +15,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── RESET ─────────────────────────────────── */
+    /* ── RESET ──────────────────────────────────── */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -26,412 +26,371 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ─── TOKENS ─────────────────────────────────── */
+    /* ── TOKENS ─────────────────────────────────── */
     :root {
-      --bg:            #000000;
-      --surface:       #111111;
-      --surface-2:     #1a1a1a;
-      --surface-3:     #222222;
-      --border:        rgba(255, 255, 255, 0.05);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --sand:          #B8A58C;
-      --sand-dim:      rgba(184, 165, 140, 0.10);
-      --sand-glow:     rgba(184, 165, 140, 0.18);
-      --text:          #ffffff;
-      --text-2:        #999999;
-      --text-3:        #4a4a4a;
-      --r-sm:          8px;
-      --r-md:          12px;
-      --r-lg:          16px;
-      --r-xl:          20px;
+      --bg:       #0A0A0A;
+      --card:     #1A1A1A;
+      --text:     #FFFFFF;
+      --text2:    #AAAAAA;
+      --sand:     #C8A87C;
+      --border:   rgba(255,255,255,0.10);
+      --r:        16px;
     }
 
-    /* ─── BASE ───────────────────────────────────── */
+    /* ── BASE ───────────────────────────────────── */
     html {
-      scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
+      font-size: 17px;
+      line-height: 1.5;
       min-height: 100dvh;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior-y: none;
-      line-height: 1.5;
     }
 
     ::-webkit-scrollbar { display: none; }
-    * { scrollbar-width: none; -ms-overflow-style: none; }
+    * { scrollbar-width: none; }
 
-    /* ─── PAGE ENTER ─────────────────────────────── */
-    .page-wrapper {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: page-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
-    }
-
-    @keyframes page-enter {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ─── STICKY HEADER ─────────────────────────── */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      padding: env(safe-area-inset-top, 0) 24px 0;
-      background: rgba(0, 0, 0, 0.80);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .header-inner {
+    /* ── WRAPPER ────────────────────────────────── */
+    .wrap {
       max-width: 480px;
       margin: 0 auto;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 0 20px;
     }
 
-    .header-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.2px;
-    }
-
-    .header-tag {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--sand);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-
-    /* ─── HERO ───────────────────────────────────── */
+    /* ── HERO ───────────────────────────────────── */
     .hero {
-      padding: 52px 24px 40px;
+      padding: 48px 20px 40px;
       max-width: 480px;
       margin: 0 auto;
+      text-align: center;
     }
 
-    .hero-icon {
-      display: block;
-      margin-bottom: 28px;
+    /* ── CSS PIXEL ART KARATEKA ─────────────────── */
+    /*
+      Built with the box-shadow technique on a single 8x8px pixel div.
+      Each shadow entry = one pixel.  Origin (0,0) = top-left pixel.
+      Character is ~10 cols × 14 rows at 8px/pixel → ~80×112px visual.
+      Two keyframe sets alternate via animation-timing-function: steps(1).
+    */
+    .karateka-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+      height: 112px;
+      align-items: flex-end;
     }
 
-    /* Karateka GIF */
-    .karate-gif {
-      width: 80px;
-      height: auto;
-      image-rendering: pixelated;
-      filter: grayscale(30%) brightness(0.9);
-      opacity: 0.75;
-      border-radius: 4px;
+    .karateka {
+      width: 8px;
+      height: 8px;
+      position: relative;
+      /* The pixel itself is invisible; all drawing is done in box-shadow */
+      background: transparent;
+      animation: karate-kick 0.7s steps(1) infinite;
     }
 
+    /*
+      Frame coordinate system: shadow X = col*8px, Y = row*8px
+      Color: #C8A87C (sand/gold)
+
+      FRAME A — fighting stance (weight on back leg, front arm guard)
+        Head:   col3-4, row0
+        Neck:   col3-4, row1
+        Body:   col2-5, row2-3
+        LArm:   col1, row2  (guard up)
+        RArm:   col5-6, row2
+        LLeg:   col2-3, row4-5 (bent)
+        RLeg:   col4-5, row4  → col5, row5-6 (weight back)
+        Feet:   col1-2, row6  col5-6, row6
+
+      FRAME B — kick (front leg raised, arm extends)
+        Head:   col3-4, row0
+        Neck:   col3-4, row1
+        Body:   col2-5, row2-3
+        LArm:   col0-1, row2  (punch extended)
+        RArm:   col5, row2
+        LLeg:   col2-3, row4-5
+        RLeg:   col5-6, row2-3 (kick!)
+        Foot:   col7, row2     (kick tip)
+        SFoot:  col2-3, row6
+    */
+
+    @keyframes karate-kick {
+      0%, 49% {
+        /* FRAME A — stance */
+        box-shadow:
+          /* head */
+          24px  0px var(--sand),
+          32px  0px var(--sand),
+          24px  8px var(--sand),
+          32px  8px var(--sand),
+          /* neck */
+          24px 16px var(--sand),
+          32px 16px var(--sand),
+          /* body */
+          16px 24px var(--sand),
+          24px 24px var(--sand),
+          32px 24px var(--sand),
+          40px 24px var(--sand),
+          16px 32px var(--sand),
+          24px 32px var(--sand),
+          32px 32px var(--sand),
+          40px 32px var(--sand),
+          /* left arm (guard up) */
+           8px 24px var(--sand),
+           8px 32px var(--sand),
+          /* right arm */
+          48px 24px var(--sand),
+          56px 24px var(--sand),
+          /* left leg */
+          16px 40px var(--sand),
+          24px 40px var(--sand),
+          16px 48px var(--sand),
+          24px 48px var(--sand),
+          /* right leg */
+          32px 40px var(--sand),
+          40px 40px var(--sand),
+          40px 48px var(--sand),
+          48px 48px var(--sand),
+          /* feet */
+           8px 56px var(--sand),
+          16px 56px var(--sand),
+          40px 56px var(--sand),
+          48px 56px var(--sand);
+      }
+      50%, 100% {
+        /* FRAME B — kick */
+        box-shadow:
+          /* head */
+          24px  0px var(--sand),
+          32px  0px var(--sand),
+          24px  8px var(--sand),
+          32px  8px var(--sand),
+          /* neck */
+          24px 16px var(--sand),
+          32px 16px var(--sand),
+          /* body */
+          16px 24px var(--sand),
+          24px 24px var(--sand),
+          32px 24px var(--sand),
+          40px 24px var(--sand),
+          16px 32px var(--sand),
+          24px 32px var(--sand),
+          32px 32px var(--sand),
+          40px 32px var(--sand),
+          /* left arm extended punch */
+           0px 24px var(--sand),
+           8px 24px var(--sand),
+          /* right arm down */
+          48px 32px var(--sand),
+          /* left leg grounded */
+          16px 40px var(--sand),
+          24px 40px var(--sand),
+          16px 48px var(--sand),
+          24px 48px var(--sand),
+          /* right leg KICK raised */
+          40px 16px var(--sand),
+          48px 16px var(--sand),
+          40px 24px var(--sand),
+          48px 24px var(--sand),
+          56px 24px var(--sand),
+          64px 24px var(--sand),
+          /* standing foot */
+          16px 56px var(--sand),
+          24px 56px var(--sand);
+      }
+    }
+
+    /* ── HERO TEXT ──────────────────────────────── */
     .hero-title {
-      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-size: 32px;
       font-weight: 700;
-      letter-spacing: -1.8px;
-      line-height: 1.04;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
       color: var(--text);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .hero-sub {
-      font-size: 14px;
-      color: var(--text-2);
-      font-weight: 400;
-      line-height: 1.65;
-      max-width: 300px;
-      margin-bottom: 36px;
+      font-size: 17px;
+      color: var(--text2);
+      line-height: 1.55;
+      margin-bottom: 16px;
     }
 
-    /* ─── INFO ROW ───────────────────────────────── */
-    .info-row {
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
-
-    .info-item {
-      font-size: 12px;
+    .hero-tags {
+      font-size: 15px;
+      color: var(--sand);
       font-weight: 500;
-      color: var(--text-3);
       letter-spacing: 0.3px;
     }
 
-    .info-sep {
-      margin: 0 10px;
-      font-size: 12px;
-      color: var(--text-3);
-      opacity: 0.4;
-    }
-
-    /* ─── DIVIDER ────────────────────────────────── */
+    /* ── SECTION DIVIDER ────────────────────────── */
     .divider {
       height: 1px;
       background: var(--border);
-      margin: 0 24px;
     }
 
-    /* ─── FORM AREA ──────────────────────────────── */
-    .form-area {
-      padding: 32px 24px env(safe-area-inset-bottom, 32px);
+    /* ── MAIN FORM CARD ─────────────────────────── */
+    .form-section {
+      padding: 36px 20px calc(env(safe-area-inset-bottom, 24px) + 24px);
       max-width: 480px;
       margin: 0 auto;
     }
 
-    .form-card {
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-lg);
-      overflow: hidden;
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 20px;
     }
 
-    .form-card-header {
-      padding: 18px 20px 16px;
-      border-bottom: 1px solid var(--border);
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
     }
 
-    .form-card-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .form-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    /* ─── FIELD ──────────────────────────────────── */
+    /* ── FIELD ──────────────────────────────────── */
     .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+      margin-bottom: 28px;
     }
 
     .field-label {
-      font-size: 10.5px;
+      display: block;
+      font-size: 20px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.9px;
-      color: var(--sand);
+      color: var(--text);
+      margin-bottom: 10px;
     }
 
     .field-label .opt {
+      font-size: 15px;
       font-weight: 400;
-      text-transform: none;
-      letter-spacing: 0;
-      color: var(--text-3);
-      margin-left: 4px;
+      color: var(--text2);
+      margin-left: 6px;
     }
 
     .field-input {
       width: 100%;
-      background: var(--surface-2);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-md);
+      min-height: 56px;
+      background: #0A0A0A;
+      border: 2px solid var(--border);
+      border-radius: 12px;
       color: var(--text);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 400;
-      padding: 13px 14px;
+      padding: 14px 16px;
       outline: none;
       appearance: none;
       -webkit-appearance: none;
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
-      min-height: 48px;
     }
 
     .field-input::placeholder {
-      color: var(--text-3);
-      font-weight: 400;
+      color: #555555;
     }
 
     .field-input:focus {
       border-color: var(--sand);
-      box-shadow: 0 0 0 3px var(--sand-dim);
+      box-shadow: 0 0 0 3px rgba(200,168,124,0.18);
     }
 
-    /* phone */
+    /* phone row */
     .phone-row {
       display: flex;
-      gap: 0;
     }
 
     .phone-prefix {
       flex-shrink: 0;
-      background: var(--surface-2);
-      border: 1px solid var(--border-subtle);
+      min-height: 56px;
+      background: #0A0A0A;
+      border: 2px solid var(--border);
       border-right: none;
-      border-radius: var(--r-md) 0 0 var(--r-md);
-      padding: 13px 12px;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-2);
+      border-radius: 12px 0 0 12px;
+      padding: 14px 14px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text2);
       display: flex;
       align-items: center;
-      min-height: 48px;
       user-select: none;
     }
 
     .phone-row .field-input {
-      border-radius: 0 var(--r-md) var(--r-md) 0;
-    }
-
-    .phone-row .field-input:focus {
-      border-color: var(--sand);
-      box-shadow: 0 0 0 3px var(--sand-dim);
-      z-index: 1;
-      position: relative;
+      border-radius: 0 12px 12px 0;
     }
 
     textarea.field-input {
-      min-height: 88px;
+      min-height: 96px;
       resize: none;
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
-    /* ─── FIELD ERRORS ───────────────────────────── */
+    /* field error state */
     .field-err {
-      font-size: 11.5px;
-      color: #888;
-      font-weight: 500;
       display: none;
-      padding-left: 2px;
+      font-size: 15px;
+      color: #FF6B6B;
+      font-weight: 500;
+      margin-top: 8px;
     }
 
-    .field.error .field-input {
-      border-color: rgba(255, 255, 255, 0.25) !important;
-    }
-
+    .field.error .field-input,
     .field.error .phone-prefix {
-      border-color: rgba(255, 255, 255, 0.25) !important;
+      border-color: #FF6B6B;
     }
 
     .field.error .field-err {
       display: block;
     }
 
-    /* ─── SLOTS SECTION ──────────────────────────── */
+    /* ── SLOTS ──────────────────────────────────── */
+    .slots-section {
+      margin-bottom: 28px;
+    }
+
     .slots-label {
-      font-size: 10.5px;
+      font-size: 20px;
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.9px;
-      color: var(--sand);
-      margin-bottom: 6px;
+      color: var(--text);
+      margin-bottom: 8px;
     }
 
     .slots-hint {
-      font-size: 12px;
-      color: var(--text-3);
-      margin-bottom: 14px;
+      font-size: 16px;
+      color: var(--text2);
+      margin-bottom: 20px;
       line-height: 1.5;
     }
 
-    .day-block {
-      border-radius: var(--r-md);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      margin-bottom: 6px;
-      transition: border-color 0.18s ease;
+    .day-group {
+      margin-bottom: 20px;
     }
 
-    .day-block:last-child {
-      margin-bottom: 0;
+    .day-heading {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
     }
 
-    .day-block.open {
-      border-color: var(--border-subtle);
-    }
-
-    .day-toggle {
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 13px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 48px;
+    .slots-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      transition: background 0.15s ease;
-    }
-
-    .day-toggle:active {
-      background: rgba(255, 255, 255, 0.02);
-      transform: scale(0.99);
-    }
-
-    .day-toggle-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .day-name {
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: -0.1px;
-    }
-
-    .day-badge {
-      font-size: 10.5px;
-      font-weight: 500;
-      color: var(--text-3);
-      background: var(--surface-2);
-      border-radius: 100px;
-      padding: 2px 9px;
-      letter-spacing: 0.1px;
-    }
-
-    .day-badge.has-sel {
-      background: var(--sand-dim);
-      color: var(--sand);
-    }
-
-    .day-chevron {
-      width: 16px;
-      height: 16px;
-      color: var(--text-3);
-      transition: transform 0.28s cubic-bezier(0.34, 1.2, 0.64, 1);
-      flex-shrink: 0;
-    }
-
-    .day-block.open .day-chevron {
-      transform: rotate(180deg);
-    }
-
-    .day-slots {
-      display: none;
-      padding: 0 14px 14px;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
-    .day-block.open .day-slots {
-      display: flex;
-      animation: slots-open 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    @keyframes slots-open {
-      from { opacity: 0; transform: translateY(-5px); }
-      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* hidden checkbox */
@@ -443,98 +402,81 @@
       pointer-events: none;
     }
 
-    /* chip — unselected */
-    .slot-chip {
-      display: inline-flex;
+    /* slot card — unselected */
+    .slot-card {
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 13px;
-      border-radius: var(--r-sm);
-      border: 1px solid var(--border-subtle);
-      background: var(--surface-2);
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-2);
+      justify-content: center;
+      min-height: 64px;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      background: #111111;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
       cursor: pointer;
       user-select: none;
-      transition: background 0.16s ease,
-                  border-color 0.16s ease,
-                  color 0.16s ease,
-                  box-shadow 0.16s ease,
-                  transform 0.1s ease;
-      min-height: 38px;
+      text-align: center;
+      transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.1s ease;
+      padding: 12px 8px;
+      line-height: 1.3;
     }
 
-    .slot-chip:active {
-      transform: scale(0.94);
+    .slot-card:active {
+      transform: scale(0.95);
     }
 
-    /* chip — selected */
-    .slot-cb:checked + .slot-chip {
-      background: var(--surface-3);
+    /* slot card — SELECTED: sand bg, black text, bold — very obvious */
+    .slot-cb:checked + .slot-card {
+      background: var(--sand);
       border-color: var(--sand);
-      color: var(--text);
-      box-shadow: 0 0 0 1px var(--sand-dim);
-    }
-
-    .slot-chip-check {
-      width: 13px;
-      height: 13px;
-      flex-shrink: 0;
-      opacity: 0;
-      stroke: var(--sand);
-      transition: opacity 0.14s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform: scale(0.4);
-    }
-
-    .slot-cb:checked + .slot-chip .slot-chip-check {
-      opacity: 1;
-      transform: scale(1);
+      color: #000000;
+      font-weight: 700;
     }
 
     .slots-err {
-      font-size: 11.5px;
-      color: #888;
-      font-weight: 500;
       display: none;
-      padding-left: 2px;
-      margin-top: 6px;
+      font-size: 15px;
+      color: #FF6B6B;
+      font-weight: 500;
+      margin-top: 8px;
     }
 
     .slots-err.show {
       display: block;
     }
 
-    /* ─── SUBMIT BUTTON ──────────────────────────── */
+    /* ── SUBMIT ──────────────────────────────────── */
+    .submit-wrap {
+      margin-top: 8px;
+    }
+
     .submit-btn {
       width: 100%;
-      min-height: 52px;
-      background: #ffffff;
+      min-height: 60px;
+      background: #FFFFFF;
       border: none;
-      border-radius: var(--r-md);
+      border-radius: 14px;
       color: #000000;
       font-family: inherit;
-      font-size: 14.5px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 0.1px;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      position: relative;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: opacity 0.18s ease,
-                  transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 10px;
+      transition: opacity 0.15s ease, transform 0.12s ease;
     }
 
-    .submit-btn:not(:disabled):hover {
-      opacity: 0.90;
-    }
-
-    .submit-btn:not(:disabled):active {
+    .submit-btn:active {
       transform: scale(0.97);
-      opacity: 0.85;
+      opacity: 0.88;
     }
 
     .submit-btn:disabled {
@@ -542,125 +484,118 @@
       cursor: not-allowed;
     }
 
-    .submit-btn.loading {
-      pointer-events: none;
-    }
-
     .btn-spinner {
       display: none;
-      width: 17px;
-      height: 17px;
-      border: 2px solid rgba(0, 0, 0, 0.25);
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid rgba(0,0,0,0.25);
       border-top-color: #000;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       flex-shrink: 0;
     }
 
-    .submit-btn.loading .btn-spinner {
-      display: block;
+    .submit-btn.loading .btn-spinner { display: block; }
+    .submit-btn.loading .btn-label  { opacity: 0.6; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .submit-note {
+      text-align: center;
+      font-size: 15px;
+      color: var(--text2);
+      margin-top: 14px;
+      line-height: 1.5;
     }
 
-    .submit-btn.loading .btn-label {
-      opacity: 0.6;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ─── FOOTER ─────────────────────────────────── */
+    /* ── FOOTER ─────────────────────────────────── */
     .footer {
       text-align: center;
-      padding: 28px 24px calc(env(safe-area-inset-bottom, 0px) + 28px);
+      padding: 28px 20px calc(env(safe-area-inset-bottom, 0px) + 28px);
       border-top: 1px solid var(--border);
       max-width: 480px;
       margin: 0 auto;
     }
 
     .footer-text {
-      font-size: 11.5px;
-      color: var(--text-3);
-      line-height: 1.6;
-      letter-spacing: 0.1px;
+      font-size: 14px;
+      color: #555555;
     }
 
-    /* ─── SUCCESS OVERLAY ────────────────────────── */
+    /* ── SUCCESS OVERLAY ────────────────────────── */
     .success-overlay {
       position: fixed;
       inset: 0;
       z-index: 200;
-      background: rgba(0, 0, 0, 0.90);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: none;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      padding: 24px;
     }
 
     .success-overlay.show {
       display: flex;
-      animation: overlay-in 0.28s ease;
+      animation: fade-in 0.25s ease;
     }
 
-    @keyframes overlay-in {
+    @keyframes fade-in {
       from { opacity: 0; }
       to   { opacity: 1; }
     }
 
-    .success-sheet {
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-bottom: none;
-      border-radius: var(--r-xl) var(--r-xl) 0 0;
-      padding: 14px 28px 44px;
+    .success-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 28px 36px;
       width: 100%;
-      max-width: 480px;
+      max-width: 380px;
       text-align: center;
-      animation: sheet-up 0.38s cubic-bezier(0.34, 1.4, 0.64, 1);
+      animation: pop-in 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
 
-    @keyframes sheet-up {
-      from { transform: translateY(100%); opacity: 0.4; }
-      to   { transform: translateY(0);    opacity: 1; }
+    @keyframes pop-in {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
     }
 
-    .sheet-handle {
-      width: 32px;
-      height: 3px;
-      border-radius: 100px;
-      background: var(--border-subtle);
-      margin: 0 auto 32px;
+    .success-check {
+      font-size: 64px;
+      line-height: 1;
+      margin-bottom: 20px;
+      /* Use CSS checkmark via a circle + SVG-like trick */
     }
 
-    .check-circle {
-      width: 68px;
-      height: 68px;
+    .check-ring {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      background: var(--sand-dim);
-      border: 1.5px solid var(--sand);
+      border: 3px solid var(--sand);
+      background: rgba(200,168,124,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 22px;
-      animation: check-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s both;
+      margin: 0 auto 24px;
+      animation: ring-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
     }
 
-    @keyframes check-pop {
-      from { transform: scale(0.3); opacity: 0; }
+    @keyframes ring-pop {
+      from { transform: scale(0.4); opacity: 0; }
       to   { transform: scale(1);   opacity: 1; }
     }
 
     .check-svg {
-      width: 28px;
-      height: 28px;
+      width: 36px;
+      height: 36px;
       stroke: var(--sand);
-      stroke-width: 2;
+      stroke-width: 3;
       fill: none;
-      stroke-dasharray: 50;
-      stroke-dashoffset: 50;
-      animation: draw-check 0.38s ease 0.28s forwards;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: draw-check 0.4s ease 0.28s forwards;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -670,331 +605,220 @@
     }
 
     .success-title {
-      font-size: 21px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.6px;
-      margin-bottom: 10px;
-      animation: fade-up-in 0.32s ease 0.22s both;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+      animation: rise-in 0.3s ease 0.22s both;
     }
 
     .success-body {
-      font-size: 13.5px;
-      color: var(--text-2);
-      line-height: 1.7;
-      margin-bottom: 28px;
-      animation: fade-up-in 0.32s ease 0.32s both;
+      font-size: 17px;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      animation: rise-in 0.3s ease 0.32s both;
     }
 
     .success-btn {
       width: 100%;
-      min-height: 52px;
-      background: #ffffff;
+      min-height: 56px;
+      background: #FFFFFF;
       border: none;
-      border-radius: var(--r-md);
+      border-radius: 14px;
       color: #000000;
       font-family: inherit;
-      font-size: 14.5px;
+      font-size: 18px;
       font-weight: 700;
       cursor: pointer;
       transition: opacity 0.15s ease, transform 0.12s ease;
-      animation: fade-up-in 0.32s ease 0.40s both;
-    }
-
-    .success-btn:hover {
-      opacity: 0.88;
+      animation: rise-in 0.3s ease 0.40s both;
     }
 
     .success-btn:active {
       transform: scale(0.97);
-      opacity: 0.80;
+      opacity: 0.85;
     }
 
-    @keyframes fade-up-in {
-      from { opacity: 0; transform: translateY(8px); }
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ─── RESPONSIVE ─────────────────────────────── */
-    @media (min-width: 480px) {
-      .success-sheet {
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--r-xl);
-        margin: 0 auto 40px;
-      }
-
-      .success-overlay {
-        align-items: center;
-      }
     }
   </style>
 </head>
 <body>
 
-<div class="page-wrapper">
-
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-inner">
-      <span class="header-title">Fondamenti del Karate</span>
-      <span class="header-tag">Prenotazione</span>
-    </div>
-  </header>
-
   <!-- HERO -->
   <section class="hero">
 
-    <!-- Karateka animated GIF -->
-    <div class="hero-icon">
-      <img class="karate-gif" src="https://media4.giphy.com/media/l0Iy7hkkPipg7phwk/giphy.gif" alt="Karateka pixel art" loading="eager" />
+    <!-- CSS pixel-art karateka -->
+    <div class="karateka-wrap">
+      <div class="karateka"></div>
     </div>
 
-    <h1 class="hero-title">Fondamenti<br />del Karate</h1>
-    <p class="hero-sub">Tecniche base di Karate, Aikido, Judo e arti marziali — per tutti i livelli</p>
-
-    <div class="info-row">
-      <span class="info-item">1 Ora</span>
-      <span class="info-sep">·</span>
-      <span class="info-item">Tutti i livelli</span>
-      <span class="info-sep">·</span>
-      <span class="info-item">Con Salvatore</span>
-    </div>
-
+    <h1 class="hero-title">Fondamenti<br>del Karate</h1>
+    <p class="hero-sub">Tecniche base per tutti i livelli<br>— con Salvatore</p>
+    <p class="hero-tags">1 Ora &nbsp;·&nbsp; Karate &nbsp;·&nbsp; Aikido &nbsp;·&nbsp; Judo</p>
   </section>
 
   <div class="divider"></div>
 
   <!-- FORM -->
-  <section class="form-area">
-    <div class="form-card">
-      <div class="form-card-header">
-        <div class="form-card-title">Registra la tua disponibilita'</div>
-      </div>
+  <section class="form-section">
+    <div class="card">
+      <div class="card-title">Quando sei disponibile?</div>
 
       <form id="regForm" novalidate>
-        <div class="form-body">
 
-          <!-- Nome -->
-          <div class="field" id="field-name">
-            <label class="field-label" for="inputName">Nome</label>
+        <!-- Nome -->
+        <div class="field" id="field-name">
+          <label class="field-label" for="inputName">Il tuo nome</label>
+          <input
+            class="field-input"
+            type="text"
+            id="inputName"
+            name="name"
+            placeholder="Es. Mario Rossi"
+            autocomplete="given-name"
+            autocapitalize="words"
+            inputmode="text"
+          />
+          <span class="field-err" id="err-name">Inserisci il tuo nome.</span>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="field" id="field-phone">
+          <label class="field-label" for="inputPhone">Numero WhatsApp</label>
+          <div class="phone-row">
+            <div class="phone-prefix">+39</div>
             <input
               class="field-input"
-              type="text"
-              id="inputName"
-              name="name"
-              placeholder="Il tuo nome"
-              autocomplete="given-name"
-              inputmode="text"
-              autocapitalize="words"
+              type="tel"
+              id="inputPhone"
+              name="phone"
+              placeholder="333 123 4567"
+              autocomplete="tel-national"
+              inputmode="tel"
+              maxlength="15"
             />
-            <span class="field-err" id="err-name">Inserisci il tuo nome.</span>
+          </div>
+          <span class="field-err" id="err-phone">Inserisci un numero valido.</span>
+        </div>
+
+        <!-- Time slots — all visible, 2-column grid -->
+        <div class="slots-section" id="slots-section">
+          <div class="slots-label">Scegli i tuoi orari</div>
+          <div class="slots-hint">Tocca gli orari in cui sei libero. Puoi sceglierne piu' di uno.</div>
+
+          <!-- LUNEDI -->
+          <div class="day-group">
+            <div class="day-heading">Lunedi</div>
+            <div class="slots-grid">
+              <div>
+                <input class="slot-cb" type="checkbox" id="lun-18" name="slots" value="Lunedi 18:00-19:00" />
+                <label class="slot-card" for="lun-18">Lunedi<br>18:00–19:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="lun-19" name="slots" value="Lunedi 19:00-20:00" />
+                <label class="slot-card" for="lun-19">Lunedi<br>19:00–20:00</label>
+              </div>
+            </div>
           </div>
 
-          <!-- WhatsApp -->
-          <div class="field" id="field-phone">
-            <label class="field-label" for="inputPhone">Numero WhatsApp</label>
-            <div class="phone-row">
-              <div class="phone-prefix">+39</div>
-              <input
-                class="field-input"
-                type="tel"
-                id="inputPhone"
-                name="phone"
-                placeholder="333 123 4567"
-                autocomplete="tel-national"
-                inputmode="tel"
-                maxlength="15"
-              />
+          <!-- MERCOLEDI -->
+          <div class="day-group">
+            <div class="day-heading">Mercoledi</div>
+            <div class="slots-grid">
+              <div>
+                <input class="slot-cb" type="checkbox" id="mer-18" name="slots" value="Mercoledi 18:00-19:00" />
+                <label class="slot-card" for="mer-18">Mercoledi<br>18:00–19:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="mer-19" name="slots" value="Mercoledi 19:00-20:00" />
+                <label class="slot-card" for="mer-19">Mercoledi<br>19:00–20:00</label>
+              </div>
             </div>
-            <span class="field-err" id="err-phone">Inserisci un numero valido.</span>
           </div>
 
-          <!-- Orari -->
-          <div>
-            <div class="slots-label">Orari disponibili</div>
-            <div class="slots-hint">Seleziona tutti gli slot in cui sei libero. Puoi scegliere piu' di uno.</div>
-
-            <!-- Lunedi -->
-            <div class="day-block" id="day-lun">
-              <button type="button" class="day-toggle" data-day="lun" aria-expanded="false">
-                <span class="day-toggle-left">
-                  <span class="day-name">Lunedi</span>
-                  <span class="day-badge" id="badge-lun">2 slot</span>
-                </span>
-                <svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-              <div class="day-slots" id="slots-lun">
-                <div>
-                  <input class="slot-cb" type="checkbox" id="lun-18" name="slots" value="Lunedi 18:00-19:00" />
-                  <label class="slot-chip" for="lun-18">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    18:00 – 19:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="lun-19" name="slots" value="Lunedi 19:00-20:00" />
-                  <label class="slot-chip" for="lun-19">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    19:00 – 20:00
-                  </label>
-                </div>
+          <!-- VENERDI -->
+          <div class="day-group">
+            <div class="day-heading">Venerdi</div>
+            <div class="slots-grid">
+              <div>
+                <input class="slot-cb" type="checkbox" id="ven-18" name="slots" value="Venerdi 18:00-19:00" />
+                <label class="slot-card" for="ven-18">Venerdi<br>18:00–19:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="ven-19" name="slots" value="Venerdi 19:00-20:00" />
+                <label class="slot-card" for="ven-19">Venerdi<br>19:00–20:00</label>
               </div>
             </div>
-
-            <!-- Mercoledi -->
-            <div class="day-block" id="day-mer">
-              <button type="button" class="day-toggle" data-day="mer" aria-expanded="false">
-                <span class="day-toggle-left">
-                  <span class="day-name">Mercoledi</span>
-                  <span class="day-badge" id="badge-mer">2 slot</span>
-                </span>
-                <svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-              <div class="day-slots" id="slots-mer">
-                <div>
-                  <input class="slot-cb" type="checkbox" id="mer-18" name="slots" value="Mercoledi 18:00-19:00" />
-                  <label class="slot-chip" for="mer-18">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    18:00 – 19:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="mer-19" name="slots" value="Mercoledi 19:00-20:00" />
-                  <label class="slot-chip" for="mer-19">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    19:00 – 20:00
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Venerdi -->
-            <div class="day-block" id="day-ven">
-              <button type="button" class="day-toggle" data-day="ven" aria-expanded="false">
-                <span class="day-toggle-left">
-                  <span class="day-name">Venerdi</span>
-                  <span class="day-badge" id="badge-ven">2 slot</span>
-                </span>
-                <svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-              <div class="day-slots" id="slots-ven">
-                <div>
-                  <input class="slot-cb" type="checkbox" id="ven-18" name="slots" value="Venerdi 18:00-19:00" />
-                  <label class="slot-chip" for="ven-18">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    18:00 – 19:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="ven-19" name="slots" value="Venerdi 19:00-20:00" />
-                  <label class="slot-chip" for="ven-19">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    19:00 – 20:00
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sabato -->
-            <div class="day-block" id="day-sab">
-              <button type="button" class="day-toggle" data-day="sab" aria-expanded="false">
-                <span class="day-toggle-left">
-                  <span class="day-name">Sabato</span>
-                  <span class="day-badge" id="badge-sab">3 slot</span>
-                </span>
-                <svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-              <div class="day-slots" id="slots-sab">
-                <div>
-                  <input class="slot-cb" type="checkbox" id="sab-09" name="slots" value="Sabato 09:00-10:00" />
-                  <label class="slot-chip" for="sab-09">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    09:00 – 10:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="sab-10" name="slots" value="Sabato 10:00-11:00" />
-                  <label class="slot-chip" for="sab-10">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    10:00 – 11:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="sab-11" name="slots" value="Sabato 11:00-12:00" />
-                  <label class="slot-chip" for="sab-11">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    11:00 – 12:00
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Domenica -->
-            <div class="day-block" id="day-dom">
-              <button type="button" class="day-toggle" data-day="dom" aria-expanded="false">
-                <span class="day-toggle-left">
-                  <span class="day-name">Domenica</span>
-                  <span class="day-badge" id="badge-dom">3 slot</span>
-                </span>
-                <svg class="day-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"/>
-                </svg>
-              </button>
-              <div class="day-slots" id="slots-dom">
-                <div>
-                  <input class="slot-cb" type="checkbox" id="dom-09" name="slots" value="Domenica 09:00-10:00" />
-                  <label class="slot-chip" for="dom-09">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    09:00 – 10:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="dom-10" name="slots" value="Domenica 10:00-11:00" />
-                  <label class="slot-chip" for="dom-10">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    10:00 – 11:00
-                  </label>
-                </div>
-                <div>
-                  <input class="slot-cb" type="checkbox" id="dom-11" name="slots" value="Domenica 11:00-12:00" />
-                  <label class="slot-chip" for="dom-11">
-                    <svg class="slot-chip-check" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    11:00 – 12:00
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="slots-err" id="err-slots">Seleziona almeno un orario.</div>
           </div>
 
-          <!-- Note -->
-          <div class="field">
-            <label class="field-label" for="inputNotes">
-              Note<span class="opt">(opzionale)</span>
-            </label>
-            <textarea
-              class="field-input"
-              id="inputNotes"
-              name="notes"
-              placeholder="Esperienza, domande..."
-            ></textarea>
+          <!-- SABATO -->
+          <div class="day-group">
+            <div class="day-heading">Sabato</div>
+            <div class="slots-grid">
+              <div>
+                <input class="slot-cb" type="checkbox" id="sab-09" name="slots" value="Sabato 09:00-10:00" />
+                <label class="slot-card" for="sab-09">Sabato<br>09:00–10:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="sab-10" name="slots" value="Sabato 10:00-11:00" />
+                <label class="slot-card" for="sab-10">Sabato<br>10:00–11:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="sab-11" name="slots" value="Sabato 11:00-12:00" />
+                <label class="slot-card" for="sab-11">Sabato<br>11:00–12:00</label>
+              </div>
+            </div>
           </div>
 
-          <!-- Submit -->
+          <!-- DOMENICA -->
+          <div class="day-group">
+            <div class="day-heading">Domenica</div>
+            <div class="slots-grid">
+              <div>
+                <input class="slot-cb" type="checkbox" id="dom-09" name="slots" value="Domenica 09:00-10:00" />
+                <label class="slot-card" for="dom-09">Domenica<br>09:00–10:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="dom-10" name="slots" value="Domenica 10:00-11:00" />
+                <label class="slot-card" for="dom-10">Domenica<br>10:00–11:00</label>
+              </div>
+              <div>
+                <input class="slot-cb" type="checkbox" id="dom-11" name="slots" value="Domenica 11:00-12:00" />
+                <label class="slot-card" for="dom-11">Domenica<br>11:00–12:00</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="slots-err" id="err-slots">Seleziona almeno un orario.</div>
+        </div>
+
+        <!-- Note -->
+        <div class="field">
+          <label class="field-label" for="inputNotes">
+            Vuoi aggiungere qualcosa?<span class="opt">(facoltativo)</span>
+          </label>
+          <textarea
+            class="field-input"
+            id="inputNotes"
+            name="notes"
+            placeholder="Esperienza, domande, altro..."
+          ></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-wrap">
           <button type="submit" class="submit-btn" id="submitBtn">
             <div class="btn-spinner"></div>
-            <span class="btn-label">Conferma disponibilita'</span>
+            <span class="btn-label">INVIA</span>
           </button>
-
+          <p class="submit-note">Salvatore ti ricontatterra' su WhatsApp</p>
         </div>
+
       </form>
     </div>
   </section>
@@ -1004,161 +828,124 @@
     <div class="footer-text">Organizzato da Salvatore</div>
   </footer>
 
-</div><!-- /page-wrapper -->
-
-<!-- SUCCESS OVERLAY -->
-<div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true">
-  <div class="success-sheet">
-    <div class="sheet-handle"></div>
-    <div class="check-circle">
-      <svg class="check-svg" viewBox="0 0 24 24">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
+  <!-- SUCCESS OVERLAY -->
+  <div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true">
+    <div class="success-box">
+      <div class="check-ring">
+        <svg class="check-svg" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="success-title">Fatto!</div>
+      <p class="success-body">Salvatore ti contatterra' su WhatsApp per confermare.</p>
+      <button class="success-btn" id="successCloseBtn">Chiudi</button>
     </div>
-    <div class="success-title">Iscrizione inviata</div>
-    <p class="success-body">
-      Grazie. Salvatore ti contatttera' su WhatsApp per confermare gli orari.
-    </p>
-    <button class="success-btn" id="successCloseBtn">Chiudi</button>
   </div>
-</div>
 
-<script src="config.js"></script>
-<script>
-  /* ── Day accordion ────────────────────────── */
-  var days = ['lun', 'mer', 'ven', 'sab', 'dom'];
-
-  days.forEach(function(day) {
-    var block   = document.getElementById('day-' + day);
-    var toggle  = block.querySelector('.day-toggle');
-    var badge   = document.getElementById('badge-' + day);
-    var slotsEl = document.getElementById('slots-' + day);
-
-    toggle.addEventListener('click', function() {
-      var isOpen = block.classList.contains('open');
-      block.classList.toggle('open', !isOpen);
-      toggle.setAttribute('aria-expanded', String(!isOpen));
+  <script src="config.js"></script>
+  <script>
+    /* ── Input cleanup ──────────────────────────── */
+    document.getElementById('inputName').addEventListener('input', function() {
+      document.getElementById('field-name').classList.remove('error');
     });
 
-    slotsEl.querySelectorAll('.slot-cb').forEach(function(cb) {
+    document.getElementById('inputPhone').addEventListener('input', function() {
+      document.getElementById('field-phone').classList.remove('error');
+      this.value = this.value.replace(/[^\d\s\-]/g, '');
+    });
+
+    document.querySelectorAll('[name="slots"]').forEach(function(cb) {
       cb.addEventListener('change', function() {
-        var total    = slotsEl.querySelectorAll('.slot-cb').length;
-        var selected = slotsEl.querySelectorAll('.slot-cb:checked').length;
-        if (selected > 0) {
-          badge.textContent = selected + ' sel.';
-          badge.classList.add('has-sel');
-        } else {
-          badge.textContent = total + ' slot';
-          badge.classList.remove('has-sel');
-        }
         if (document.querySelectorAll('[name="slots"]:checked').length > 0) {
           document.getElementById('err-slots').classList.remove('show');
         }
       });
     });
-  });
 
-  /* ── Realtime validation clear ────────────── */
-  document.getElementById('inputName').addEventListener('input', function() {
-    document.getElementById('field-name').classList.remove('error');
-  });
+    /* ── Form submit ────────────────────────────── */
+    document.getElementById('regForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-  document.getElementById('inputPhone').addEventListener('input', function() {
-    document.getElementById('field-phone').classList.remove('error');
-    this.value = this.value.replace(/[^\d\s\-]/g, '');
-  });
+      var nameVal  = document.getElementById('inputName').value.trim();
+      var phoneVal = document.getElementById('inputPhone').value.trim();
+      var notesVal = document.getElementById('inputNotes').value.trim();
+      var slots    = Array.from(document.querySelectorAll('[name="slots"]:checked')).map(function(c) { return c.value; });
 
-  /* ── Form submit ──────────────────────────── */
-  document.getElementById('regForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+      var valid = true;
 
-    var nameVal  = document.getElementById('inputName').value.trim();
-    var phoneVal = document.getElementById('inputPhone').value.trim();
-    var notesVal = document.getElementById('inputNotes').value.trim();
-    var slots    = Array.from(document.querySelectorAll('[name="slots"]:checked')).map(function(c) { return c.value; });
+      if (!nameVal) {
+        document.getElementById('field-name').classList.add('error');
+        valid = false;
+      }
 
-    var valid = true;
+      if (!phoneVal || phoneVal.replace(/\D/g, '').length < 6) {
+        document.getElementById('field-phone').classList.add('error');
+        valid = false;
+      }
 
-    if (!nameVal) {
-      document.getElementById('field-name').classList.add('error');
-      valid = false;
-    }
+      if (slots.length === 0) {
+        document.getElementById('err-slots').classList.add('show');
+        valid = false;
+      }
 
-    if (!phoneVal || phoneVal.replace(/\D/g, '').length < 6) {
-      document.getElementById('field-phone').classList.add('error');
-      valid = false;
-    }
+      if (!valid) {
+        var firstErr = document.querySelector('.field.error .field-input, .slots-err.show');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
 
-    if (slots.length === 0) {
-      document.getElementById('err-slots').classList.add('show');
-      valid = false;
-    }
+      var btn = document.getElementById('submitBtn');
+      btn.classList.add('loading');
+      btn.disabled = true;
 
-    if (!valid) {
-      var firstErr = document.querySelector('.field.error, .slots-err.show');
-      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
+      var newReg = {
+        id:        Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+        name:      nameVal,
+        phone:     '+39' + phoneVal.replace(/\s+/g, ''),
+        slots:     slots,
+        notes:     notesVal,
+        timestamp: new Date().toISOString()
+      };
 
-    var btn = document.getElementById('submitBtn');
-    btn.classList.add('loading');
-    btn.disabled = true;
+      try {
+        var res = await fetch(API_URL);
+        var db  = await res.json();
+        var regs = db.registrations || [];
+        regs.push(newReg);
 
-    var newReg = {
-      id:        Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
-      name:      nameVal,
-      phone:     '+39' + phoneVal.replace(/\s+/g, ''),
-      slots:     slots,
-      notes:     notesVal,
-      timestamp: new Date().toISOString()
-    };
+        await fetch(API_URL, {
+          method:  'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ registrations: regs })
+        });
 
-    try {
-      var res = await fetch(API_URL);
-      var db  = await res.json();
-      var regs = db.registrations || [];
-      regs.push(newReg);
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        document.getElementById('successOverlay').classList.add('show');
+        document.body.style.overflow = 'hidden';
 
-      await fetch(API_URL, {
-        method:  'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ registrations: regs })
-      });
-
-      btn.classList.remove('loading');
-      btn.disabled = false;
-      document.getElementById('successOverlay').classList.add('show');
-      document.body.style.overflow = 'hidden';
-
-    } catch (err) {
-      console.error('[Fondamenti] Errore invio:', err);
-      btn.classList.remove('loading');
-      btn.disabled = false;
-      alert('Errore durante l\'invio. Riprova o contatta Salvatore su WhatsApp.');
-    }
-  });
-
-  /* ── Success close ────────────────────────── */
-  function closeSuccess() {
-    document.getElementById('successOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-    document.getElementById('regForm').reset();
-    document.querySelectorAll('.field.error').forEach(function(f) { f.classList.remove('error'); });
-    document.getElementById('err-slots').classList.remove('show');
-    days.forEach(function(day) {
-      var badge   = document.getElementById('badge-' + day);
-      var slotsEl = document.getElementById('slots-' + day);
-      var total   = slotsEl.querySelectorAll('.slot-cb').length;
-      badge.textContent = total + ' slot';
-      badge.classList.remove('has-sel');
+      } catch (err) {
+        console.error('[Karate360] Errore invio:', err);
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        alert('Errore durante l\'invio. Riprova o contatta Salvatore su WhatsApp.');
+      }
     });
-  }
 
-  document.getElementById('successCloseBtn').addEventListener('click', closeSuccess);
-  document.getElementById('successOverlay').addEventListener('click', function(e) {
-    if (e.target === this) closeSuccess();
-  });
-</script>
+    /* ── Success close ──────────────────────────── */
+    function closeSuccess() {
+      document.getElementById('successOverlay').classList.remove('show');
+      document.body.style.overflow = '';
+      document.getElementById('regForm').reset();
+      document.querySelectorAll('.field.error').forEach(function(f) { f.classList.remove('error'); });
+      document.getElementById('err-slots').classList.remove('show');
+    }
+
+    document.getElementById('successCloseBtn').addEventListener('click', closeSuccess);
+    document.getElementById('successOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeSuccess();
+    });
+  </script>
 
 </body>
 </html>
