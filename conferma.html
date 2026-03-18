@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Fondamenti del Karate" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>Fondamenti del Karate — Conferma</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET ─────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ─── TOKENS ─────────────────────────────────── */
+    :root {
+      --bg:            #000000;
+      --surface:       #111111;
+      --surface-2:     #1a1a1a;
+      --surface-3:     #222222;
+      --border:        rgba(255, 255, 255, 0.05);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --sand:          #B8A58C;
+      --sand-dim:      rgba(184, 165, 140, 0.10);
+      --sand-glow:     rgba(184, 165, 140, 0.18);
+      --green:         #4CAF87;
+      --green-dim:     rgba(76, 175, 135, 0.10);
+      --green-border:  rgba(76, 175, 135, 0.30);
+      --text:          #ffffff;
+      --text-2:        #999999;
+      --text-3:        #4a4a4a;
+      --r-sm:          8px;
+      --r-md:          12px;
+      --r-lg:          16px;
+      --r-xl:          20px;
+      --r-pill:        100px;
+    }
+
+    /* ─── BASE ───────────────────────────────────── */
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: none;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar { display: none; }
+    * { scrollbar-width: none; -ms-overflow-style: none; }
+
+    /* ─── STICKY HEADER ─────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: env(safe-area-inset-top, 0) 24px 0;
+      background: rgba(0, 0, 0, 0.80);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+
+    .header-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--sand);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    /* ─── PAGE WRAPPER ───────────────────────────── */
+    .page-wrapper {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: page-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+    }
+
+    @keyframes page-enter {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── MAIN CONTENT ───────────────────────────── */
+    .main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 40px 24px calc(env(safe-area-inset-bottom, 0px) + 48px);
+    }
+
+    /* ─── LESSON LABEL ───────────────────────────── */
+    .lesson-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--sand);
+      margin-bottom: 16px;
+    }
+
+    /* ─── LESSON TIME ────────────────────────────── */
+    .lesson-day {
+      font-size: clamp(2.6rem, 10vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.0;
+      color: var(--text);
+    }
+
+    .lesson-time {
+      font-size: clamp(1.6rem, 6vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      color: var(--text-2);
+      margin-top: 6px;
+    }
+
+    /* ─── DIVIDER ────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* ─── COUNTER SECTION ────────────────────────── */
+    .counter-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+
+    .counter-number {
+      font-size: clamp(3.5rem, 14vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1.0;
+      color: var(--text);
+      display: inline-block;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+    }
+
+    .counter-number.pop {
+      animation: count-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes count-pop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.18); }
+      100% { transform: scale(1); }
+    }
+
+    .counter-label {
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    /* ─── NAMES PILLS ────────────────────────────── */
+    .names-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      min-height: 28px;
+    }
+
+    .name-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      animation: pill-in 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    .name-pill.is-me {
+      background: var(--sand-dim);
+      border-color: rgba(184, 165, 140, 0.25);
+      color: var(--sand);
+    }
+
+    @keyframes pill-in {
+      from { opacity: 0; transform: scale(0.8); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .names-empty {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* ─── ACTION SECTION ─────────────────────────── */
+    .action-section {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    /* ─── BIG CONFIRM BUTTON ─────────────────────── */
+    .btn-confirm {
+      width: 100%;
+      min-height: 56px;
+      background: #ffffff;
+      border: none;
+      border-radius: var(--r-md);
+      color: #000000;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.18s ease, transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-confirm:not(:disabled):active {
+      transform: scale(0.97);
+      opacity: 0.85;
+    }
+
+    .btn-confirm:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-confirm.loading {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* ─── DECLINE LINK ───────────────────────────── */
+    .btn-decline {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-3);
+      cursor: pointer;
+      padding: 16px 0 4px;
+      text-align: center;
+      width: 100%;
+      transition: color 0.15s ease;
+    }
+
+    .btn-decline:hover {
+      color: var(--text-2);
+    }
+
+    /* ─── CONFIRMED STATE ────────────────────────── */
+    .state-confirmed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .confirmed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-radius: var(--r-md);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .confirmed-badge svg {
+      flex-shrink: 0;
+    }
+
+    .btn-cancel-confirm {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--text-3);
+      cursor: pointer;
+      padding: 4px 0;
+      text-align: left;
+      transition: color 0.15s ease;
+    }
+
+    .btn-cancel-confirm:hover {
+      color: var(--text-2);
+    }
+
+    /* ─── DECLINED STATE ─────────────────────────── */
+    .state-declined {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .declined-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-radius: var(--r-md);
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-2);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .btn-reconfirm {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--sand);
+      cursor: pointer;
+      padding: 4px 0;
+      text-align: left;
+      transition: color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-reconfirm:hover {
+      opacity: 0.75;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 28px 24px calc(env(safe-area-inset-bottom, 0px) + 28px);
+      border-top: 1px solid var(--border);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-size: 11.5px;
+      color: var(--text-3);
+      line-height: 1.6;
+      letter-spacing: 0.1px;
+    }
+
+    /* ─── LOADING STATE ──────────────────────────── */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 80px 24px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border-subtle);
+      border-top-color: var(--sand);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 13px;
+      color: var(--text-3);
+    }
+
+    /* ─── ERROR STATE ────────────────────────────── */
+    .error-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 80px 24px;
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .error-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+    }
+
+    .error-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--text);
+    }
+
+    .error-body {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .btn-retry {
+      margin-top: 8px;
+      min-height: 44px;
+      padding: 0 24px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-retry:active {
+      transform: scale(0.97);
+      opacity: 0.7;
+    }
+
+    /* ─── BTN SPINNER (inline) ───────────────────── */
+    .btn-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0, 0, 0, 0.20);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .btn-confirm.loading .btn-spinner {
+      display: block;
+    }
+
+    .btn-confirm.loading .btn-label-text {
+      opacity: 0.6;
+    }
+
+    /* ─── NAME OVERLAY ───────────────────────────── */
+    .name-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    .name-overlay.hidden {
+      display: none;
+    }
+
+    .name-sheet {
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-bottom: none;
+      border-radius: var(--r-xl) var(--r-xl) 0 0;
+      padding: 14px 28px 44px;
+      width: 100%;
+      max-width: 480px;
+      animation: sheet-up 0.38s cubic-bezier(0.34, 1.4, 0.64, 1);
+    }
+
+    @keyframes sheet-up {
+      from { transform: translateY(100%); opacity: 0.4; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .sheet-handle {
+      width: 32px;
+      height: 3px;
+      border-radius: var(--r-pill);
+      background: var(--border-subtle);
+      margin: 0 auto 28px;
+    }
+
+    .name-sheet-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.6px;
+      margin-bottom: 6px;
+    }
+
+    .name-sheet-sub {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .name-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 500;
+      padding: 15px 16px;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 54px;
+      margin-bottom: 14px;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .name-input::placeholder {
+      color: var(--text-3);
+      font-weight: 400;
+    }
+
+    .name-input:focus {
+      border-color: var(--sand);
+      box-shadow: 0 0 0 3px var(--sand-dim);
+    }
+
+    .btn-continue {
+      width: 100%;
+      min-height: 52px;
+      background: #ffffff;
+      border: none;
+      border-radius: var(--r-md);
+      color: #000000;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-continue:active {
+      transform: scale(0.97);
+      opacity: 0.85;
+    }
+
+    .btn-continue:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    @media (min-width: 480px) {
+      .name-sheet {
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--r-xl);
+        margin: 0 auto 40px;
+      }
+
+      .name-overlay {
+        align-items: center;
+      }
+    }
+
+    /* ─── HIDDEN ─────────────────────────────────── */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ─── STATE TRANSITION ───────────────────────── */
+    .action-section > * {
+      animation: fade-in 0.22s ease;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAME OVERLAY -->
+<div class="name-overlay hidden" id="nameOverlay" role="dialog" aria-modal="true" aria-label="Inserisci il tuo nome">
+  <div class="name-sheet">
+    <div class="sheet-handle"></div>
+    <div class="name-sheet-title">Come ti chiami?</div>
+    <div class="name-sheet-sub">Il tuo nome apparira' nella lista dei presenti.</div>
+    <input
+      class="name-input"
+      type="text"
+      id="nameInput"
+      placeholder="Il tuo nome"
+      autocomplete="given-name"
+      autocapitalize="words"
+      inputmode="text"
+      maxlength="40"
+      autocorrect="off"
+    />
+    <button class="btn-continue" id="btnContinue" disabled>Continua</button>
+  </div>
+</div>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <span class="header-title">Fondamenti del Karate</span>
+      <span class="header-tag" id="headerTag">Lezione</span>
+    </div>
+  </header>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div>
+    <div class="loading-text">Caricamento...</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-state hidden" id="errorState">
+    <div class="error-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <div class="error-title" id="errorTitle">Errore</div>
+    <div class="error-body" id="errorBody">Si e' verificato un errore.</div>
+    <button class="btn-retry hidden" id="btnRetry">Riprova</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main hidden" id="mainContent">
+
+    <div class="lesson-label">Prossima Lezione</div>
+
+    <div class="lesson-day" id="lessonDay">—</div>
+    <div class="lesson-time" id="lessonTime">—</div>
+
+    <div class="divider"></div>
+
+    <div class="counter-section">
+      <span class="counter-number" id="counterNumber">0</span>
+      <div class="counter-label">persone confermate</div>
+      <div class="names-list" id="namesList">
+        <span class="names-empty">Nessuno ancora — sii il primo!</span>
+      </div>
+    </div>
+
+    <div class="action-section" id="actionSection">
+      <!-- Rendered by JS based on user state -->
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer hidden" id="mainFooter">
+    <div class="footer-text">Organizzato da Salvatore</div>
+  </footer>
+
+</div><!-- /page-wrapper -->
+
+<script src="config.js"></script>
+<script>
+  /* ══════════════════════════════════════════════
+     CONSTANTS & STATE
+  ══════════════════════════════════════════════ */
+  var lessonId    = new URLSearchParams(window.location.search).get('id');
+  var userName    = localStorage.getItem('k360_name') || null;
+  var responseKey = lessonId ? 'k360_response_' + lessonId : null;
+  var currentData = null;
+  var currentLesson = null;
+  var refreshTimer  = null;
+  var prevCount     = -1;
+
+  /* ══════════════════════════════════════════════
+     DOM REFS
+  ══════════════════════════════════════════════ */
+  var elLoading      = document.getElementById('loadingState');
+  var elError        = document.getElementById('errorState');
+  var elErrorTitle   = document.getElementById('errorTitle');
+  var elErrorBody    = document.getElementById('errorBody');
+  var elBtnRetry     = document.getElementById('btnRetry');
+  var elMain         = document.getElementById('mainContent');
+  var elFooter       = document.getElementById('mainFooter');
+  var elLessonDay    = document.getElementById('lessonDay');
+  var elLessonTime   = document.getElementById('lessonTime');
+  var elCounter      = document.getElementById('counterNumber');
+  var elNamesList    = document.getElementById('namesList');
+  var elActionSection = document.getElementById('actionSection');
+  var elHeaderTag    = document.getElementById('headerTag');
+
+  var elNameOverlay  = document.getElementById('nameOverlay');
+  var elNameInput    = document.getElementById('nameInput');
+  var elBtnContinue  = document.getElementById('btnContinue');
+
+  /* ══════════════════════════════════════════════
+     UTILS
+  ══════════════════════════════════════════════ */
+  function show(el)  { el.classList.remove('hidden'); }
+  function hide(el)  { el.classList.add('hidden'); }
+
+  function parseSlot(slot) {
+    // slot format: "Sabato 10:00-11:00"
+    var parts = slot.split(' ');
+    var day   = parts[0] || '';
+    var time  = parts[1] || '';
+    var times = time.replace('-', ' \u2013 ');
+    return { day: day, time: times };
+  }
+
+  function getUserResponse() {
+    if (!responseKey) return null;
+    return localStorage.getItem(responseKey); // 'confirmed' | 'declined' | null
+  }
+
+  function setUserResponse(val) {
+    if (!responseKey) return;
+    if (val) {
+      localStorage.setItem(responseKey, val);
+    } else {
+      localStorage.removeItem(responseKey);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RENDER
+  ══════════════════════════════════════════════ */
+  function renderLesson(lesson) {
+    var parsed = parseSlot(lesson.slot);
+    elLessonDay.textContent  = parsed.day;
+    elLessonTime.textContent = parsed.time;
+    elHeaderTag.textContent  = parsed.day;
+  }
+
+  function renderCounter(lesson) {
+    var confirmed = lesson.confirmed || [];
+    var count = confirmed.length;
+
+    if (count !== prevCount) {
+      elCounter.textContent = count;
+      if (prevCount >= 0) {
+        // animate pop only after first render
+        elCounter.classList.remove('pop');
+        void elCounter.offsetWidth; // reflow
+        elCounter.classList.add('pop');
+      }
+      prevCount = count;
+    }
+
+    // Names list
+    if (confirmed.length === 0) {
+      elNamesList.innerHTML = '<span class="names-empty">Nessuno ancora \u2014 sii il primo!</span>';
+    } else {
+      elNamesList.innerHTML = confirmed.map(function(c) {
+        var isMe = userName && c.name.toLowerCase().trim() === userName.toLowerCase().trim();
+        return '<span class="name-pill' + (isMe ? ' is-me' : '') + '">' +
+               escapeHtml(c.name) + (isMe ? ' (tu)' : '') +
+               '</span>';
+      }).join('');
+    }
+  }
+
+  function renderAction(lesson) {
+    var resp = getUserResponse();
+
+    // Also verify from live data if user is actually in confirmed/declined
+    var confirmed = lesson.confirmed || [];
+    var declined  = lesson.declined  || [];
+
+    var inConfirmed = userName && confirmed.some(function(c) {
+      return c.name.toLowerCase().trim() === userName.toLowerCase().trim();
+    });
+    var inDeclined = userName && declined.some(function(c) {
+      return c.name.toLowerCase().trim() === userName.toLowerCase().trim();
+    });
+
+    // Sync localStorage with live data
+    if (inConfirmed) setUserResponse('confirmed');
+    else if (inDeclined) setUserResponse('declined');
+
+    resp = getUserResponse();
+
+    var html = '';
+
+    if (resp === 'confirmed') {
+      html = '<div class="state-confirmed">' +
+        '<div class="confirmed-badge">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+          'Hai confermato!' +
+        '</div>' +
+        '<button class="btn-cancel-confirm" id="btnCancelConfirm">Annulla conferma</button>' +
+      '</div>';
+    } else if (resp === 'declined') {
+      html = '<div class="state-declined">' +
+        '<div class="declined-badge">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          'Hai declinato' +
+        '</div>' +
+        '<button class="btn-reconfirm" id="btnReconfirm">Cambia idea \u2014 Ci sono!</button>' +
+      '</div>';
+    } else {
+      html = '<button class="btn-confirm" id="btnConfirm">' +
+          '<div class="btn-spinner"></div>' +
+          '<span class="btn-label-text">Ci sono!</span>' +
+        '</button>' +
+        '<button class="btn-decline" id="btnDecline">Non ci sono</button>';
+    }
+
+    elActionSection.innerHTML = html;
+
+    // Bind events
+    var btnConfirm = document.getElementById('btnConfirm');
+    var btnDecline = document.getElementById('btnDecline');
+    var btnCancelConfirm = document.getElementById('btnCancelConfirm');
+    var btnReconfirm = document.getElementById('btnReconfirm');
+
+    if (btnConfirm) {
+      btnConfirm.addEventListener('click', function() { respond('confirmed'); });
+    }
+    if (btnDecline) {
+      btnDecline.addEventListener('click', function() { respond('declined'); });
+    }
+    if (btnCancelConfirm) {
+      btnCancelConfirm.addEventListener('click', function() { cancelResponse(); });
+    }
+    if (btnReconfirm) {
+      btnReconfirm.addEventListener('click', function() { respond('confirmed'); });
+    }
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function renderPage(data) {
+    currentData = data;
+    var lessons = data.lessons || [];
+    var lesson = lessons.find(function(l) { return l.id === lessonId; });
+
+    if (!lesson) {
+      showError('Lezione non trovata.', 'Il link potrebbe essere scaduto o non valido.', false);
+      return;
+    }
+
+    currentLesson = lesson;
+
+    hide(elLoading);
+    hide(elError);
+    show(elMain);
+    show(elFooter);
+
+    renderLesson(lesson);
+    renderCounter(lesson);
+    renderAction(lesson);
+  }
+
+  /* ══════════════════════════════════════════════
+     ERROR DISPLAY
+  ══════════════════════════════════════════════ */
+  function showError(title, body, showRetry) {
+    hide(elLoading);
+    hide(elMain);
+    hide(elFooter);
+    show(elError);
+    elErrorTitle.textContent = title;
+    elErrorBody.textContent  = body;
+    if (showRetry) {
+      show(elBtnRetry);
+    } else {
+      hide(elBtnRetry);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     DATA FETCHING
+  ══════════════════════════════════════════════ */
+  function fetchData(showLoading) {
+    if (showLoading) {
+      show(elLoading);
+      hide(elError);
+      hide(elMain);
+      hide(elFooter);
+    }
+
+    return fetch(API_URL)
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        renderPage(data);
+        return data;
+      })
+      .catch(function(err) {
+        console.error('[conferma] fetch error:', err);
+        if (!currentLesson) {
+          showError('Errore di connessione.', 'Controlla la connessione e riprova.', true);
+        }
+      });
+  }
+
+  function startAutoRefresh() {
+    stopAutoRefresh();
+    refreshTimer = setInterval(function() {
+      fetchData(false);
+    }, 10000);
+  }
+
+  function stopAutoRefresh() {
+    if (refreshTimer) {
+      clearInterval(refreshTimer);
+      refreshTimer = null;
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RESPOND (confirm / decline)
+  ══════════════════════════════════════════════ */
+  function respond(type) {
+    if (!userName) return;
+
+    var btnConfirm = document.getElementById('btnConfirm');
+    if (btnConfirm) {
+      btnConfirm.classList.add('loading');
+      btnConfirm.disabled = true;
+    }
+
+    fetch(API_URL)
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        var lessons = data.lessons || [];
+        var idx = lessons.findIndex(function(l) { return l.id === lessonId; });
+        if (idx === -1) throw new Error('lesson not found');
+
+        var lesson = lessons[idx];
+        if (!lesson.confirmed) lesson.confirmed = [];
+        if (!lesson.declined)  lesson.declined  = [];
+
+        var nameLower = userName.toLowerCase().trim();
+
+        // Remove from both first
+        lesson.confirmed = lesson.confirmed.filter(function(c) {
+          return c.name.toLowerCase().trim() !== nameLower;
+        });
+        lesson.declined = lesson.declined.filter(function(c) {
+          return c.name.toLowerCase().trim() !== nameLower;
+        });
+
+        var entry = { name: userName, ts: new Date().toISOString() };
+        if (type === 'confirmed') {
+          lesson.confirmed.push(entry);
+        } else {
+          lesson.declined.push(entry);
+        }
+
+        lessons[idx] = lesson;
+        data.lessons = lessons;
+
+        return fetch(API_URL, {
+          method:  'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(data)
+        }).then(function(putRes) {
+          if (!putRes.ok) throw new Error('PUT failed');
+          return data;
+        });
+      })
+      .then(function(data) {
+        setUserResponse(type);
+        renderPage(data);
+      })
+      .catch(function(err) {
+        console.error('[conferma] respond error:', err);
+        if (btnConfirm) {
+          btnConfirm.classList.remove('loading');
+          btnConfirm.disabled = false;
+        }
+        alert('Errore di connessione. Riprova.');
+      });
+  }
+
+  function cancelResponse() {
+    if (!userName) return;
+
+    fetch(API_URL)
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        var lessons = data.lessons || [];
+        var idx = lessons.findIndex(function(l) { return l.id === lessonId; });
+        if (idx === -1) throw new Error('lesson not found');
+
+        var lesson = lessons[idx];
+        var nameLower = userName.toLowerCase().trim();
+
+        if (lesson.confirmed) {
+          lesson.confirmed = lesson.confirmed.filter(function(c) {
+            return c.name.toLowerCase().trim() !== nameLower;
+          });
+        }
+        if (lesson.declined) {
+          lesson.declined = lesson.declined.filter(function(c) {
+            return c.name.toLowerCase().trim() !== nameLower;
+          });
+        }
+
+        lessons[idx] = lesson;
+        data.lessons = lessons;
+
+        return fetch(API_URL, {
+          method:  'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(data)
+        }).then(function(putRes) {
+          if (!putRes.ok) throw new Error('PUT failed');
+          return data;
+        });
+      })
+      .then(function(data) {
+        setUserResponse(null);
+        renderPage(data);
+      })
+      .catch(function(err) {
+        console.error('[conferma] cancel error:', err);
+        alert('Errore di connessione. Riprova.');
+      });
+  }
+
+  /* ══════════════════════════════════════════════
+     NAME OVERLAY
+  ══════════════════════════════════════════════ */
+  elNameInput.addEventListener('input', function() {
+    elBtnContinue.disabled = this.value.trim().length < 2;
+  });
+
+  elNameInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !elBtnContinue.disabled) {
+      submitName();
+    }
+  });
+
+  elBtnContinue.addEventListener('click', submitName);
+
+  function submitName() {
+    var val = elNameInput.value.trim();
+    if (val.length < 2) return;
+    userName = val;
+    localStorage.setItem('k360_name', userName);
+    elNameOverlay.classList.add('hidden');
+    // Re-render action section with new name
+    if (currentLesson) {
+      renderCounter(currentLesson);
+      renderAction(currentLesson);
+    }
+  }
+
+  /* ══════════════════════════════════════════════
+     RETRY BUTTON
+  ══════════════════════════════════════════════ */
+  elBtnRetry.addEventListener('click', function() {
+    fetchData(true).then(function() {
+      if (currentLesson) startAutoRefresh();
+    });
+  });
+
+  /* ══════════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════════ */
+  function init() {
+    // Guard: no ?id param
+    if (!lessonId) {
+      showError(
+        'Link non valido.',
+        'Chiedi a Salvatore il link corretto.',
+        false
+      );
+      return;
+    }
+
+    // Show name overlay if no name stored
+    if (!userName) {
+      show(elNameOverlay);
+      // Focus after animation
+      setTimeout(function() { elNameInput.focus(); }, 350);
+    }
+
+    // Fetch data
+    fetchData(true).then(function() {
+      if (currentLesson) {
+        startAutoRefresh();
+      }
+    });
+  }
+
+  init();
+</script>
+
+</body>
+</html>

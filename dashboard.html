@@ -1383,6 +1383,13 @@ function renderOrari() {
       const pillClass = n >= 3 ? 'pill-green' : n === 2 ? 'pill-amber' : 'pill-gray';
       const uid = 'slot-' + key.replace(/[^a-z0-9]/gi, '-');
 
+      const slotKey = s.day + ' ' + s.time;
+      const createBtn = people.length > 0
+        ? `<button class="btn-primary" style="margin-top:12px;height:42px;font-size:13px" onclick="event.stopPropagation();createLesson('${esc(slotKey)}')">
+            Crea lezione e ottieni link
+          </button>`
+        : '';
+
       const peopleHtml = people.length
         ? people.map(p => `<div class="slot-person">
             <div class="avatar" style="width:32px;height:32px;font-size:12px">${esc(initial(p.name))}</div>
@@ -1393,7 +1400,7 @@ function renderOrari() {
             <a href="${waLink(p.phone, 'Ciao ' + (p.name||'') + ', ti scrivo riguardo alla lezione di Fondamenti del Karate del ' + s.day + ' ore ' + s.time + '.')}" target="_blank">
               <button class="wa-btn-sm"><i class="fa-brands fa-whatsapp"></i></button>
             </a>
-          </div>`).join('')
+          </div>`).join('') + createBtn
         : '<div class="slot-empty">Nessun iscritto</div>';
 
       return `<div class="slot-row" id="${uid}" onclick="toggleSlot('${uid}')">
@@ -1555,12 +1562,106 @@ function sendCustomMsg() {
 }
 
 /* ══════════════════════════════════════════════
+   CREA LEZIONE
+══════════════════════════════════════════════ */
+async function createLesson(slotKey) {
+  try {
+    showToast('Creazione lezione...');
+    const res = await fetch(API_URL, { cache: 'no-store' });
+    const data = await res.json();
+    if (!data.lessons) data.lessons = [];
+
+    // Check if lesson already exists for this slot
+    const existing = data.lessons.find(l => l.slot === slotKey);
+    if (existing) {
+      const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + existing.id;
+      showLessonLink(slotKey, link);
+      return;
+    }
+
+    const lessonId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    data.lessons.push({
+      id: lessonId,
+      slot: slotKey,
+      createdAt: new Date().toISOString(),
+      confirmed: [],
+      declined: []
+    });
+
+    await fetch(API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + lessonId;
+    showLessonLink(slotKey, link);
+
+  } catch (e) {
+    console.error('createLesson:', e);
+    showToast('Errore nella creazione');
+  }
+}
+
+function showLessonLink(slotKey, link) {
+  // Show bottom sheet with the link
+  const overlay = document.getElementById('sheet-overlay');
+  const sheet = document.getElementById('delete-sheet');
+  document.getElementById('sheet-body').innerHTML = `
+    <div style="margin-bottom:12px;font-size:13px;color:var(--text-2)">
+      Lezione creata per <strong style="color:var(--text)">${esc(slotKey)}</strong>
+    </div>
+    <div style="background:var(--bg-2);border:1px solid var(--sep-strong);border-radius:var(--r-md);padding:12px;font-size:12px;color:var(--sand);word-break:break-all;margin-bottom:12px">
+      ${esc(link)}
+    </div>
+    <div style="font-size:12px;color:var(--text-3)">
+      Condividi questo link nel gruppo WhatsApp. Le persone potranno confermare con un tap.
+    </div>
+  `;
+  document.querySelector('.sheet-title').textContent = 'Link lezione';
+  document.getElementById('btn-confirm-delete').textContent = 'Copia link';
+  document.getElementById('btn-confirm-delete').onclick = function() {
+    copyToClipboard(link, 'Link copiato!');
+  };
+
+  // Add WhatsApp share button
+  const actions = document.querySelector('.sheet-actions');
+  const waBtn = document.createElement('button');
+  waBtn.className = 'btn-wa';
+  waBtn.style.cssText = 'height:50px;font-size:15px;font-weight:600;border-radius:var(--r-md)';
+  waBtn.innerHTML = '<i class="fa-brands fa-whatsapp" style="margin-right:6px"></i> Invia su WhatsApp';
+  waBtn.onclick = function() {
+    const msg = 'Ciao! Lezione di Fondamenti del Karate — ' + slotKey + '. Conferma la tua presenza: ' + link;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  };
+
+  // Remove old wa btn if exists
+  const oldWa = actions.querySelector('.btn-wa');
+  if (oldWa) oldWa.remove();
+  actions.insertBefore(waBtn, actions.firstChild);
+
+  overlay.classList.add('visible');
+  sheet.classList.add('open');
+}
+
+/* ══════════════════════════════════════════════
    DELETE SHEET
 ══════════════════════════════════════════════ */
 function openDeleteSheet(id, name) {
   pendingDeleteId = id;
+  document.querySelector('.sheet-title').textContent = 'Elimina iscritto';
   document.getElementById('sheet-body').textContent =
     'Vuoi eliminare ' + (name || 'questo iscritto') + '? L\'azione non può essere annullata.';
+  const btn = document.getElementById('btn-confirm-delete');
+  btn.textContent = 'Elimina';
+  btn.onclick = async function() {
+    if (!pendingDeleteId) return;
+    closeDeleteSheet();
+    await deleteRegistration(pendingDeleteId);
+  };
+  // Remove WhatsApp button if present
+  const oldWa = document.querySelector('.sheet-actions .btn-wa');
+  if (oldWa) oldWa.remove();
   document.getElementById('sheet-overlay').classList.add('visible');
   document.getElementById('delete-sheet').classList.add('open');
 }
@@ -1571,11 +1672,7 @@ function closeDeleteSheet() {
   document.getElementById('delete-sheet').classList.remove('open');
 }
 
-document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
-  if (!pendingDeleteId) return;
-  closeDeleteSheet();
-  await deleteRegistration(pendingDeleteId);
-});
+// Delete handler is set in openDeleteSheet()
 
 /* ══════════════════════════════════════════════
    TAB NAVIGATION
