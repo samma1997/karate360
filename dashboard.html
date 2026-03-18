@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#FFFFFF" />
+  <meta name="theme-color" content="#191919" />
   <link rel="manifest" href="manifest-admin.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <title>Fondamenti del Karate — Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,49 +20,33 @@
   <script src="config.js?v=2"></script>
 
   <style>
-    /* ─── RESET ──────────────────────────────────────── */
+    /* ─── RESET ───────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ─── CSS VARIABLES ──────────────────────────────── */
+    /* ─── ROOT TOKENS ─────────────────────────────────────── */
     :root {
-      --bg:        #FFFFFF;
-      --bg-2:      #F7F7F5;
-      --bg-3:      #EDEDED;
-      --text:      #37352F;
-      --text-2:    #787774;
-      --text-3:    #B4B4B0;
-      --accent:    #2383E2;
-      --accent-bg: rgba(35,131,226,0.08);
-      --green:     #0F7B0F;
-      --yellow:    #C29243;
-      --red:       #E03E3E;
-      --red-bg:    rgba(224,62,62,0.07);
-      --border:    rgba(55,53,47,0.09);
-      --shadow:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --radius:    8px;
-      --radius-sm: 5px;
+      --bg:         #191919;
+      --card:       #202020;
+      --bg-3:       #2A2A2A;
+      --border:     rgba(255,255,255,0.07);
+      --text:       #E8E8E3;
+      --text-2:     #9B9A97;
+      --text-3:     #5A5A58;
+      --accent:     #529CCA;
+      --accent-bg:  rgba(82,156,202,0.12);
+      --green:      #4CAF6E;
+      --green-bg:   rgba(76,175,110,0.12);
+      --yellow:     #D4A843;
+      --yellow-bg:  rgba(212,168,67,0.12);
+      --red:        #E05252;
+      --red-bg:     rgba(224,82,82,0.10);
+      --radius:     10px;
+      --radius-sm:  6px;
+      --shadow:     0 2px 8px rgba(0,0,0,0.35);
+      --shadow-lg:  0 8px 24px rgba(0,0,0,0.50);
     }
 
-    [data-theme="dark"] {
-      --bg:        #191919;
-      --bg-2:      #202020;
-      --bg-3:      #2F2F2F;
-      --text:      #E8E8E3;
-      --text-2:    #9B9A97;
-      --text-3:    #5A5A58;
-      --accent:    #529CCA;
-      --accent-bg: rgba(82,156,202,0.1);
-      --green:     #4CAF6E;
-      --yellow:    #D4A843;
-      --red:       #E05252;
-      --red-bg:    rgba(224,82,82,0.08);
-      --border:    rgba(255,255,255,0.07);
-      --shadow:    0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.35);
-    }
-
-    /* ─── BASE ───────────────────────────────────────── */
+    /* ─── BASE ────────────────────────────────────────────── */
     html { font-size: 15px; scroll-behavior: smooth; }
 
     body {
@@ -70,23 +54,23 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      transition: background 0.25s ease, color 0.25s ease;
       min-height: 100vh;
     }
 
-    /* ─── STICKY HEADER ──────────────────────────────── */
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── STICKY HEADER ───────────────────────────────────── */
     .header {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
       background: var(--bg);
       border-bottom: 1px solid var(--border);
-      padding: 0 32px;
+      padding: 0 28px;
       height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: background 0.25s ease, border-color 0.25s ease;
     }
 
     .header-title {
@@ -99,7 +83,7 @@
       gap: 8px;
     }
 
-    .header-title .dot {
+    .header-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -107,16 +91,12 @@
       flex-shrink: 0;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .header-actions { display: flex; align-items: center; gap: 6px; }
 
     .icon-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border);
       background: transparent;
       color: var(--text-2);
@@ -125,60 +105,43 @@
       align-items: center;
       justify-content: center;
       font-size: 13px;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      transition: background 0.15s, color 0.15s;
     }
+    .icon-btn:hover { background: var(--card); color: var(--text); }
 
-    .icon-btn:hover {
-      background: var(--bg-2);
-      color: var(--text);
-    }
-
-    .theme-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-
-    .theme-btn:hover {
-      background: var(--bg-2);
-      color: var(--text);
-    }
-
-    /* ─── MAIN LAYOUT ────────────────────────────────── */
+    /* ─── MAIN LAYOUT ─────────────────────────────────────── */
     .main {
-      max-width: 900px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 40px 32px 80px;
+      padding: 40px 28px 100px;
     }
 
-    /* ─── SECTION ────────────────────────────────────── */
-    .section {
-      margin-bottom: 48px;
-    }
+    /* ─── SECTION ─────────────────────────────────────────── */
+    .section { margin-bottom: 52px; }
 
-    .section-label {
+    .section-title {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
       color: var(--text-3);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
-    /* ─── OVERVIEW ───────────────────────────────────── */
+    /* ─── CARD ────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    /* ─── RIEPILOGO ───────────────────────────────────────── */
     .overview-row {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
       flex-wrap: wrap;
     }
 
@@ -186,14 +149,15 @@
       display: flex;
       align-items: baseline;
       gap: 10px;
+      flex-shrink: 0;
     }
 
     .big-count {
-      font-size: 52px;
+      font-size: 44px;
       font-weight: 700;
       line-height: 1;
       color: var(--accent);
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
     }
 
     .big-count-label {
@@ -202,111 +166,97 @@
       color: var(--text-2);
     }
 
-    .divider-v {
+    .v-divider {
       width: 1px;
-      height: 52px;
+      height: 44px;
       background: var(--border);
+      flex-shrink: 0;
     }
 
     .top-slots {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+      flex: 1;
     }
 
     .slot-chip {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: var(--bg-2);
+      padding: 7px 13px;
+      border-radius: 8px;
+      background: var(--card);
       border: 1px solid var(--border);
       font-size: 13px;
-      color: var(--text);
       font-weight: 500;
-      transition: background 0.15s, border-color 0.15s;
+      color: var(--text);
+      white-space: nowrap;
     }
 
-    .slot-chip .chip-dot {
+    .chip-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
-    .slot-chip .chip-count {
+    .chip-count {
       font-size: 12px;
       color: var(--text-2);
       font-weight: 400;
     }
 
-    .dot-1 { background: var(--accent); }
-    .dot-2 { background: var(--green); }
-    .dot-3 { background: var(--yellow); }
+    .dot-green  { background: var(--green); }
+    .dot-yellow { background: var(--yellow); }
+    .dot-gray   { background: var(--text-3); }
 
-    /* ─── CARD ───────────────────────────────────────── */
-    .card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: background 0.25s ease, border-color 0.25s ease;
-      box-shadow: var(--shadow);
-    }
+    /* ─── PROSSIMA LEZIONE ────────────────────────────────── */
+    .lesson-card { position: relative; overflow: hidden; }
 
-    /* ─── PROSSIMA LEZIONE ───────────────────────────── */
-    .lesson-header {
+    .lesson-card-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 6px;
       flex-wrap: wrap;
     }
 
-    .lesson-slot-info .lesson-day {
-      font-size: 18px;
+    .lesson-slot-name {
+      font-size: 20px;
       font-weight: 700;
       color: var(--text);
       letter-spacing: -0.02em;
-      margin-bottom: 2px;
+      line-height: 1.2;
     }
 
-    .lesson-slot-info .lesson-time {
+    .lesson-slot-sub {
       font-size: 14px;
       color: var(--text-2);
-      font-weight: 400;
+      margin-top: 3px;
     }
 
-    .slot-select-wrap {
+    /* Confirmed summary bar */
+    .confirmed-bar {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      background: var(--green-bg);
+      border: 1px solid rgba(76,175,110,0.20);
+      margin-bottom: 16px;
     }
 
-    .slot-select {
-      font-family: inherit;
-      font-size: 13px;
-      color: var(--text);
-      background: var(--bg-2);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px 10px;
-      cursor: pointer;
-      outline: none;
-      transition: border-color 0.15s, background 0.15s;
-    }
+    .confirmed-bar i { color: var(--green); font-size: 14px; }
+    .confirmed-bar span { font-size: 13px; font-weight: 500; color: var(--green); }
 
-    .slot-select:focus {
-      border-color: var(--accent);
-    }
-
-    /* ─── PEOPLE LIST ────────────────────────────────── */
+    /* People list */
     .people-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       margin-bottom: 20px;
     }
 
@@ -314,18 +264,16 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 10px;
+      padding: 7px 10px;
       border-radius: var(--radius-sm);
       transition: background 0.12s;
+      position: relative;
     }
-
-    .person-row:hover {
-      background: var(--bg-2);
-    }
+    .person-row:hover { background: var(--bg-3); }
 
     .avatar {
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: var(--accent-bg);
       color: var(--accent);
@@ -335,7 +283,30 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
+      position: relative;
+    }
+
+    .avatar.sm {
+      width: 30px;
+      height: 30px;
+      font-size: 10px;
+    }
+
+    .confirmed-badge {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--card);
     }
 
     .person-name {
@@ -343,17 +314,18 @@
       font-weight: 500;
       color: var(--text);
       flex: 1;
+      min-width: 0;
     }
 
-    .person-meta {
+    .person-phone {
       font-size: 12px;
       color: var(--text-3);
     }
 
-    .wa-icon-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+    .wa-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-sm);
       border: none;
       background: transparent;
       color: var(--green);
@@ -366,50 +338,43 @@
       flex-shrink: 0;
       text-decoration: none;
     }
+    .wa-btn:hover { background: var(--green-bg); }
 
-    .wa-icon-btn:hover {
-      background: rgba(15,123,15,0.08);
-    }
-
-    [data-theme="dark"] .wa-icon-btn:hover {
-      background: rgba(76,175,110,0.12);
-    }
-
-    /* ─── ACTION BUTTONS ─────────────────────────────── */
+    /* Action row */
     .action-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
+      margin-top: 4px;
     }
 
     .btn-primary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      height: 50px;
-      padding: 0 20px;
+      height: 52px;
+      padding: 0 22px;
       border-radius: var(--radius);
       background: var(--accent);
       color: #fff;
       font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       border: none;
       cursor: pointer;
       transition: opacity 0.15s, transform 0.1s;
-      letter-spacing: -0.01em;
       white-space: nowrap;
     }
-
-    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:hover { opacity: 0.87; }
     .btn-primary:active { transform: scale(0.98); }
 
     .btn-ghost {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      height: 36px;
+      height: 38px;
       padding: 0 14px;
       border-radius: var(--radius-sm);
       background: transparent;
@@ -420,125 +385,123 @@
       border: 1px solid var(--border);
       cursor: pointer;
       transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
     }
+    .btn-ghost:hover { background: var(--bg-3); color: var(--text); }
 
-    .btn-ghost:hover {
-      background: var(--bg-2);
-      color: var(--text);
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-3);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
     }
+    .btn-sm:hover { background: var(--bg-3); color: var(--text); }
+    .btn-sm.danger:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
 
-    .copy-link-row {
-      margin-top: 12px;
+    .copy-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .link-preview {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-3);
-      font-family: 'Menlo', 'Monaco', monospace;
-      background: var(--bg-2);
+      font-family: 'Menlo','Monaco',monospace;
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 4px 8px;
+      border-radius: 5px;
+      padding: 5px 9px;
       flex: 1;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    /* ─── TUTTI GLI ORARI ────────────────────────────── */
-    .slots-table {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    /* ─── TUTTI GLI ORARI ─────────────────────────────────── */
+    .day-group { margin-bottom: 16px; }
+
+    .day-group-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 6px;
+      padding: 0 4px;
     }
+
+    .slot-rows { display: flex; flex-direction: column; gap: 3px; }
 
     .slot-row {
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       overflow: hidden;
-      transition: border-color 0.15s;
     }
 
     .slot-row-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       padding: 10px 14px;
       cursor: pointer;
-      background: var(--bg);
+      background: var(--card);
       transition: background 0.12s;
       user-select: none;
+      min-height: 44px;
     }
+    .slot-row-header:hover { background: var(--bg-3); }
+    .slot-row-header.open { background: var(--bg-3); border-bottom: 1px solid var(--border); }
 
-    .slot-row-header:hover {
-      background: var(--bg-2);
-    }
-
-    .slot-row-header.open {
-      background: var(--bg-2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .slot-chevron {
-      font-size: 11px;
+    .chevron {
+      font-size: 10px;
       color: var(--text-3);
       transition: transform 0.2s;
       flex-shrink: 0;
     }
+    .slot-row-header.open .chevron { transform: rotate(90deg); }
 
-    .slot-row-header.open .slot-chevron {
-      transform: rotate(90deg);
-    }
-
-    .slot-day-label {
+    .slot-time {
       font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      min-width: 90px;
-      flex-shrink: 0;
-    }
-
-    .slot-time-label {
-      font-size: 13px;
+      font-weight: 500;
       color: var(--text-2);
       flex: 1;
     }
 
-    .slot-badge {
+    .count-badge {
       font-size: 11px;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 10px;
-      background: var(--accent-bg);
-      color: var(--accent);
+      padding: 2px 9px;
+      border-radius: 20px;
       flex-shrink: 0;
     }
-
-    .slot-badge.empty {
-      background: var(--bg-3);
-      color: var(--text-3);
-    }
+    .count-badge.high   { background: var(--green-bg);   color: var(--green); }
+    .count-badge.mid    { background: var(--yellow-bg);  color: var(--yellow); }
+    .count-badge.low    { background: var(--accent-bg);  color: var(--accent); }
+    .count-badge.empty  { background: var(--bg);         color: var(--text-3); border: 1px solid var(--border); }
 
     .slot-row-body {
       display: none;
-      padding: 10px 14px 14px;
-      background: var(--bg-2);
+      padding: 12px 14px 16px;
+      background: var(--bg);
     }
+    .slot-row-body.open { display: block; }
 
-    .slot-row-body.open {
-      display: block;
-    }
+    .slot-people { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 
-    .slot-people-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .slot-person-item {
+    .slot-person {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -548,19 +511,12 @@
       border-radius: 4px;
       transition: background 0.12s;
     }
+    .slot-person:hover { background: var(--card); }
 
-    .slot-person-item:hover {
-      background: var(--bg-3);
-    }
+    .slot-body-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    .slot-person-item .avatar {
-      width: 24px;
-      height: 24px;
-      font-size: 9px;
-    }
-
-    /* ─── TUTTI GLI ISCRITTI ─────────────────────────── */
-    .registrations-grid {
+    /* ─── TUTTI GLI ISCRITTI ──────────────────────────────── */
+    .reg-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 8px;
@@ -568,59 +524,65 @@
 
     .reg-card {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
-      padding: 12px 14px;
+      padding: 14px;
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
-      background: var(--bg);
-      transition: background 0.12s, border-color 0.15s;
+      background: var(--card);
+      transition: background 0.12s;
     }
+    .reg-card:hover { background: var(--bg-3); }
 
-    .reg-card:hover {
-      background: var(--bg-2);
-    }
-
-    .reg-card .avatar {
-      width: 36px;
-      height: 36px;
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-
-    .reg-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .reg-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .reg-slot {
-      font-size: 12px;
-      color: var(--text-2);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .reg-actions {
+    .reg-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-bg);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
       flex-shrink: 0;
+    }
+
+    .reg-info { flex: 1; min-width: 0; }
+
+    .reg-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .reg-phone {
+      font-size: 13px;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+      text-decoration: none;
+    }
+    .reg-phone:hover { text-decoration: underline; }
+
+    .slot-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+
+    .slot-tag {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      white-space: nowrap;
     }
 
     .del-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 5px;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
       border: none;
       background: transparent;
       color: var(--text-3);
@@ -630,70 +592,149 @@
       justify-content: center;
       font-size: 12px;
       transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
     }
+    .del-btn:hover { background: var(--red-bg); color: var(--red); }
 
-    .del-btn:hover {
-      background: var(--red-bg);
-      color: var(--red);
-    }
+    /* ─── MESSAGGI PRONTI ─────────────────────────────────── */
+    .msg-cards { display: flex; flex-direction: column; gap: 16px; }
 
-    /* ─── TESTO INVITO ───────────────────────────────── */
-    .invite-block {
-      background: var(--bg-2);
+    .msg-card {
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 20px;
-      margin-bottom: 16px;
     }
 
-    .invite-text {
-      font-size: 14px;
-      line-height: 1.8;
-      color: var(--text);
-      white-space: pre-line;
-    }
-
-    /* ─── TOAST ──────────────────────────────────────── */
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--text);
-      color: var(--bg);
+    .msg-card-title {
       font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .msg-text-block {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-2);
+      white-space: pre-line;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-bottom: 14px;
+      font-family: inherit;
+    }
+
+    .custom-textarea {
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 12px 14px;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color 0.15s;
+    }
+    .custom-textarea:focus { border-color: var(--accent); }
+    .custom-textarea::placeholder { color: var(--text-3); }
+
+    .recipient-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-2);
+      font-size: 12px;
       font-weight: 500;
-      padding: 10px 18px;
-      border-radius: 8px;
-      z-index: 9999;
-      white-space: nowrap;
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
-      opacity: 0;
-      pointer-events: none;
-      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .pill.active {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: rgba(82,156,202,0.30);
     }
 
-    #toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
+    /* ─── LEZIONI CREATE ──────────────────────────────────── */
+    .lessons-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      flex-wrap: wrap;
     }
 
-    /* ─── NOTIFICATION BANNER ────────────────────────── */
+    .lesson-item-info { flex: 1; min-width: 0; }
+
+    .lesson-item-slot {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .lesson-item-meta {
+      font-size: 12px;
+      color: var(--text-2);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .stat-pill.confirmed { background: var(--green-bg); color: var(--green); }
+    .stat-pill.declined  { background: var(--red-bg);   color: var(--red); }
+
+    .lesson-item-actions { display: flex; align-items: center; gap: 6px; }
+
+    /* ─── NOTIFICATION BANNER ─────────────────────────────── */
     #notif-banner {
       position: fixed;
-      top: 60px;
+      top: 62px;
       right: 20px;
       background: var(--accent);
       color: #fff;
       font-size: 13px;
       font-weight: 500;
       padding: 10px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       z-index: 9999;
       display: none;
       align-items: center;
       gap: 8px;
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
       animation: slideIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
       max-width: 300px;
     }
@@ -703,22 +744,79 @@
       to   { transform: translateX(0);    opacity: 1; }
     }
 
-    /* ─── EMPTY STATE ────────────────────────────────── */
+    #notif-close {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin-left: 2px;
+      font-size: 14px;
+      opacity: 0.8;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #notif-close:hover { opacity: 1; }
+
+    /* Permission prompt banner */
+    #perm-banner {
+      display: none;
+      position: fixed;
+      top: 62px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border-radius: 10px;
+      z-index: 9990;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-lg);
+      white-space: nowrap;
+    }
+
+    /* ─── TOAST ───────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--text);
+      color: var(--bg);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 9px;
+      z-index: 9999;
+      white-space: nowrap;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: var(--shadow-lg);
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ─── EMPTY / LOADING STATES ──────────────────────────── */
     .empty-state {
-      padding: 32px 0;
+      padding: 28px 0;
       text-align: center;
       color: var(--text-3);
       font-size: 13px;
     }
 
-    /* ─── LOADING ────────────────────────────────────── */
-    .loading-row {
+    .spinner-row {
       display: flex;
       align-items: center;
       gap: 10px;
       color: var(--text-2);
       font-size: 13px;
-      padding: 12px 0;
+      padding: 10px 0;
     }
 
     .spinner {
@@ -730,163 +828,176 @@
       animation: spin 0.7s linear infinite;
       flex-shrink: 0;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ─── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 600px) {
-      .main { padding: 24px 16px 60px; }
-      .header { padding: 0 16px; }
-      .big-count { font-size: 42px; }
-      .divider-v { display: none; }
-      .registrations-grid { grid-template-columns: 1fr; }
+    /* ─── DIVIDER ─────────────────────────────────────────── */
+    hr.sec-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 0 52px;
     }
 
-    /* ─── TRANSITIONS ────────────────────────────────── */
-    .card, .slot-row, .reg-card, .invite-block,
-    .slot-row-header, .slot-row-body {
-      transition: background 0.25s ease, border-color 0.25s ease;
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .main { padding: 24px 16px 80px; }
+      .header { padding: 0 16px; }
+      .big-count { font-size: 38px; }
+      .v-divider { display: none; }
+      .reg-grid { grid-template-columns: 1fr; }
+      .lesson-slot-name { font-size: 18px; }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ─── HEADER ─────────────────────────────────────── -->
+  <!-- ─── STICKY HEADER ────────────────────────────────── -->
   <header class="header">
     <div class="header-title">
-      <span class="dot"></span>
+      <span class="header-dot"></span>
       Fondamenti del Karate
     </div>
     <div class="header-actions">
-      <button class="icon-btn" onclick="loadData()" title="Aggiorna dati">
+      <button class="icon-btn" id="refresh-btn" onclick="loadData()" title="Aggiorna">
         <i class="fa-solid fa-rotate-right"></i>
       </button>
       <button class="icon-btn" onclick="exportCSV()" title="Esporta CSV">
-        <i class="fa-solid fa-download"></i>
+        <i class="fa-solid fa-file-arrow-down"></i>
       </button>
     </div>
   </header>
 
-  <!-- ─── NOTIFICATION BANNER ──────────────────────── -->
-  <div id="notif-banner">
+  <!-- ─── NOTIFICATION BANNER ──────────────────────────── -->
+  <div id="notif-banner" role="alert">
     <i class="fa-solid fa-bell"></i>
     <span id="notif-text">Nuova iscrizione!</span>
-    <button onclick="document.getElementById('notif-banner').style.display='none'"
-            style="background:none;border:none;color:#fff;cursor:pointer;margin-left:4px;font-size:14px;">
+    <button id="notif-close" onclick="document.getElementById('notif-banner').style.display='none'" aria-label="Chiudi">
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
 
-  <!-- ─── MAIN ──────────────────────────────────────── -->
+  <!-- ─── NOTIFICATION PERMISSION BANNER ───────────────── -->
+  <div id="perm-banner">
+    <i class="fa-solid fa-bell" style="color:var(--accent)"></i>
+    <span>Abilita le notifiche per nuove iscrizioni</span>
+    <button class="btn-ghost" style="height:30px;padding:0 12px;font-size:12px;" onclick="requestNotifPermission()">Abilita</button>
+    <button style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:14px;padding:0 4px;" onclick="document.getElementById('perm-banner').style.display='none'">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- ─── MAIN ──────────────────────────────────────────── -->
   <main class="main">
 
-    <!-- ── Section 1: Overview ─────────────────────── -->
-    <section class="section" id="sec-overview">
-      <div class="section-label">Panoramica</div>
+    <!-- ══ 1. RIEPILOGO ══════════════════════════════════ -->
+    <section class="section" id="sec-riepilogo">
+      <div class="section-title">Riepilogo</div>
       <div class="overview-row">
         <div class="big-count-block">
           <span class="big-count" id="total-count">—</span>
           <span class="big-count-label">iscritti</span>
         </div>
-        <div class="divider-v"></div>
+        <div class="v-divider"></div>
         <div class="top-slots" id="top-slots">
-          <span class="slot-chip" style="color:var(--text-2);font-size:13px;border-style:dashed;">
-            Caricamento…
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Section 2: Prossima Lezione ─────────────── -->
-    <section class="section" id="sec-lesson">
-      <div class="section-label">Prossima Lezione</div>
-      <div class="card">
-        <div class="lesson-header">
-          <div class="lesson-slot-info">
-            <div class="lesson-day" id="lesson-day">—</div>
-            <div class="lesson-time" id="lesson-time">Seleziona un orario</div>
-          </div>
-          <div class="slot-select-wrap">
-            <select class="slot-select" id="slot-select" onchange="onSlotChange()">
-            </select>
-          </div>
-        </div>
-
-        <div class="people-list" id="lesson-people">
-          <div class="loading-row">
+          <div class="spinner-row">
             <div class="spinner"></div>
-            <span>Caricamento partecipanti…</span>
+            <span>Caricamento…</span>
           </div>
-        </div>
-
-        <div class="action-row">
-          <button class="btn-primary" onclick="sendWhatsApp()">
-            <i class="fa-brands fa-whatsapp"></i>
-            INVIA SU WHATSAPP
-          </button>
-          <button class="btn-ghost" onclick="copyLessonLink()">
-            <i class="fa-solid fa-link"></i>
-            Copia link
-          </button>
-        </div>
-
-        <div class="copy-link-row">
-          <span class="link-preview" id="lesson-link-preview">—</span>
         </div>
       </div>
     </section>
 
-    <!-- ── Section 3: Tutti gli Orari ──────────────── -->
-    <section class="section" id="sec-slots">
-      <div class="section-label">Tutti gli Orari</div>
-      <div class="slots-table" id="slots-table">
-        <div class="loading-row">
+    <!-- ══ 2. PROSSIMA LEZIONE ═══════════════════════════ -->
+    <section class="section" id="sec-prossima">
+      <div class="section-title">Prossima Lezione</div>
+      <div class="card lesson-card" id="lesson-card">
+        <div class="spinner-row">
+          <div class="spinner"></div>
+          <span>Caricamento…</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 3. TUTTI GLI ORARI ════════════════════════════ -->
+    <section class="section" id="sec-orari">
+      <div class="section-title">Tutti gli orari</div>
+      <div id="orari-container">
+        <div class="spinner-row">
           <div class="spinner"></div>
           <span>Caricamento orari…</span>
         </div>
       </div>
     </section>
 
-    <!-- ── Section 4: Tutti gli Iscritti ───────────── -->
-    <section class="section" id="sec-registrations">
-      <div class="section-label">Tutti gli Iscritti</div>
-      <div class="registrations-grid" id="registrations-grid">
-        <div class="loading-row">
+    <!-- ══ 4. TUTTI GLI ISCRITTI ═════════════════════════ -->
+    <section class="section" id="sec-iscritti">
+      <div class="section-title">Tutti gli iscritti <span id="iscritti-count" style="color:var(--text-3);font-weight:400;letter-spacing:0;text-transform:none;font-size:11px;"></span></div>
+      <div class="reg-grid" id="reg-grid">
+        <div class="spinner-row" style="grid-column:1/-1">
           <div class="spinner"></div>
           <span>Caricamento iscritti…</span>
         </div>
       </div>
     </section>
 
-    <!-- ── Section 5: Testo Invito ──────────────────── -->
-    <section class="section" id="sec-invite">
-      <div class="section-label">Testo Invito</div>
-      <div class="invite-block">
-        <div class="invite-text" id="invite-text"></div>
+    <!-- ══ 5. MESSAGGI PRONTI ════════════════════════════ -->
+    <section class="section" id="sec-messaggi">
+      <div class="section-title">Messaggi pronti</div>
+      <div class="msg-cards">
+
+        <!-- Card 1: Invito iniziale -->
+        <div class="msg-card">
+          <div class="msg-card-title"><i class="fa-solid fa-envelope-open-text" style="color:var(--accent);margin-right:7px;"></i>Invito iniziale</div>
+          <div class="msg-text-block" id="invite-text-preview"></div>
+          <div class="action-row">
+            <button class="btn-primary" style="height:42px;font-size:12px;" onclick="sendInviteWhatsApp()">
+              <i class="fa-brands fa-whatsapp"></i>
+              INVIA SU WHATSAPP
+            </button>
+            <button class="btn-ghost" onclick="copyInviteText()">
+              <i class="fa-solid fa-copy"></i>
+              COPIA TESTO
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Messaggio personalizzato -->
+        <div class="msg-card">
+          <div class="msg-card-title"><i class="fa-solid fa-pen-to-square" style="color:var(--yellow);margin-right:7px;"></i>Messaggio personalizzato</div>
+          <textarea class="custom-textarea" id="custom-msg" placeholder="Scrivi il tuo messaggio…"></textarea>
+          <div class="recipient-pills" id="recipient-pills"></div>
+          <div class="action-row">
+            <button class="btn-primary" style="height:42px;font-size:12px;" onclick="sendCustomMessages()">
+              <i class="fa-brands fa-whatsapp"></i>
+              INVIA AI SELEZIONATI
+            </button>
+          </div>
+        </div>
+
       </div>
-      <div class="action-row">
-        <button class="btn-ghost" onclick="copyInviteText()">
-          <i class="fa-solid fa-copy"></i>
-          Copia testo
-        </button>
-        <button class="btn-ghost" onclick="shareInviteWhatsApp()" style="color:var(--green);border-color:currentColor;">
-          <i class="fa-brands fa-whatsapp"></i>
-          WhatsApp
-        </button>
+    </section>
+
+    <!-- ══ 6. LEZIONI CREATE ══════════════════════════════ -->
+    <section class="section" id="sec-lezioni">
+      <div class="section-title">Lezioni create</div>
+      <div class="lessons-list" id="lessons-list">
+        <div class="spinner-row">
+          <div class="spinner"></div>
+          <span>Caricamento lezioni…</span>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- ─── TOAST ─────────────────────────────────────── -->
-  <div id="toast"></div>
+  <!-- ─── TOAST ─────────────────────────────────────────── -->
+  <div id="toast" role="status" aria-live="polite"></div>
 
-  <!-- ─── SCRIPT ────────────────────────────────────── -->
+  <!-- ─── SCRIPT ────────────────────────────────────────── -->
   <script>
-  /* ═══════════════════════════════════════════════════
-     SLOTS
-  ═══════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════
+     SLOTS DEFINITION
+  ═══════════════════════════════════════════════════════ */
   const SLOTS = [
     { day: 'Lunedì',    time: '18:00-19:00' },
     { day: 'Lunedì',    time: '19:00-20:00' },
@@ -902,19 +1013,19 @@
     { day: 'Domenica',  time: '11:00-12:00' },
   ];
 
-  /* ═══════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════
      STATE
-  ═══════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════ */
   let _data = { registrations: [], lessons: [] };
-  let _selectedSlotIdx = 0;
   let _prevCount = null;
+  let _selectedSlot = null;  // currently displayed slot object in "Prossima Lezione"
 
-  /* ═══════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════
      HELPERS
-  ═══════════════════════════════════════════════════ */
-  function esc(str) {
-    if (!str) return '';
-    return String(str)
+  ═══════════════════════════════════════════════════════ */
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
@@ -922,8 +1033,8 @@
   function initials(name) {
     if (!name) return '?';
     const parts = name.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
-    return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
   function timeAgo(ts) {
@@ -934,7 +1045,20 @@
     if (m < 60) return `${m}m fa`;
     const h = Math.floor(m / 60);
     if (h < 24) return `${h}h fa`;
-    return `${Math.floor(h/24)}g fa`;
+    return `${Math.floor(h / 24)}g fa`;
+  }
+
+  function slotKey(s) {
+    return `${s.day} ${s.time}`;
+  }
+
+  function getRegistrationLink() {
+    return window.location.origin + window.location.pathname.replace('dashboard.html', 'index.html');
+  }
+
+  function getLessonConfirmLink(lessonId) {
+    const base = window.location.origin + window.location.pathname.replace('dashboard.html', '');
+    return `${base}conferma.html?id=${encodeURIComponent(lessonId)}`;
   }
 
   function waLink(phone, msg) {
@@ -943,40 +1067,55 @@
     return `https://wa.me/${ph}?text=${encodeURIComponent(msg)}`;
   }
 
-  function getRegistrationLink() {
-    return window.location.origin + window.location.pathname.replace('dashboard.html', 'index.html');
+  function waGroupLink(msg) {
+    return `https://wa.me/?text=${encodeURIComponent(msg)}`;
   }
 
-  function getLessonConfirmLink(id) {
-    return window.location.origin + window.location.pathname.replace('dashboard.html', '') + `conferma.html?id=${id}`;
+  /* Slot counts map: { "Lunedì 18:00-19:00": [reg, ...], ... } */
+  function getSlotCounts() {
+    const map = {};
+    SLOTS.forEach(s => { map[slotKey(s)] = []; });
+    (_data.registrations || []).forEach(r => {
+      const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+      slots.forEach(sk => {
+        if (map[sk] !== undefined) map[sk].push(r);
+        else {
+          // try matching by day+time fields
+          SLOTS.forEach(s => {
+            if (sk === slotKey(s) || (r.day === s.day && r.time === s.time)) {
+              map[slotKey(s)].push(r);
+            }
+          });
+        }
+      });
+    });
+    return map;
   }
 
-  function slotKey(s) {
-    return `${s.day}-${s.time}`;
-  }
-
-  function getRegsForSlot(slotObj) {
-    const key = slotKey(slotObj);
-    return (_data.registrations || []).filter(r =>
-      r.slot === key || r.slot === `${slotObj.day} ${slotObj.time}` ||
-      (r.day === slotObj.day && r.time === slotObj.time)
-    );
-  }
-
-  function getBestSlotIdx() {
-    let best = 0, bestCount = -1;
-    SLOTS.forEach((s, i) => {
-      const c = getRegsForSlot(s).length;
-      if (c > bestCount) { bestCount = c; best = i; }
+  function getBestSlot() {
+    const counts = getSlotCounts();
+    let best = SLOTS[0];
+    let bestCount = -1;
+    SLOTS.forEach(s => {
+      const c = (counts[slotKey(s)] || []).length;
+      if (c > bestCount) { bestCount = c; best = s; }
     });
     return best;
   }
 
-  /* ═══════════════════════════════════════════════════
-     UI FEEDBACK
-  ═══════════════════════════════════════════════════ */
+  function getLessonForSlot(slotObj) {
+    const key = slotKey(slotObj);
+    return (_data.lessons || []).find(l =>
+      l.slot === key || `${l.day} ${l.time}` === key
+    ) || null;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     TOAST
+  ═══════════════════════════════════════════════════════ */
   let _toastTimer = null;
-  function showToast(msg, duration = 2400) {
+  function showToast(msg, duration) {
+    duration = duration || 2600;
     const el = document.getElementById('toast');
     el.textContent = msg;
     el.classList.add('show');
@@ -998,341 +1137,583 @@
     }
   }
 
-  /* ═══════════════════════════════════════════════════
-     API
-  ═══════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════
+     API WRAPPERS
+  ═══════════════════════════════════════════════════════ */
   async function loadData() {
+    const btn = document.getElementById('refresh-btn');
+    if (btn) btn.style.opacity = '0.4';
     try {
-      _data = await apiRead();
+      const d = await apiRead();
+      _data = d;
       if (!_data.registrations) _data.registrations = [];
       if (!_data.lessons)       _data.lessons = [];
       render();
       checkNewRegistrations();
-    } catch(e) {
+    } catch (e) {
       showToast('Errore caricamento dati');
       console.error(e);
+    } finally {
+      if (btn) btn.style.opacity = '';
     }
   }
 
   async function putData() {
     try {
       await apiSaveAll(_data);
-    } catch(e) {
-      showToast('Errore salvataggio dati');
+    } catch (e) {
+      showToast('Errore salvataggio');
       console.error(e);
     }
   }
 
   async function deleteRegistration(id, name) {
     if (!confirm(`Eliminare ${name}?`)) return;
-    _data.registrations = (_data.registrations || []).filter(r => r.id !== id);
-    await apiDelete(id);
-    showToast(`${name} eliminato`);
-    render();
+    try {
+      await apiDelete(id);
+      _data.registrations = (_data.registrations || []).filter(r => r.id !== id);
+      showToast(`${name} eliminato`);
+      render();
+    } catch (e) {
+      showToast('Errore eliminazione');
+    }
   }
 
   async function createLesson(slotObj) {
-    const id = 'lesson_' + Date.now();
+    const counts = getSlotCounts();
+    const regs   = counts[slotKey(slotObj)] || [];
+    const id     = 'lesson_' + Date.now();
     const lesson = {
       id,
+      slot:      slotKey(slotObj),
       day:       slotObj.day,
       time:      slotObj.time,
-      slot:      slotKey(slotObj),
       createdAt: new Date().toISOString(),
-      participants: getRegsForSlot(slotObj).map(r => r.id)
+      confirmed: [],
+      declined:  [],
+      reminderSentAt: null,
     };
     if (!_data.lessons) _data.lessons = [];
     _data.lessons.push(lesson);
     await putData();
-    return id;
+    render();
+    return lesson;
   }
 
-  /* ═══════════════════════════════════════════════════
-     RENDER
-  ═══════════════════════════════════════════════════ */
+  async function deleteLesson(lessonId) {
+    _data.lessons = (_data.lessons || []).filter(l => l.id !== lessonId);
+    await putData();
+    showToast('Lezione eliminata');
+    render();
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     RENDER ORCHESTRATOR
+  ═══════════════════════════════════════════════════════ */
   function render() {
-    renderOverview();
-    renderSlotSelect();
-    renderLessonSection();
-    renderSlotsTable();
-    renderRegistrations();
-    renderInviteText();
+    renderRiepilogo();
+    renderProssimaLezione();
+    renderOrari();
+    renderIscritti();
+    renderMessaggi();
+    renderLezioniCreate();
   }
 
-  /* ── Overview ──────────────────────────────────── */
-  function renderOverview() {
+  /* ═══════════════════════════════════════════════════════
+     1. RIEPILOGO
+  ═══════════════════════════════════════════════════════ */
+  function renderRiepilogo() {
     const total = (_data.registrations || []).length;
     document.getElementById('total-count').textContent = total;
 
-    // top 3 slots by count
-    const counts = SLOTS.map((s, i) => ({ s, i, count: getRegsForSlot(s).length }));
-    const sorted = [...counts].sort((a,b) => b.count - a.count).slice(0,3);
+    const counts = getSlotCounts();
+    const sorted = SLOTS
+      .map(s => ({ s, count: (counts[slotKey(s)] || []).length }))
+      .filter(x => x.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 3);
 
-    const dotClasses = ['dot-1','dot-2','dot-3'];
     const topEl = document.getElementById('top-slots');
-    topEl.innerHTML = sorted.map((item, rank) => {
-      if (item.count === 0) return '';
-      return `
-        <div class="slot-chip">
-          <span class="chip-dot ${dotClasses[rank]}"></span>
-          <span>${esc(item.s.day)} ${esc(item.s.time)}</span>
-          <span class="chip-count">${item.count}</span>
-        </div>`;
-    }).filter(Boolean).join('') || '<span style="font-size:13px;color:var(--text-3)">Nessuna iscrizione</span>';
-  }
-
-  /* ── Slot select ───────────────────────────────── */
-  function renderSlotSelect() {
-    const sel = document.getElementById('slot-select');
-    const prev = sel.value;
-    sel.innerHTML = SLOTS.map((s, i) => {
-      const c = getRegsForSlot(s).length;
-      return `<option value="${i}">${s.day} ${s.time} (${c})</option>`;
-    }).join('');
-    if (prev !== '') {
-      sel.value = prev;
-      _selectedSlotIdx = parseInt(prev, 10);
-    } else {
-      _selectedSlotIdx = getBestSlotIdx();
-      sel.value = _selectedSlotIdx;
+    if (sorted.length === 0) {
+      topEl.innerHTML = '<span style="font-size:13px;color:var(--text-3)">Nessuna iscrizione</span>';
+      return;
     }
+
+    topEl.innerHTML = sorted.map((item, i) => {
+      const dotClass = item.count >= 5 ? 'dot-green' : item.count >= 3 ? 'dot-yellow' : 'dot-gray';
+      return `<div class="slot-chip">
+        <span class="chip-dot ${dotClass}"></span>
+        <span>${esc(item.s.day)} ${esc(item.s.time)}</span>
+        <span class="chip-count">${item.count}</span>
+      </div>`;
+    }).join('');
   }
 
-  /* ── Lesson section ────────────────────────────── */
-  function renderLessonSection() {
-    const slot = SLOTS[_selectedSlotIdx];
-    document.getElementById('lesson-day').textContent = slot.day;
-    document.getElementById('lesson-time').textContent = slot.time;
+  /* ═══════════════════════════════════════════════════════
+     2. PROSSIMA LEZIONE
+  ═══════════════════════════════════════════════════════ */
+  function renderProssimaLezione() {
+    if (!_selectedSlot) _selectedSlot = getBestSlot();
+    const slot    = _selectedSlot;
+    const counts  = getSlotCounts();
+    const regs    = counts[slotKey(slot)] || [];
+    const lesson  = getLessonForSlot(slot);
+    const card    = document.getElementById('lesson-card');
 
-    const regs = getRegsForSlot(slot);
-    const peopleEl = document.getElementById('lesson-people');
+    // Confirmed names set
+    const confirmedNames = new Set(((lesson && lesson.confirmed) || []).map(c => c.name));
+    const confirmedCount = confirmedNames.size;
 
+    // Determine CTA label
+    let ctaLabel, ctaAction;
+    if (!lesson) {
+      ctaLabel  = 'CREA LEZIONE E INVIA SU WHATSAPP';
+      ctaAction = 'sendWhatsApp()';
+    } else if (!lesson.reminderSentAt) {
+      ctaLabel  = 'INVIA REMINDER SU WHATSAPP';
+      ctaAction = `sendReminder('${lesson.id}')`;
+    } else {
+      ctaLabel  = 'INVIA NUOVAMENTE';
+      ctaAction = `sendReminder('${lesson.id}')`;
+    }
+
+    // Confirm link
+    const confirmLink = lesson ? getLessonConfirmLink(lesson.id) : '';
+
+    // Build people HTML
+    let peopleHtml = '';
     if (regs.length === 0) {
-      peopleEl.innerHTML = `<div class="empty-state">Nessun iscritto per questo orario</div>`;
+      peopleHtml = '<div class="empty-state">Nessun iscritto per questo orario</div>';
     } else {
-      peopleEl.innerHTML = regs.map(r => {
+      peopleHtml = '<div class="people-list">' + regs.map(r => {
+        const name  = r.name || r.nome || 'N/D';
         const phone = r.phone || r.telefono || '';
-        const msg = `Ciao ${esc(r.name || r.nome || '')}, ti ricordo la lezione di Karate ${slot.day} alle ${slot.time}!`;
-        const wa = phone ? `<a class="wa-icon-btn" href="${waLink(phone, msg)}" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : '';
-        return `
-          <div class="person-row">
-            <div class="avatar">${initials(r.name || r.nome || '?')}</div>
-            <span class="person-name">${esc(r.name || r.nome || 'N/D')}</span>
-            <span class="person-meta">${phone ? phone : ''}</span>
-            ${wa}
-          </div>`;
-      }).join('');
+        const msg   = `Ciao ${name}! Lezione di Fondamenti del Karate — ${slot.day} ${slot.time}`;
+        const waHref = phone ? waLink(phone, msg) : '';
+        const isConf = confirmedNames.has(name);
+        const badge  = isConf ? '<span class="confirmed-badge"><i class="fa-solid fa-check" style="font-size:6px;"></i></span>' : '';
+        return `<div class="person-row">
+          <div class="avatar sm">${initials(name)}${badge}</div>
+          <span class="person-name">${esc(name)}</span>
+          ${phone ? `<a class="wa-btn" href="${esc(waHref)}" target="_blank" rel="noopener" title="WhatsApp ${esc(phone)}"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+        </div>`;
+      }).join('') + '</div>';
     }
 
-    // link preview
-    const lastLesson = (_data.lessons || []).slice().reverse().find(l => l.slot === slotKey(slot));
-    const previewLink = lastLesson ? getLessonConfirmLink(lastLesson.id) : '—';
-    document.getElementById('lesson-link-preview').textContent = previewLink;
+    // Confirmed bar
+    let confirmedBar = '';
+    if (lesson && (confirmedCount > 0 || ((lesson.confirmed || []).length > 0))) {
+      confirmedBar = `<div class="confirmed-bar">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>${confirmedCount} su ${regs.length} hanno confermato</span>
+      </div>`;
+    }
+
+    // Slot selector
+    const selectorHtml = `<select id="slot-selector" onchange="onSlotChange()" style="
+      font-family:inherit;font-size:13px;color:var(--text);
+      background:var(--bg);border:1px solid var(--border);
+      border-radius:var(--radius-sm);padding:7px 10px;
+      cursor:pointer;outline:none;">
+      ${SLOTS.map((s, i) => {
+        const c = (counts[slotKey(s)] || []).length;
+        const sel = slotKey(s) === slotKey(slot) ? 'selected' : '';
+        return `<option value="${i}" ${sel}>${s.day} ${s.time} (${c})</option>`;
+      }).join('')}
+    </select>`;
+
+    card.innerHTML = `
+      <div class="lesson-card-header">
+        <div>
+          <div class="lesson-slot-name">${esc(slot.day)} ${esc(slot.time)}</div>
+          <div class="lesson-slot-sub">${regs.length} ${regs.length === 1 ? 'persona disponibile' : 'persone disponibili'}</div>
+        </div>
+        ${selectorHtml}
+      </div>
+
+      ${confirmedBar}
+      ${peopleHtml}
+
+      <div class="action-row">
+        <button class="btn-primary" onclick="${ctaAction}">
+          <i class="fa-brands fa-whatsapp"></i>
+          ${esc(ctaLabel)}
+        </button>
+        ${lesson ? `<button class="btn-ghost" onclick="copyLessonLink('${esc(lesson.id)}')">
+          <i class="fa-solid fa-link"></i>
+          Copia link conferma
+        </button>` : ''}
+      </div>
+
+      ${lesson ? `<div class="copy-row">
+        <span class="link-preview">${esc(confirmLink)}</span>
+      </div>` : ''}
+    `;
   }
 
-  /* ── Slots table ───────────────────────────────── */
-  function renderSlotsTable() {
-    const container = document.getElementById('slots-table');
-    container.innerHTML = SLOTS.map((s, i) => {
-      const regs = getRegsForSlot(s);
-      const count = regs.length;
-      const badgeClass = count === 0 ? 'slot-badge empty' : 'slot-badge';
+  function onSlotChange() {
+    const sel = document.getElementById('slot-selector');
+    if (!sel) return;
+    _selectedSlot = SLOTS[parseInt(sel.value, 10)];
+    renderProssimaLezione();
+  }
 
-      const peopleHtml = count === 0
-        ? '<span style="font-size:13px;color:var(--text-3)">Nessun iscritto</span>'
-        : regs.map(r => {
-            const phone = r.phone || r.telefono || '';
-            const msg = `Ciao ${esc(r.name || r.nome || '')}, ti ricordo la lezione di Karate ${s.day} alle ${s.time}!`;
-            const wa = phone ? `<a class="wa-icon-btn" href="${waLink(phone, msg)}" target="_blank" style="width:24px;height:24px;font-size:13px;" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>` : '';
-            return `<div class="slot-person-item">
-              <div class="avatar">${initials(r.name || r.nome || '?')}</div>
-              <span style="flex:1">${esc(r.name || r.nome || 'N/D')}</span>
-              <span style="font-size:12px;color:var(--text-3);margin-right:4px">${phone}</span>
-              ${wa}
-            </div>`;
-          }).join('');
+  /* ═══════════════════════════════════════════════════════
+     3. TUTTI GLI ORARI
+  ═══════════════════════════════════════════════════════ */
+  function renderOrari() {
+    const counts    = getSlotCounts();
+    const container = document.getElementById('orari-container');
 
-      return `
-        <div class="slot-row" id="slot-row-${i}">
-          <div class="slot-row-header" onclick="toggleSlotRow(${i})">
-            <i class="fa-solid fa-chevron-right slot-chevron" id="chevron-${i}"></i>
-            <span class="slot-day-label">${esc(s.day)}</span>
-            <span class="slot-time-label">${esc(s.time)}</span>
-            <span class="${badgeClass}">${count} iscritti</span>
+    // Group by day
+    const days = [];
+    const seen = {};
+    SLOTS.forEach(s => { if (!seen[s.day]) { seen[s.day] = true; days.push(s.day); } });
+
+    let html = '';
+    days.forEach(day => {
+      const daySlots = SLOTS.filter(s => s.day === day);
+      html += `<div class="day-group">
+        <div class="day-group-label">${esc(day)}</div>
+        <div class="slot-rows">`;
+
+      daySlots.forEach((s, localIdx) => {
+        const key  = slotKey(s);
+        const regs = counts[key] || [];
+        const c    = regs.length;
+        const badgeClass = c >= 5 ? 'high' : c >= 3 ? 'mid' : c >= 1 ? 'low' : 'empty';
+        const globalIdx  = SLOTS.indexOf(s);
+
+        // People list inside
+        const peopleInner = c === 0
+          ? '<span style="font-size:13px;color:var(--text-3);">Nessun iscritto</span>'
+          : regs.map(r => {
+              const name  = r.name || r.nome || 'N/D';
+              const phone = r.phone || r.telefono || '';
+              const msg   = `Ciao ${name}! Lezione ${s.day} ${s.time} — Fondamenti del Karate`;
+              return `<div class="slot-person">
+                <div class="avatar sm">${initials(name)}</div>
+                <span style="flex:1">${esc(name)}</span>
+                <span style="font-size:12px;color:var(--text-3);margin-right:4px;">${esc(phone)}</span>
+                ${phone ? `<a class="wa-btn" href="${esc(waLink(phone, msg))}" target="_blank" rel="noopener" style="width:26px;height:26px;font-size:13px;"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
+              </div>`;
+            }).join('');
+
+        const msgGroup  = buildGroupMessage(s, regs, null);
+        const waGroupHref = waGroupLink(msgGroup);
+
+        html += `<div class="slot-row">
+          <div class="slot-row-header" id="sh-${globalIdx}" onclick="toggleSlot(${globalIdx})">
+            <i class="fa-solid fa-chevron-right chevron" id="ch-${globalIdx}"></i>
+            <span class="slot-time">${esc(s.time)}</span>
+            <span class="count-badge ${badgeClass}">${c} ${c === 1 ? 'iscritto' : 'iscritti'}</span>
           </div>
-          <div class="slot-row-body" id="slot-body-${i}">
-            <div class="slot-people-list">${peopleHtml}</div>
+          <div class="slot-row-body" id="sb-${globalIdx}">
+            <div class="slot-people">${peopleInner}</div>
+            <div class="slot-body-actions">
+              <button class="btn-sm" onclick="createLessonForSlot(${globalIdx})">
+                <i class="fa-solid fa-plus"></i>
+                Crea lezione
+              </button>
+              <a class="btn-sm" href="${esc(waGroupHref)}" target="_blank" rel="noopener" style="text-decoration:none;color:var(--green);border-color:var(--green-bg);">
+                <i class="fa-brands fa-whatsapp"></i>
+                Invia messaggio
+              </a>
+            </div>
           </div>
         </div>`;
-    }).join('');
+      });
+
+      html += `</div></div>`;
+    });
+
+    container.innerHTML = html;
   }
 
-  function toggleSlotRow(i) {
-    const header = document.querySelector(`#slot-row-${i} .slot-row-header`);
-    const body   = document.getElementById(`slot-body-${i}`);
+  function toggleSlot(idx) {
+    const header = document.getElementById(`sh-${idx}`);
+    const body   = document.getElementById(`sb-${idx}`);
+    if (!body) return;
     const isOpen = body.classList.contains('open');
     body.classList.toggle('open', !isOpen);
     header.classList.toggle('open', !isOpen);
   }
 
-  /* ── Registrations grid ────────────────────────── */
-  function renderRegistrations() {
-    const grid = document.getElementById('registrations-grid');
-    const regs = _data.registrations || [];
+  async function createLessonForSlot(idx) {
+    const slot   = SLOTS[idx];
+    const lesson = getLessonForSlot(slot);
+    if (lesson) {
+      showToast('Lezione già creata per questo orario');
+      return;
+    }
+    await createLesson(slot);
+    showToast(`Lezione creata per ${slot.day} ${slot.time}`);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     4. TUTTI GLI ISCRITTI
+  ═══════════════════════════════════════════════════════ */
+  function renderIscritti() {
+    const regs  = _data.registrations || [];
+    const grid  = document.getElementById('reg-grid');
+    const count = document.getElementById('iscritti-count');
+    if (count) count.textContent = regs.length > 0 ? `(${regs.length})` : '';
 
     if (regs.length === 0) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">Nessun iscritto</div>`;
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Nessun iscritto ancora</div>';
       return;
     }
 
-    const sorted = [...regs].sort((a,b) => {
+    const sorted = [...regs].sort((a, b) => {
       const na = (a.name || a.nome || '').toLowerCase();
       const nb = (b.name || b.nome || '').toLowerCase();
-      return na.localeCompare(nb);
+      return na.localeCompare(nb, 'it');
     });
 
     grid.innerHTML = sorted.map(r => {
       const name  = r.name || r.nome || 'N/D';
       const phone = r.phone || r.telefono || '';
-      const slot  = r.slot || (r.day ? `${r.day} ${r.time}` : '—');
-      const msg   = `Ciao ${name}!`;
-      const wa    = phone ? `<a class="wa-icon-btn" href="${waLink(phone, msg)}" target="_blank" title="WhatsApp" style="color:var(--green)"><i class="fa-brands fa-whatsapp"></i></a>` : '';
-      return `
-        <div class="reg-card">
-          <div class="avatar">${initials(name)}</div>
-          <div class="reg-info">
-            <div class="reg-name">${esc(name)}</div>
-            <div class="reg-slot">${esc(slot)}</div>
-          </div>
-          <div class="reg-actions">
-            ${wa}
-            <button class="del-btn" onclick="deleteRegistration('${esc(r.id)}', '${esc(name)}')" title="Elimina">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
-        </div>`;
+      const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+      const waMsg = `Ciao ${name}!`;
+      const phoneHref = phone ? waLink(phone, waMsg) : '';
+
+      const slotTags = slots.length > 0
+        ? `<div class="slot-tags">${slots.map(sk => `<span class="slot-tag">${esc(sk)}</span>`).join('')}</div>`
+        : '';
+
+      return `<div class="reg-card">
+        <div class="reg-avatar">${initials(name)}</div>
+        <div class="reg-info">
+          <div class="reg-name">${esc(name)}</div>
+          ${phone ? `<a class="reg-phone" href="${esc(phoneHref)}" target="_blank" rel="noopener">${esc(phone)}</a>` : ''}
+          ${slotTags}
+        </div>
+        <button class="del-btn" onclick="deleteRegistration('${esc(r.id)}', '${esc(name.replace(/'/g,"\\'"))}')" title="Elimina">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>`;
     }).join('');
   }
 
-  /* ── Invite text ───────────────────────────────── */
-  function renderInviteText() {
-    const link = getRegistrationLink();
-    const text = `Ciao! Ti invito a iscriverti alle lezioni di Fondamenti del Karate.
+  /* ═══════════════════════════════════════════════════════
+     5. MESSAGGI PRONTI
+  ═══════════════════════════════════════════════════════ */
+  function renderMessaggi() {
+    const link    = getRegistrationLink();
+    const invText = `Ciao! 🥋\n\nTi invito alle lezioni di Fondamenti del Karate — Karate, Aikido, Judo, 1 ora, tutti i livelli.\n\nQuando sei disponibile?\n👉 ${link}\n\nPoi ti dirò l'orario! — Salvatore`;
+    const el = document.getElementById('invite-text-preview');
+    if (el) el.textContent = invText;
 
-Clicca qui per scegliere il tuo orario preferito e registrarti:
-${link}
-
-Le lezioni si svolgono ogni settimana e sono aperte a tutti i livelli. Ti aspettiamo!`;
-    document.getElementById('invite-text').textContent = text;
+    // Recipient pills
+    const pills = document.getElementById('recipient-pills');
+    if (pills) {
+      const regs = _data.registrations || [];
+      if (regs.length === 0) {
+        pills.innerHTML = '<span style="font-size:13px;color:var(--text-3);">Nessun iscritto</span>';
+        return;
+      }
+      pills.innerHTML = regs.map(r => {
+        const name = r.name || r.nome || 'N/D';
+        return `<span class="pill" data-id="${esc(r.id)}" onclick="togglePill(this)">
+          ${initials(name)} ${esc(name)}
+        </span>`;
+      }).join('');
+    }
   }
 
-  /* ═══════════════════════════════════════════════════
-     SLOT SELECT CHANGE
-  ═══════════════════════════════════════════════════ */
-  function onSlotChange() {
-    const sel = document.getElementById('slot-select');
-    _selectedSlotIdx = parseInt(sel.value, 10);
-    renderLessonSection();
+  function togglePill(el) {
+    el.classList.toggle('active');
   }
 
-  /* ═══════════════════════════════════════════════════
-     ACTIONS
-  ═══════════════════════════════════════════════════ */
-  async function sendWhatsApp() {
-    const slot = SLOTS[_selectedSlotIdx];
-    const regs = getRegsForSlot(slot);
-
-    // create lesson record
-    const lessonId = await createLesson(slot);
-    const confirmLink = getLessonConfirmLink(lessonId);
-
-    // update preview
-    document.getElementById('lesson-link-preview').textContent = confirmLink;
-
-    if (regs.length === 0) {
-      showToast('Nessun iscritto per questo orario');
-      return;
-    }
-
-    // compose message
-    const names = regs.map(r => r.name || r.nome || '').filter(Boolean).join(', ');
-    const msg = `Ciao a tutti! Vi ricordo la lezione di Karate ${slot.day} alle ${slot.time}.
-
-Partecipanti: ${names}
-
-Conferma presenza: ${confirmLink}`;
-
-    // open WhatsApp with first participant who has a phone
-    const first = regs.find(r => r.phone || r.telefono);
-    if (first) {
-      window.open(waLink(first.phone || first.telefono, msg), '_blank');
-    } else {
-      copyToClipboard(msg);
-      showToast('Messaggio copiato (nessun telefono disponibile)');
-    }
-    showToast('Lezione creata!');
-  }
-
-  function copyLessonLink() {
-    const text = document.getElementById('lesson-link-preview').textContent;
-    if (text && text !== '—') {
-      copyToClipboard(text);
-    } else {
-      showToast('Crea prima la lezione con il bottone WhatsApp');
-    }
+  function getSelectedRecipients() {
+    const pills = document.querySelectorAll('#recipient-pills .pill.active');
+    const ids   = Array.from(pills).map(p => p.dataset.id);
+    return (_data.registrations || []).filter(r => ids.includes(r.id));
   }
 
   function copyInviteText() {
-    copyToClipboard(document.getElementById('invite-text').textContent);
+    const el = document.getElementById('invite-text-preview');
+    if (el) copyToClipboard(el.textContent);
   }
 
-  function shareInviteWhatsApp() {
-    const text = document.getElementById('invite-text').textContent;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  function sendInviteWhatsApp() {
+    const el   = document.getElementById('invite-text-preview');
+    const text = el ? el.textContent : '';
+    window.open(waGroupLink(text), '_blank', 'noopener');
   }
 
-  /* ═══════════════════════════════════════════════════
+  function sendCustomMessages() {
+    const msg        = (document.getElementById('custom-msg') || {}).value || '';
+    const recipients = getSelectedRecipients();
+    if (!msg.trim()) { showToast('Scrivi un messaggio prima'); return; }
+    if (recipients.length === 0) { showToast('Seleziona almeno un destinatario'); return; }
+
+    let opened = 0;
+    recipients.forEach((r, i) => {
+      const phone = r.phone || r.telefono || '';
+      if (!phone) return;
+      setTimeout(() => window.open(waLink(phone, msg), '_blank', 'noopener'), i * 600);
+      opened++;
+    });
+    if (opened === 0) showToast('Nessun numero di telefono disponibile');
+    else showToast(`Aperto WhatsApp per ${opened} contatti`);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     6. LEZIONI CREATE
+  ═══════════════════════════════════════════════════════ */
+  function renderLezioniCreate() {
+    const list    = document.getElementById('lessons-list');
+    const lessons = _data.lessons || [];
+
+    if (lessons.length === 0) {
+      list.innerHTML = '<div class="empty-state">Nessuna lezione creata ancora</div>';
+      return;
+    }
+
+    const counts = getSlotCounts();
+    list.innerHTML = [...lessons].reverse().map(l => {
+      const regs         = counts[l.slot] || [];
+      const confirmedCnt = (l.confirmed || []).length;
+      const declinedCnt  = (l.declined  || []).length;
+      const confirmLink  = getLessonConfirmLink(l.id);
+      const createdAt    = l.createdAt ? new Date(l.createdAt).toLocaleDateString('it-IT', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+
+      return `<div class="lesson-item">
+        <div class="lesson-item-info">
+          <div class="lesson-item-slot">${esc(l.slot)}</div>
+          <div class="lesson-item-meta">
+            <span>${createdAt}</span>
+            ${confirmedCnt > 0 ? `<span class="stat-pill confirmed"><i class="fa-solid fa-check"></i>${confirmedCnt} conf.</span>` : ''}
+            ${declinedCnt  > 0 ? `<span class="stat-pill declined"><i class="fa-solid fa-xmark"></i>${declinedCnt} decl.</span>` : ''}
+            <span style="color:var(--text-3)">${regs.length} disponibili</span>
+          </div>
+        </div>
+        <div class="lesson-item-actions">
+          <button class="btn-sm" onclick="copyToClipboard('${esc(confirmLink)}')" title="Copia link conferma">
+            <i class="fa-solid fa-link"></i>
+            Link
+          </button>
+          <a class="btn-sm" href="${esc(confirmLink)}" target="_blank" rel="noopener" style="text-decoration:none;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+          <button class="btn-sm danger" onclick="deleteLesson('${esc(l.id)}')">
+            <i class="fa-solid fa-trash-can"></i>
+            Elimina
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     WHATSAPP ACTIONS
+  ═══════════════════════════════════════════════════════ */
+  function buildGroupMessage(slotObj, regs, lesson) {
+    const n           = regs.length;
+    const confirmLink = lesson ? getLessonConfirmLink(lesson.id) : getRegistrationLink();
+
+    if (!lesson) {
+      // First time — create lesson message
+      return `Ciao a tutti! 🥋\n\nLa lezione di Fondamenti del Karate sarà:\n\n📅 ${slotObj.day}\n🕐 ${slotObj.time}\n\nSiamo in ${n}! Conferma che ci sei:\n👉 ${confirmLink}\n\n— Salvatore`;
+    } else {
+      // Reminder
+      const confirmedCnt = (lesson.confirmed || []).length;
+      return `Promemoria! 🥋\n\n${slotObj.day} alle ${slotObj.time} — Fondamenti del Karate\n\n${confirmedCnt} confermati su ${n}\n\nConferma ancora:\n👉 ${confirmLink}\n\nCi vediamo! — Salvatore`;
+    }
+  }
+
+  async function sendWhatsApp() {
+    const slot = _selectedSlot || getBestSlot();
+    let lesson = getLessonForSlot(slot);
+
+    if (!lesson) {
+      lesson = await createLesson(slot);
+    }
+
+    const counts = getSlotCounts();
+    const regs   = counts[slotKey(slot)] || [];
+    const msg    = buildGroupMessage(slot, regs, null);
+
+    window.open(waGroupLink(msg), '_blank', 'noopener');
+    showToast('Lezione creata — WhatsApp aperto');
+  }
+
+  async function sendReminder(lessonId) {
+    const lesson = (_data.lessons || []).find(l => l.id === lessonId);
+    if (!lesson) { showToast('Lezione non trovata'); return; }
+
+    const slotObj = SLOTS.find(s => slotKey(s) === lesson.slot) || { day: lesson.day, time: lesson.time };
+    const counts  = getSlotCounts();
+    const regs    = counts[lesson.slot] || [];
+    const msg     = buildGroupMessage(slotObj, regs, lesson);
+
+    // Mark reminder sent
+    lesson.reminderSentAt = new Date().toISOString();
+    await putData();
+
+    window.open(waGroupLink(msg), '_blank', 'noopener');
+    showToast('Reminder inviato');
+    render();
+  }
+
+  function copyLessonLink(lessonId) {
+    const link = getLessonConfirmLink(lessonId);
+    copyToClipboard(link);
+  }
+
+  /* ═══════════════════════════════════════════════════════
      EXPORT CSV
-  ═══════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════ */
   function exportCSV() {
     const regs = _data.registrations || [];
     if (regs.length === 0) { showToast('Nessun dato da esportare'); return; }
-    const header = ['Nome', 'Telefono', 'Orario', 'Data iscrizione'];
-    const rows = regs.map(r => [
-      r.name || r.nome || '',
-      r.phone || r.telefono || '',
-      r.slot || (r.day ? `${r.day} ${r.time}` : ''),
-      r.createdAt ? new Date(r.createdAt).toLocaleString('it-IT') : ''
-    ]);
-    const csv = '\uFEFF' + [header, ...rows]
-      .map(row => row.map(c => `"${String(c).replace(/"/g,'""')}"`).join(','))
+
+    const header = ['Nome', 'Telefono', 'Slot', 'Note', 'Data iscrizione'];
+    const rows   = regs.map(r => {
+      const slots = Array.isArray(r.slots) ? r.slots.join(' | ') : (r.slot || '');
+      return [
+        r.name  || r.nome     || '',
+        r.phone || r.telefono || '',
+        slots,
+        r.notes || r.note     || '',
+        r.timestamp || r.createdAt ? new Date(r.timestamp || r.createdAt).toLocaleString('it-IT') : ''
+      ];
+    });
+
+    const csv  = '\uFEFF' + [header, ...rows]
+      .map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
       .join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement('a');
-    a.href = url;
-    a.download = `karate360-iscritti-${new Date().toISOString().slice(0,10)}.csv`;
+    a.href     = url;
+    a.download = `karate360-iscritti-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     showToast('CSV esportato');
   }
 
-  /* ═══════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════
      NOTIFICATIONS
-  ═══════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════ */
   function checkNewRegistrations() {
     const count = (_data.registrations || []).length;
     if (_prevCount !== null && count > _prevCount) {
-      const diff = count - _prevCount;
-      const banner = document.getElementById('notif-banner');
-      document.getElementById('notif-text').textContent =
-        `${diff} nuova${diff > 1 ? 'e iscrizioni' : ' iscrizione'}!`;
-      banner.style.display = 'flex';
-      setTimeout(() => { banner.style.display = 'none'; }, 6000);
+      const diff  = count - _prevCount;
+      const label = diff > 1 ? `${diff} nuove iscrizioni!` : 'Nuova iscrizione!';
+
+      const banner   = document.getElementById('notif-banner');
+      const notifTxt = document.getElementById('notif-text');
+      if (notifTxt) notifTxt.textContent = label;
+      if (banner) {
+        banner.style.display = 'flex';
+        setTimeout(() => { banner.style.display = 'none'; }, 7000);
+      }
 
       if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Karate 360', {
-          body: `${diff} nuova${diff > 1 ? 'e iscrizioni' : ' iscrizione'} ricevuta!`,
+        new Notification('Fondamenti del Karate', {
+          body: label,
           icon: 'icon-192.png'
         });
       }
@@ -1340,47 +1721,52 @@ Conferma presenza: ${confirmLink}`;
     _prevCount = count;
   }
 
-  function requestNotificationPermission() {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
+  function requestNotifPermission() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(perm => {
+        document.getElementById('perm-banner').style.display = 'none';
+        if (perm === 'granted') showToast('Notifiche abilitate');
+      });
     }
   }
 
-  /* ═══════════════════════════════════════════════════
-     THEME
-  ═══════════════════════════════════════════════════ */
-  function initTheme() {
-    /* Dark mode only */
+  function maybeShowPermBanner() {
+    if ('Notification' in window && Notification.permission === 'default') {
+      const banner = document.getElementById('perm-banner');
+      if (banner) banner.style.display = 'flex';
+    }
   }
 
-  /* ═══════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════
      SERVICE WORKER
-  ═══════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════ */
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 
-  /* ═══════════════════════════════════════════════════
-     AUTO REFRESH
-  ═══════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════
+     AUTO-REFRESH & NOTIFICATION POLL
+  ═══════════════════════════════════════════════════════ */
   setInterval(loadData, 30000);
+
   setInterval(() => {
     apiRead().then(d => {
-      const c = (d.registrations || []).length;
-      if (_prevCount !== null && c > _prevCount) {
+      const newCount = (d.registrations || []).length;
+      const oldCount = (_data.registrations || []).length;
+      if (newCount !== oldCount) {
         _data = d;
         if (!_data.lessons) _data.lessons = [];
-        checkNewRegistrations();
         render();
+        checkNewRegistrations();
       }
     }).catch(() => {});
   }, 15000);
 
-  /* ═══════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════
      INIT
-  ═══════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════ */
   loadData();
-  setTimeout(requestNotificationPermission, 3000);
+  setTimeout(maybeShowPermBanner, 3000);
   </script>
 
 </body>
