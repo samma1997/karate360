@@ -7,6 +7,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#0a0a0a" />
+  <link rel="manifest" href="manifest-admin.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
   <title>Karate 360 — Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -92,6 +95,11 @@
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(0); }
     }
 
     /* ─── STICKY HEADER ─── */
@@ -1510,6 +1518,112 @@ function fallbackCopy(text, msg) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ══════════════════════════════════════════
+// SERVICE WORKER + NOTIFICHE
+// ══════════════════════════════════════════
+let lastKnownCount = null;
+
+async function initNotifications() {
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('sw.js');
+    } catch (e) {
+      console.warn('[K360] SW registration failed:', e);
+    }
+  }
+
+  // Request notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    // Show banner to ask for permission
+    showNotifBanner();
+  }
+}
+
+function showNotifBanner() {
+  const banner = document.createElement('div');
+  banner.id = 'notif-banner';
+  banner.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+    background: linear-gradient(135deg, #DC2626, #991b1b);
+    color: #fff; padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    animation: slideDown 0.3s ease;
+    padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  `;
+  banner.innerHTML = `
+    <i class="fas fa-bell" style="font-size:18px"></i>
+    <span style="flex:1">Attiva le notifiche per sapere quando qualcuno si iscrive!</span>
+    <button onclick="requestNotifPermission()" style="
+      background: #fff; color: #DC2626; border: none; border-radius: 8px;
+      padding: 8px 14px; font-family: inherit; font-size: 12px; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+    ">Attiva</button>
+    <button onclick="this.parentElement.remove()" style="
+      background: none; border: none; color: rgba(255,255,255,0.7); font-size: 18px;
+      cursor: pointer; padding: 4px;
+    ">&times;</button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function requestNotifPermission() {
+  const permission = await Notification.requestPermission();
+  const banner = document.getElementById('notif-banner');
+  if (banner) banner.remove();
+  if (permission === 'granted') {
+    showToast('Notifiche attivate!');
+  }
+}
+
+// Poll for new registrations and notify
+async function checkForNewRegistrations() {
+  try {
+    const res = await fetch(API_URL);
+    const db = await res.json();
+    const currentCount = (db.registrations || []).length;
+
+    if (lastKnownCount !== null && currentCount > lastKnownCount) {
+      const newOnes = currentCount - lastKnownCount;
+      const latest = db.registrations[db.registrations.length - 1];
+      const name = latest ? latest.name : 'Qualcuno';
+
+      // Browser notification
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Karate 360 - Nuova iscrizione!', {
+          body: `${name} si e\' iscritto!${newOnes > 1 ? ` (+${newOnes - 1} altri)` : ''}`,
+          icon: 'icon-192.png',
+          tag: 'karate360-new-' + currentCount,
+          renotify: true
+        });
+      }
+
+      // Also refresh the dashboard data
+      allRegistrations = (db.registrations || []).sort((a, b) => {
+        return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+      });
+      renderAll();
+      showToast('Nuova iscrizione: ' + name);
+    }
+
+    lastKnownCount = currentCount;
+  } catch (e) {
+    // silent fail on polling
+  }
+}
+
+// Init
+initNotifications();
+
+// Set initial count
+fetch(API_URL).then(r => r.json()).then(db => {
+  lastKnownCount = (db.registrations || []).length;
+}).catch(() => {});
+
+// Check every 15 seconds for new registrations
+setInterval(checkForNewRegistrations, 15000);
 </script>
 </body>
 </html>

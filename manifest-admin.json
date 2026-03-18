@@ -1,0 +1,24 @@
+{
+  "name": "Karate 360 - Admin",
+  "short_name": "K360 Admin",
+  "description": "Dashboard admin per gestire le prenotazioni",
+  "start_url": "/karate360/dashboard.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
