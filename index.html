@@ -121,51 +121,53 @@
 
     /* ─── HERO ───────────────────────────────────────────── */
     .hero {
-      padding: 56px 20px 48px;
+      padding: 48px 20px 40px;
       max-width: 480px;
       margin: 0 auto;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
 
     .hero-img-wrap {
-      margin-bottom: 28px;
-      display: flex;
-      justify-content: center;
+      flex-shrink: 0;
     }
 
     .hero-img {
-      max-width: 200px;
+      width: 100px;
       height: auto;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      filter: drop-shadow(0 0 60px rgba(212,165,116,0.12));
+      filter: drop-shadow(0 0 40px rgba(212,165,116,0.10));
       display: block;
     }
 
+    .hero-text {
+      flex: 1;
+    }
+
     .hero-title {
-      font-size: 36px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -1.5px;
-      line-height: 1.08;
+      letter-spacing: -1px;
+      line-height: 1.12;
       color: var(--text);
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .hero-discipline {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--amber);
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .hero-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text2);
-      line-height: 1.6;
-      max-width: 300px;
-      margin: 0 auto;
+      line-height: 1.55;
     }
 
     /* ─── DIVIDER ─────────────────────────────────────────── */
@@ -646,21 +648,13 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-img-wrap">
-      <img
-        class="hero-img"
-        src="karateka.gif"
-        alt="Karateka pixel art"
-        width="200"
-      />
+      <img class="hero-img" src="karateka.gif" alt="Karateka" />
     </div>
-
-    <h1 class="hero-title">
-      Fondamenti<br>del Karate
-    </h1>
-
-    <p class="hero-discipline">Karate &middot; Aikido &middot; Judo</p>
-
-    <p class="hero-desc">Lezione di 1 ora per tutti i livelli con Salvatore</p>
+    <div class="hero-text">
+      <p class="hero-discipline">Karate &middot; Aikido &middot; Judo</p>
+      <h1 class="hero-title">Fondamenti<br>del Karate</h1>
+      <p class="hero-desc">Lezione di 1 ora per tutti i livelli<br>con Salvatore</p>
+    </div>
   </section>
 
   <div class="gradient-rule"></div>
@@ -982,13 +976,13 @@
         try {
           var getRes  = await fetch(API_URL);
           var db      = await getRes.json();
-          var regs    = Array.isArray(db.registrations) ? db.registrations : [];
-          regs.push(newReg);
+          if (!Array.isArray(db.registrations)) db.registrations = [];
+          db.registrations.push(newReg);
 
           await fetch(API_URL, {
             method:  'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ registrations: regs })
+            body:    JSON.stringify(db)
           });
 
           submitBtn.classList.remove('loading');
