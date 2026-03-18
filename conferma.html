@@ -717,7 +717,7 @@
 
 </div><!-- /page-wrapper -->
 
-<script src="config.js"></script>
+<script src="config.js?v=2"></script>
 <script>
   /* ══════════════════════════════════════════════
      CONSTANTS & STATE
@@ -944,11 +944,7 @@
       hide(elFooter);
     }
 
-    return fetch(API_URL)
-      .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      })
+    return apiRead()
       .then(function(data) {
         renderPage(data);
         return data;
@@ -987,11 +983,7 @@
       btnConfirm.disabled = true;
     }
 
-    fetch(API_URL)
-      .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      })
+    apiRead()
       .then(function(data) {
         var lessons = data.lessons || [];
         var idx = lessons.findIndex(function(l) { return l.id === lessonId; });
@@ -1003,7 +995,6 @@
 
         var nameLower = userName.toLowerCase().trim();
 
-        // Remove from both first
         lesson.confirmed = lesson.confirmed.filter(function(c) {
           return c.name.toLowerCase().trim() !== nameLower;
         });
@@ -1021,14 +1012,7 @@
         lessons[idx] = lesson;
         data.lessons = lessons;
 
-        return fetch(API_URL, {
-          method:  'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(data)
-        }).then(function(putRes) {
-          if (!putRes.ok) throw new Error('PUT failed');
-          return data;
-        });
+        return apiSaveAll(data).then(function() { return data; });
       })
       .then(function(data) {
         setUserResponse(type);
@@ -1047,11 +1031,7 @@
   function cancelResponse() {
     if (!userName) return;
 
-    fetch(API_URL)
-      .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      })
+    apiRead()
       .then(function(data) {
         var lessons = data.lessons || [];
         var idx = lessons.findIndex(function(l) { return l.id === lessonId; });
@@ -1074,14 +1054,7 @@
         lessons[idx] = lesson;
         data.lessons = lessons;
 
-        return fetch(API_URL, {
-          method:  'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify(data)
-        }).then(function(putRes) {
-          if (!putRes.ok) throw new Error('PUT failed');
-          return data;
-        });
+        return apiSaveAll(data).then(function() { return data; });
       })
       .then(function(data) {
         setUserResponse(null);
