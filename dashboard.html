@@ -14,9 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
+  <script src="config.js"></script>
 
   <style>
     /* ─── RESET & BASE ─── */
@@ -938,31 +936,10 @@
 <body>
 
 <!-- ════════════════════════════════════════
-     LOCK SCREEN
-═══════════════════════════════════════════ -->
-<div id="lock-screen">
-  <div class="lock-icon">🥋</div>
-  <div class="lock-title">Karate 360</div>
-  <div class="lock-subtitle">Dashboard Admin</div>
-  <div class="lock-input-wrap">
-    <input
-      id="lock-input"
-      class="lock-input"
-      type="password"
-      placeholder="password"
-      autocomplete="current-password"
-      inputmode="text"
-    />
-    <div class="lock-error" id="lock-error"></div>
-  </div>
-  <button class="lock-btn" id="lock-btn">Accedi</button>
-</div>
-
-<!-- ════════════════════════════════════════
      MAIN APP
 ═══════════════════════════════════════════ -->
 <div id="app">
-  <div id="main">
+  <div id="main" class="visible">
 
     <!-- ── TAB CONTENTS ── -->
 
@@ -971,6 +948,9 @@
       <div class="page-header">
         <span class="page-title">Panoramica</span>
         <div class="header-actions">
+          <button class="export-btn" onclick="loadData()" style="margin-right:4px">
+            <i class="fas fa-sync-alt"></i>
+          </button>
           <button class="export-btn" id="export-btn">
             <i class="fas fa-download"></i> CSV
           </button>
@@ -1147,7 +1127,7 @@
 // ══════════════════════════════════════════
 let allRegistrations = [];
 let deleteTarget = null;
-let unsubscribe = null;
+// Google Sheets polling
 
 // ─── SLOT DEFINITIONS ───────────────────
 const SLOTS = [
@@ -1175,69 +1155,43 @@ function groupedSlots() {
 function slotLabel(s) { return `${s.day} ${s.time}`; }
 
 // ══════════════════════════════════════════
-// AUTH
+// GOOGLE SHEETS BACKEND
 // ══════════════════════════════════════════
-const PASSWORD = 'karate360';
-
-function checkAuth() {
-  return sessionStorage.getItem('k360auth') === '1';
-}
-
-function doLogin() {
-  const val = document.getElementById('lock-input').value.trim();
-  if (val === PASSWORD) {
-    sessionStorage.setItem('k360auth', '1');
-    const ls = document.getElementById('lock-screen');
-    ls.classList.add('hiding');
-    setTimeout(() => {
-      ls.style.display = 'none';
-      document.getElementById('main').classList.add('visible');
-      initFirebase();
-    }, 420);
-  } else {
-    const err = document.getElementById('lock-error');
-    err.textContent = 'Password errata';
-    const inp = document.getElementById('lock-input');
-    inp.style.borderColor = 'var(--red)';
-    setTimeout(() => {
-      err.textContent = '';
-      inp.style.borderColor = '';
-    }, 2000);
+async function loadData() {
+  try {
+    if (typeof APPS_SCRIPT_URL === 'undefined' || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL') {
+      console.warn('[K360] Apps Script URL non configurato. Demo mode.');
+      allRegistrations = [];
+      renderAll();
+      return;
+    }
+    const res = await fetch(APPS_SCRIPT_URL + '?action=read');
+    const json = await res.json();
+    if (json.success) {
+      allRegistrations = (json.registrations || []).sort((a, b) => {
+        return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+      });
+    }
+    renderAll();
+  } catch (err) {
+    console.error('[K360] Errore caricamento dati:', err);
+    allRegistrations = [];
+    renderAll();
   }
 }
 
-document.getElementById('lock-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-document.getElementById('lock-btn').addEventListener('click', doLogin);
-
-if (checkAuth()) {
-  document.getElementById('lock-screen').style.display = 'none';
-  document.getElementById('main').classList.add('visible');
-  initFirebase();
-}
-
-// ══════════════════════════════════════════
-// FIREBASE
-// ══════════════════════════════════════════
-function initFirebase() {
+async function deleteRegistration(id) {
   try {
-    firebase.initializeApp(firebaseConfig);
-  } catch(e) {}
-  const db = firebase.firestore();
-  if (unsubscribe) unsubscribe();
-  unsubscribe = db.collection('registrations')
-    .orderBy('timestamp', 'desc')
-    .onSnapshot(snapshot => {
-      allRegistrations = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      renderAll();
-    }, err => {
-      console.error('Firestore error:', err);
-    });
+    await fetch(APPS_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id));
+    await loadData();
+  } catch (err) {
+    console.error('[K360] Errore eliminazione:', err);
+  }
 }
+
+// Load data on start and refresh every 30 seconds
+loadData();
+setInterval(loadData, 30000);
 
 // ══════════════════════════════════════════
 // RENDER ALL
@@ -1530,7 +1484,7 @@ function closeDeleteModal() {
 document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
   if (!deleteTarget) return;
   try {
-    await firebase.firestore().collection('registrations').doc(deleteTarget).delete();
+    await deleteRegistration(deleteTarget);
     showToast('Iscrizione eliminata');
   } catch(e) {
     showToast('Errore nell\'eliminazione');
@@ -1554,7 +1508,7 @@ document.getElementById('export-btn').addEventListener('click', () => {
       r.phone || '',
       (r.slots||[]).join('; '),
       r.notes || '',
-      r.timestamp ? new Date(r.timestamp.toDate()).toLocaleString('it-IT') : ''
+      r.timestamp ? new Date(r.timestamp).toLocaleString('it-IT') : ''
     ]);
   });
   const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
@@ -1610,7 +1564,7 @@ function waLink(phone, msg) {
 function timeAgo(ts) {
   if (!ts) return '';
   let date;
-  try { date = ts.toDate ? ts.toDate() : new Date(ts); } catch(e) { return ''; }
+  try { date = new Date(ts); } catch(e) { return ''; }
   const diffMs = Date.now() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
   const diffH   = Math.floor(diffMs / 3600000);

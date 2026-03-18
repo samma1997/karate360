@@ -14,8 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- Config loaded from config.js -->
 
   <style>
     /* ─── RESET ─────────────────────────────────── */
@@ -1068,17 +1067,8 @@
   </div>
 </div>
 
-<script src="firebase-config.js"></script>
+<script src="config.js"></script>
 <script>
-  /* ── Firebase init ────────────────────────── */
-  let db = null;
-  try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
-  } catch (e) {
-    console.warn('[K360] Firebase non configurato. Demo mode attivo.', e.message);
-  }
-
   /* ── Day accordion ────────────────────────── */
   const days = ['lun', 'mer', 'ven', 'sab', 'dom'];
 
@@ -1161,19 +1151,23 @@
     btn.disabled = true;
 
     const data = {
-      name:      nameVal,
-      phone:     '+39' + phoneVal.replace(/\s+/g, ''),
-      slots:     slots,
-      notes:     notesVal,
-      timestamp: db ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString()
+      name:  nameVal,
+      phone: '+39' + phoneVal.replace(/\s+/g, ''),
+      slots: slots.join(', '),
+      notes: notesVal
     };
 
     try {
-      if (db) {
-        await db.collection('registrations').add(data);
+      if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL') {
+        await fetch(APPS_SCRIPT_URL + '?action=write', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
       } else {
         await new Promise(function(res) { setTimeout(res, 800); });
-        console.info('[K360] Demo:', data);
+        console.info('[K360] Demo mode — dati:', data);
       }
 
       btn.classList.remove('loading');
@@ -1182,7 +1176,7 @@
       document.body.style.overflow = 'hidden';
 
     } catch (err) {
-      console.error('[K360] Errore Firestore:', err);
+      console.error('[K360] Errore invio:', err);
       btn.classList.remove('loading');
       btn.disabled = false;
       alert('Errore durante l\'invio. Riprova o contatta Salvatore su WhatsApp.');
