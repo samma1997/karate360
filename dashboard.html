@@ -962,6 +962,28 @@
         </div>
       </div>
 
+      <!-- AZIONE RAPIDA -->
+      <div id="quick-action" style="display:none;padding:16px 16px 0">
+        <div style="background:var(--sand-dim);border:1px solid rgba(184,165,140,0.25);border-radius:var(--r-lg);padding:16px;position:relative">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--sand);margin-bottom:8px">Slot migliore</div>
+          <div id="qa-slot" style="font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.4px;margin-bottom:4px"></div>
+          <div id="qa-count" style="font-size:13px;color:var(--text-2);margin-bottom:14px"></div>
+          <button id="qa-create-btn" class="btn-primary" style="height:46px;font-size:14px" onclick="quickCreateAndShare()">
+            <i class="fa-brands fa-whatsapp" style="margin-right:6px"></i> Crea lezione e invia su WhatsApp
+          </button>
+          <div id="qa-link-row" style="display:none;margin-top:10px">
+            <div style="display:flex;gap:8px">
+              <button class="btn-secondary" style="flex:1;margin-top:0;height:42px;font-size:13px" id="qa-copy-btn">
+                <i class="fa-regular fa-copy"></i> Copia link
+              </button>
+              <button class="btn-wa" style="flex:1;height:42px;font-size:13px;border-radius:var(--r-md)" id="qa-wa-btn">
+                <i class="fa-brands fa-whatsapp"></i> WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="stat-grid" id="stat-grid">
         <div class="stat-card">
           <div class="stat-value stat-accent" id="stat-iscritti">—</div>
@@ -1296,6 +1318,7 @@ async function deleteRegistration(id) {
    RENDER ALL
 ══════════════════════════════════════════════ */
 function renderAll() {
+  renderQuickAction();
   renderPanoramica();
   renderOrari();
   renderPersone();
@@ -1512,6 +1535,10 @@ function onSlotSelect() {
     return slots.includes(key);
   });
 
+  // Auto-fill message text
+  document.getElementById('msg-slot-text').value =
+    'Ciao! Siamo in ' + people.length + ' per la lezione di Fondamenti del Karate ' + key + '. Ci sei? Rispondi a questo messaggio! — Salvatore';
+
   if (!people.length) {
     rows.innerHTML = '<p style="font-size:13px;color:var(--text-3);padding:4px 0">Nessun iscritto in questo slot</p>';
     container.style.display = 'block';
@@ -1559,6 +1586,99 @@ function sendCustomMsg() {
       window.open(waLink(el.dataset.phone, text.replace('{nome}', el.dataset.name || '')), '_blank');
     }, i * 600);
   });
+}
+
+/* ══════════════════════════════════════════════
+   AZIONE RAPIDA (Panoramica)
+══════════════════════════════════════════════ */
+function renderQuickAction() {
+  const slotMap = {};
+  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
+  allRegistrations.forEach(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : [];
+    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
+  });
+
+  const sorted = Object.entries(slotMap).sort((a,b) => b[1] - a[1]);
+  const best = sorted[0];
+  const qa = document.getElementById('quick-action');
+
+  if (!best || best[1] === 0) {
+    qa.style.display = 'none';
+    return;
+  }
+
+  qa.style.display = 'block';
+  document.getElementById('qa-slot').textContent = best[0];
+  document.getElementById('qa-count').textContent = best[1] + ' persone disponibili';
+
+  // Reset button state
+  document.getElementById('qa-create-btn').style.display = '';
+  document.getElementById('qa-link-row').style.display = 'none';
+}
+
+async function quickCreateAndShare() {
+  const slotMap = {};
+  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
+  allRegistrations.forEach(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : [];
+    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
+  });
+  const sorted = Object.entries(slotMap).sort((a,b) => b[1] - a[1]);
+  const bestSlot = sorted[0] ? sorted[0][0] : null;
+  if (!bestSlot) return;
+
+  const btn = document.getElementById('qa-create-btn');
+  btn.textContent = 'Creazione...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(API_URL, { cache: 'no-store' });
+    const data = await res.json();
+    if (!data.lessons) data.lessons = [];
+
+    let lesson = data.lessons.find(l => l.slot === bestSlot);
+    if (!lesson) {
+      lesson = {
+        id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+        slot: bestSlot,
+        createdAt: new Date().toISOString(),
+        confirmed: [],
+        declined: []
+      };
+      data.lessons.push(lesson);
+      await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    }
+
+    const link = window.location.origin + window.location.pathname.replace('dashboard.html', 'conferma.html') + '?id=' + lesson.id;
+    const count = sorted[0][1];
+    const waMsg = 'Ciao a tutti! La lezione di Fondamenti del Karate di ' + bestSlot + ' sta prendendo forma — siamo gia\' in ' + count + '! Conferma la tua presenza con un tap: ' + link + ' — Salvatore';
+
+    // Show link row, hide create button
+    btn.style.display = 'none';
+    const linkRow = document.getElementById('qa-link-row');
+    linkRow.style.display = 'block';
+
+    document.getElementById('qa-copy-btn').onclick = function() {
+      copyToClipboard(link, 'Link copiato!');
+    };
+    document.getElementById('qa-wa-btn').onclick = function() {
+      window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
+    };
+
+    // Auto-open WhatsApp
+    window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
+
+  } catch (e) {
+    console.error('quickCreate:', e);
+    btn.textContent = 'Crea lezione e invia su WhatsApp';
+    btn.disabled = false;
+    showToast('Errore — riprova');
+  }
 }
 
 /* ══════════════════════════════════════════════
