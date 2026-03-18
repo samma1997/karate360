@@ -125,86 +125,14 @@
       margin-bottom: 28px;
     }
 
-    /* PIXEL ART KARATEKA — animated CSS sprite */
-    .pixel-karate {
-      width: 64px;
-      height: 80px;
-      position: relative;
+    /* Karateka GIF */
+    .karate-gif {
+      width: 80px;
+      height: auto;
       image-rendering: pixelated;
-      animation: karate-move 1.6s steps(1) infinite;
-    }
-    .pixel-karate .px {
-      position: absolute;
-      background: var(--sand);
-    }
-    /* Head */
-    .pixel-karate .head { width:12px;height:12px;left:26px;top:0;border-radius:2px; }
-    /* Headband */
-    .pixel-karate .band { width:16px;height:3px;left:24px;top:6px;background:#fff;opacity:0.7; }
-    /* Body */
-    .pixel-karate .torso { width:14px;height:20px;left:25px;top:13px;border-radius:1px; }
-    /* Belt */
-    .pixel-karate .belt { width:16px;height:3px;left:24px;top:25px;background:#fff;opacity:0.5; }
-    /* Left arm — changes with animation */
-    .pixel-karate .l-arm { width:4px;height:18px;left:21px;top:14px;border-radius:1px;transform-origin:top center;transition:none; }
-    /* Right arm */
-    .pixel-karate .r-arm { width:4px;height:18px;left:39px;top:14px;border-radius:1px;transform-origin:top center; }
-    /* Left leg */
-    .pixel-karate .l-leg { width:5px;height:22px;left:25px;top:33px;border-radius:1px;transform-origin:top center; }
-    /* Right leg */
-    .pixel-karate .r-leg { width:5px;height:22px;left:34px;top:33px;border-radius:1px;transform-origin:top center; }
-    /* Foot */
-    .pixel-karate .l-foot { width:8px;height:4px;left:22px;top:54px;border-radius:1px; }
-    .pixel-karate .r-foot { width:8px;height:4px;left:34px;top:54px;border-radius:1px; }
-
-    /* Frame 1: Ready stance */
-    @keyframes karate-move {
-      0%   { /* stance */ }
-      25%  { /* punch right */ }
-      50%  { /* kick */ }
-      75%  { /* block */ }
-      100% { /* back to stance */ }
-    }
-
-    /* Animate individual parts */
-    .pixel-karate .r-arm {
-      animation: punch 1.6s steps(1) infinite;
-    }
-    @keyframes punch {
-      0%   { transform: rotate(-10deg); width:4px; height:18px; }
-      25%  { transform: rotate(-85deg) scaleX(1.2); width:4px; height:22px; }
-      50%  { transform: rotate(-10deg); width:4px; height:18px; }
-      75%  { transform: rotate(-50deg); width:4px; height:20px; }
-    }
-
-    .pixel-karate .l-arm {
-      animation: block-arm 1.6s steps(1) infinite;
-    }
-    @keyframes block-arm {
-      0%   { transform: rotate(10deg); }
-      25%  { transform: rotate(30deg); }
-      50%  { transform: rotate(60deg); }
-      75%  { transform: rotate(-20deg); }
-    }
-
-    .pixel-karate .r-leg {
-      animation: kick-leg 1.6s steps(1) infinite;
-    }
-    @keyframes kick-leg {
-      0%   { transform: rotate(0deg); }
-      25%  { transform: rotate(0deg); }
-      50%  { transform: rotate(-75deg); height:26px; }
-      75%  { transform: rotate(0deg); }
-    }
-
-    .pixel-karate .l-leg {
-      animation: stance-leg 1.6s steps(1) infinite;
-    }
-    @keyframes stance-leg {
-      0%   { transform: rotate(5deg); }
-      25%  { transform: rotate(5deg); }
-      50%  { transform: rotate(15deg); }
-      75%  { transform: rotate(5deg); }
+      filter: grayscale(30%) brightness(0.9);
+      opacity: 0.75;
+      border-radius: 4px;
     }
 
     .hero-title {
@@ -815,20 +743,9 @@
   <!-- HERO -->
   <section class="hero">
 
-    <!-- Pixel Art Karateka — animated CSS -->
+    <!-- Karateka animated GIF -->
     <div class="hero-icon">
-      <div class="pixel-karate" aria-hidden="true">
-        <div class="px head"></div>
-        <div class="px band"></div>
-        <div class="px torso"></div>
-        <div class="px belt"></div>
-        <div class="px l-arm"></div>
-        <div class="px r-arm"></div>
-        <div class="px l-leg"></div>
-        <div class="px r-leg"></div>
-        <div class="px l-foot"></div>
-        <div class="px r-foot"></div>
-      </div>
+      <img class="karate-gif" src="https://media4.giphy.com/media/l0Iy7hkkPipg7phwk/giphy.gif" alt="Karateka pixel art" loading="eager" />
     </div>
 
     <h1 class="hero-title">Fondamenti<br />del Karate</h1>
