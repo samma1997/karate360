@@ -990,16 +990,7 @@
         };
 
         try {
-          var getRes = await fetch(API_URL);
-          var db     = await getRes.json();
-          if (!Array.isArray(db.registrations)) db.registrations = [];
-          db.registrations.push(newReg);
-
-          await fetch(API_URL, {
-            method:  'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify(db)
-          });
+          await apiAddRegistration(newReg);
 
           submitBtn.classList.remove('loading');
           submitBtn.disabled = false;

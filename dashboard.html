@@ -1003,9 +1003,7 @@
   ═══════════════════════════════════════════════════ */
   async function loadData() {
     try {
-      const res = await fetch(API_URL, { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      _data = await res.json();
+      _data = await apiRead();
       if (!_data.registrations) _data.registrations = [];
       if (!_data.lessons)       _data.lessons = [];
       render();
@@ -1018,12 +1016,7 @@
 
   async function putData() {
     try {
-      const res = await fetch(API_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(_data)
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      await apiSaveAll(_data);
     } catch(e) {
       showToast('Errore salvataggio dati');
       console.error(e);
@@ -1033,7 +1026,7 @@
   async function deleteRegistration(id, name) {
     if (!confirm(`Eliminare ${name}?`)) return;
     _data.registrations = (_data.registrations || []).filter(r => r.id !== id);
-    await putData();
+    await apiDelete(id);
     showToast(`${name} eliminato`);
     render();
   }
@@ -1372,23 +1365,20 @@ Conferma presenza: ${confirmLink}`;
   ═══════════════════════════════════════════════════ */
   setInterval(loadData, 30000);
   setInterval(() => {
-    // notification poll
-    fetch(API_URL, { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => {
-        const c = (d.registrations || []).length;
-        if (_prevCount !== null && c > _prevCount) {
-          _data = d;
-          checkNewRegistrations();
-          render();
-        }
-      }).catch(() => {});
+    apiRead().then(d => {
+      const c = (d.registrations || []).length;
+      if (_prevCount !== null && c > _prevCount) {
+        _data = d;
+        if (!_data.lessons) _data.lessons = [];
+        checkNewRegistrations();
+        render();
+      }
+    }).catch(() => {});
   }, 15000);
 
   /* ═══════════════════════════════════════════════════
      INIT
   ═══════════════════════════════════════════════════ */
-  initTheme();
   loadData();
   setTimeout(requestNotificationPermission, 3000);
   </script>
