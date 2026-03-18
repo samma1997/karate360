@@ -2,1879 +2,1655 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karate 360 — Dashboard Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>Karate 360 — Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
   <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #111118;
-      --bg-card: #16161f;
-      --bg-card-hover: #1c1c28;
-      --bg-modal: #13131b;
-      --border: #2a2a3a;
-      --border-accent: #3a2a1a;
-      --red: #c0392b;
-      --red-light: #e74c3c;
-      --red-glow: rgba(192, 57, 43, 0.25);
-      --gold: #d4a017;
-      --gold-light: #f0c040;
-      --gold-glow: rgba(212, 160, 23, 0.2);
-      --green: #27ae60;
-      --green-light: #2ecc71;
-      --yellow: #f39c12;
-      --text-primary: #f0f0f8;
-      --text-secondary: #9090a8;
-      --text-muted: #5a5a72;
-      --shadow-card: 0 4px 24px rgba(0,0,0,0.5);
-      --shadow-glow-red: 0 0 20px rgba(192, 57, 43, 0.3);
-      --shadow-glow-gold: 0 0 20px rgba(212, 160, 23, 0.25);
-      --radius: 12px;
-      --radius-sm: 8px;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --bg:          #0a0a0a;
+      --bg-card:     #141414;
+      --bg-raised:   #1c1c1c;
+      --bg-input:    #1a1a1a;
+      --sep:         rgba(255,255,255,0.07);
+      --sep-strong:  rgba(255,255,255,0.12);
+      --red:         #DC2626;
+      --red-dim:     rgba(220,38,38,0.15);
+      --gold:        #D4A574;
+      --gold-dim:    rgba(212,165,116,0.15);
+      --green:       #22C55E;
+      --yellow:      #EAB308;
+      --text:        #F5F5F5;
+      --text-2:      #A1A1A1;
+      --text-3:      #606060;
+      --radius-lg:   16px;
+      --radius-md:   12px;
+      --radius-sm:   8px;
+      --radius-pill: 99px;
+      --tab-h:       calc(56px + env(safe-area-inset-bottom, 0px));
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100%;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+    /* hide scrollbars */
+    ::-webkit-scrollbar { display: none; }
+    * { scrollbar-width: none; }
 
-    /* ===== PASSWORD MODAL ===== */
-    #password-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.97);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999;
-      backdrop-filter: blur(10px);
-    }
-
-    #password-overlay.hidden { display: none; }
-
-    .password-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: var(--shadow-card), var(--shadow-glow-red);
-      animation: fadeInUp 0.4s ease;
-    }
-
-    .password-box .logo-icon {
-      font-size: 56px;
-      margin-bottom: 16px;
-      display: block;
-      filter: drop-shadow(0 0 12px rgba(192,57,43,0.5));
-    }
-
-    .password-box h2 {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-      letter-spacing: 1px;
-    }
-
-    .password-box p {
-      color: var(--text-secondary);
-      font-size: 13px;
-      margin-bottom: 32px;
-    }
-
-    .password-box input {
-      width: 100%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
-      font-size: 16px;
-      font-family: 'Montserrat', sans-serif;
-      color: var(--text-primary);
-      letter-spacing: 3px;
-      text-align: center;
-      outline: none;
-      transition: var(--transition);
-      margin-bottom: 16px;
-    }
-
-    .password-box input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-glow);
-    }
-
-    .password-box button {
-      width: 100%;
-      background: linear-gradient(135deg, var(--red), var(--red-light));
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: var(--transition);
-    }
-
-    .password-box button:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-glow-red);
-    }
-
-    .password-error {
-      color: var(--red-light);
-      font-size: 13px;
-      margin-top: 12px;
-      display: none;
-    }
-
-    /* ===== HEADER ===== */
-    header {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      height: 70px;
+    /* ─── APP SHELL ─── */
+    #app {
       display: flex;
+      flex-direction: column;
+      height: 100%;
+      height: -webkit-fill-available;
+    }
+
+    /* ─── LOCK SCREEN ─── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 8px;
+      z-index: 1000;
+      padding: 32px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    #lock-screen.hiding {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .lock-icon {
+      font-size: 72px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .lock-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .lock-subtitle {
+      font-size: 14px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+    }
+
+    .lock-input-wrap {
+      width: 100%;
+      max-width: 280px;
+      position: relative;
+    }
+
+    .lock-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1.5px solid var(--sep-strong);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      letter-spacing: 4px;
+      padding: 14px 16px;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+
+    .lock-input:focus { border-color: var(--red); }
+    .lock-input::placeholder { letter-spacing: 0; font-size: 14px; color: var(--text-3); }
+
+    .lock-error {
+      font-size: 13px;
+      color: var(--red);
+      text-align: center;
+      height: 18px;
+      margin-top: 8px;
+    }
+
+    .lock-btn {
+      margin-top: 8px;
+      width: 100%;
+      max-width: 280px;
+      padding: 14px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      -webkit-appearance: none;
+    }
+
+    .lock-btn:active { opacity: 0.8; transform: scale(0.97); }
+
+    /* ─── MAIN CONTENT AREA ─── */
+    #main {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    #main.visible { display: flex; }
+
+    /* ─── TAB CONTENT ─── */
+    .tab-content {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 16px;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.22s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── STICKY HEADER ─── */
+    .page-header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.4);
-    }
-
-    .header-left {
+      z-index: 10;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 16px 16px 12px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--sep);
     }
 
-    .header-logo {
-      font-size: 28px;
-      filter: drop-shadow(0 0 8px rgba(192,57,43,0.6));
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
-    .header-title {
-      display: flex;
-      flex-direction: column;
-    }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
 
-    .header-title span:first-child {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      background: linear-gradient(90deg, var(--gold-light), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .header-title span:last-child {
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .header-right {
-      display: flex;
+    /* ─── PILL / BADGE ─── */
+    .badge {
+      display: inline-flex;
       align-items: center;
-      gap: 14px;
-    }
-
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 7px;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: var(--radius-pill);
       font-size: 12px;
-      color: var(--green-light);
+      font-weight: 700;
+      background: var(--red);
+      color: #fff;
+    }
+
+    .count-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pill-green  { background: rgba(34,197,94,0.2);  color: var(--green); }
+    .pill-yellow { background: rgba(234,179,8,0.2);  color: var(--yellow); }
+    .pill-red    { background: rgba(220,38,38,0.2);  color: var(--red); }
+    .pill-gray   { background: rgba(255,255,255,0.07); color: var(--text-3); }
+
+    /* ─── CARDS & GROUPS ─── */
+    .section-group {
+      margin: 20px 16px 0;
+    }
+
+    .section-label {
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.5px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding: 0 4px;
     }
 
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--green-light);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
+    .grouped-list {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
     }
 
-    .btn-logout {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      border-radius: var(--radius-sm);
-      padding: 8px 16px;
-      font-size: 13px;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
+    .list-row {
       display: flex;
       align-items: center;
-      gap: 7px;
-      transition: var(--transition);
-      font-weight: 600;
-    }
-
-    .btn-logout:hover {
-      border-color: var(--red-light);
-      color: var(--red-light);
-    }
-
-    /* ===== MAIN LAYOUT ===== */
-    .main-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 32px 24px;
-    }
-
-    /* ===== STATS ROW ===== */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-bottom: 36px;
-    }
-
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 28px;
+      padding: 13px 16px;
+      gap: 12px;
+      min-height: 50px;
       position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: background 0.12s;
     }
 
-    .stat-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-card), var(--shadow-glow-gold);
-    }
+    .list-row:active { background: var(--bg-raised); }
 
-    .stat-card::before {
+    .list-row + .list-row::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: var(--radius) var(--radius) 0 0;
+      top: 0;
+      left: 16px;
+      right: 0;
+      height: 1px;
+      background: var(--sep);
     }
 
-    .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--red), var(--red-light)); }
-    .stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
-    .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--green), var(--green-light)); }
+    .row-left { flex: 1; min-width: 0; }
+    .row-right { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
 
-    .stat-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .stat-value {
-      font-size: 38px;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-card:nth-child(1) .stat-value { color: var(--red-light); }
-    .stat-card:nth-child(2) .stat-value { color: var(--gold-light); font-size: 22px; font-weight: 800; }
-    .stat-card:nth-child(3) .stat-value { color: var(--green-light); font-size: 22px; font-weight: 800; }
-
-    .stat-sub {
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .stat-icon {
-      position: absolute;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 40px;
-      opacity: 0.07;
-    }
-
-    /* ===== SECTION HEADER ===== */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .section-title h2 {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .section-title .icon-wrap {
-      width: 38px;
-      height: 38px;
-      border-radius: var(--radius-sm);
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: var(--gold);
-    }
-
-    .section-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 36px 0;
-    }
-
-    /* ===== TOGGLE TABS ===== */
-    .view-tabs {
-      display: flex;
-      gap: 8px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 6px;
-      width: fit-content;
-      margin-bottom: 28px;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      padding: 9px 20px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      letter-spacing: 0.3px;
-    }
-
-    .tab-btn.active {
-      background: var(--bg-card);
-      color: var(--gold-light);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .tab-btn:not(.active):hover { color: var(--text-primary); }
-
-    /* ===== SLOT CARDS ===== */
-    .slots-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-      gap: 20px;
-    }
-
-    .slot-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: var(--transition);
-      box-shadow: var(--shadow-card);
-    }
-
-    .slot-card:hover {
-      border-color: var(--border-accent);
-      transform: translateY(-1px);
-    }
-
-    .slot-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 20px;
-      cursor: pointer;
-      user-select: none;
-      transition: var(--transition);
-      border-bottom: 1px solid transparent;
-    }
-
-    .slot-card-header:hover { background: var(--bg-card-hover); }
-
-    .slot-card.expanded .slot-card-header {
-      border-bottom-color: var(--border);
-      background: var(--bg-card-hover);
-    }
-
-    .slot-header-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .slot-badge {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-
-    .slot-badge.green { background: rgba(39,174,96,0.2); color: var(--green-light); border: 2px solid var(--green); }
-    .slot-badge.yellow { background: rgba(243,156,18,0.2); color: var(--yellow); border: 2px solid var(--yellow); }
-    .slot-badge.red { background: rgba(192,57,43,0.2); color: var(--red-light); border: 2px solid var(--red); }
-
-    .slot-name {
+    .row-title {
       font-size: 15px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
-
-    .slot-count-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    .slot-header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-whatsapp-group {
-      background: rgba(37,211,102,0.12);
-      color: #25d366;
-      border: 1px solid rgba(37,211,102,0.3);
-      border-radius: var(--radius-sm);
-      padding: 7px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-
-    .btn-whatsapp-group:hover {
-      background: rgba(37,211,102,0.22);
-      border-color: #25d366;
-      transform: translateY(-1px);
-    }
-
-    .chevron {
-      color: var(--text-muted);
-      transition: transform 0.3s ease;
-      font-size: 14px;
-    }
-
-    .slot-card.expanded .chevron { transform: rotate(180deg); }
-
-    .slot-card-body {
-      display: none;
-      padding: 16px 20px 20px;
-    }
-
-    .slot-card.expanded .slot-card-body { display: block; }
-
-    .slot-person-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .slot-person-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      transition: var(--transition);
-    }
-
-    .slot-person-item:hover { border-color: var(--gold); }
-
-    .slot-person-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .person-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--red), var(--gold));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 800;
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .person-details .person-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .person-details .person-phone {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .btn-wa-individual {
-      background: transparent;
-      border: 1px solid rgba(37,211,102,0.3);
-      color: #25d366;
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 600;
-      font-family: 'Montserrat', sans-serif;
-    }
-
-    .btn-wa-individual:hover {
-      background: rgba(37,211,102,0.12);
-    }
-
-    /* ===== PERSONE VIEW ===== */
-    #view-persone { display: none; }
-
-    .people-table-wrap {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow-card);
-    }
-
-    .people-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .people-table thead tr {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .people-table thead th {
-      padding: 14px 18px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-      font-weight: 700;
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    .people-table tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition);
-    }
-
-    .people-table tbody tr:last-child { border-bottom: none; }
-    .people-table tbody tr:hover { background: var(--bg-card-hover); }
-
-    .people-table td {
-      padding: 14px 18px;
-      font-size: 13px;
-      vertical-align: middle;
-    }
-
-    .person-name-cell {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-    }
-
-    .phone-link {
-      color: #25d366;
-      text-decoration: none;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: var(--transition);
-    }
-
-    .phone-link:hover { opacity: 0.8; }
-
-    .slot-tag {
-      display: inline-block;
-      background: rgba(212,160,23,0.12);
-      color: var(--gold-light);
-      border: 1px solid rgba(212,160,23,0.3);
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      margin: 2px 3px 2px 0;
-      white-space: nowrap;
-    }
-
-    .notes-cell {
-      color: var(--text-secondary);
-      font-size: 12px;
-      max-width: 200px;
+      font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .date-cell {
-      color: var(--text-muted);
-      font-size: 12px;
-      white-space: nowrap;
+    .row-sub {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-top: 1px;
     }
 
-    .btn-delete {
-      background: transparent;
-      border: 1px solid rgba(192,57,43,0.3);
-      color: var(--red-light);
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      font-size: 12px;
-      cursor: pointer;
-      transition: var(--transition);
-      font-family: 'Montserrat', sans-serif;
+    /* ─── STAT CARDS ─── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 16px 16px 0;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-2);
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--red);
+      letter-spacing: -0.5px;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ─── BAR CHART ─── */
+    .chart-wrap {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+    }
+
+    .chart-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
+      padding: 10px 14px;
+      position: relative;
     }
 
-    .btn-delete:hover {
-      background: rgba(192,57,43,0.15);
-      border-color: var(--red-light);
+    .chart-row + .chart-row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 14px;
+      right: 0;
+      height: 1px;
+      background: var(--sep);
     }
 
-    /* ===== ACTION ROW ===== */
-    .action-row {
+    .chart-label {
+      font-size: 12px;
+      color: var(--text-2);
+      width: 100px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chart-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--sep-strong);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .chart-bar-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 3px;
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .chart-count {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      width: 20px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ─── RECENT LIST ─── */
+    .person-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 28px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--red), var(--red-light));
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 11px 22px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: 'Montserrat', sans-serif;
+      padding: 11px 16px;
+      position: relative;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: var(--transition);
-      letter-spacing: 0.3px;
+      transition: background 0.12s;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-glow-red);
-    }
+    .person-row:active { background: var(--bg-raised); }
 
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      border-radius: var(--radius-sm);
-      padding: 11px 22px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: var(--transition);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--gold);
-      color: var(--gold-light);
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: #1a1000;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 11px 22px;
-      font-size: 13px;
-      font-weight: 800;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: var(--transition);
-    }
-
-    .btn-gold:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-glow-gold);
-    }
-
-    /* ===== FOLLOWUP MODAL ===== */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(6px);
-      padding: 20px;
-      animation: fadeIn 0.2s ease;
-    }
-
-    .modal-overlay.hidden { display: none; }
-
-    .modal-box {
-      background: var(--bg-modal);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      width: 100%;
-      max-width: 620px;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow-card), 0 0 60px rgba(0,0,0,0.6);
-      animation: fadeInUp 0.3s ease;
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 22px 26px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
+    .person-row + .person-row::before {
+      content: '';
+      position: absolute;
       top: 0;
-      background: var(--bg-modal);
-      z-index: 1;
+      left: 58px;
+      right: 0;
+      height: 1px;
+      background: var(--sep);
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .person-info { flex: 1; min-width: 0; }
+
+    .person-name {
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-phone {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-top: 1px;
+    }
+
+    .person-time {
+      font-size: 12px;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+
+    .person-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 5px;
+    }
+
+    .slot-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--red-dim);
+      color: var(--red);
+      white-space: nowrap;
+    }
+
+    .person-notes {
+      font-size: 12px;
+      color: var(--text-2);
+      font-style: italic;
+      margin-top: 3px;
+    }
+
+    /* ─── SLOT EXPAND ─── */
+    .slot-expanded {
+      display: none;
+      background: var(--bg-raised);
+      padding: 8px 0;
+    }
+
+    .slot-expanded.open { display: block; }
+
+    .slot-person-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px 9px 20px;
+    }
+
+    .slot-person-row + .slot-person-row {
+      border-top: 1px solid var(--sep);
+    }
+
+    .slot-person-name { flex: 1; font-size: 14px; font-weight: 500; }
+
+    .slot-person-phone {
+      font-size: 13px;
+      color: var(--text-2);
+    }
+
+    .wa-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37,211,102,0.15);
+      color: #25D366;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background 0.15s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    .wa-btn:active { background: rgba(37,211,102,0.3); transform: scale(0.92); }
+
+    .empty-state {
+      padding: 16px;
+      font-size: 13px;
+      color: var(--text-3);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* ─── SEARCH BAR ─── */
+    .search-wrap {
+      position: sticky;
+      top: 65px;
+      z-index: 9;
+      padding: 8px 16px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--sep);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-raised);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 9px 12px 9px 36px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .search-wrap-inner {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-3);
+      font-size: 14px;
+      pointer-events: none;
+    }
+
+    /* ─── PEOPLE FULL CARD ─── */
+    .person-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 8px 16px 0;
+      transition: background 0.12s;
+    }
+
+    .person-card-inner {
+      padding: 14px 16px;
+    }
+
+    .person-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .person-card-info { flex: 1; min-width: 0; }
+
+    .person-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .delete-btn {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--red-dim);
+      color: var(--red);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .delete-btn:active { background: rgba(220,38,38,0.3); transform: scale(0.92); }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 16px;
+      border-radius: var(--radius-md);
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      -webkit-appearance: none;
+    }
+
+    .btn:active { opacity: 0.8; transform: scale(0.97); }
+
+    .btn-primary { background: var(--red); color: #fff; }
+    .btn-secondary { background: var(--bg-raised); color: var(--text); }
+    .btn-green { background: rgba(34,197,94,0.15); color: var(--green); }
+    .btn-gold { background: var(--gold-dim); color: var(--gold); }
+    .btn-full { width: 100%; }
+    .btn-sm { padding: 8px 12px; font-size: 13px; }
+
+    /* ─── TEXTAREA / SELECT / INPUT ─── */
+    .form-field {
+      width: 100%;
+      background: var(--bg-raised);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--radius-md);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      padding: 11px 13px;
+      outline: none;
+      -webkit-appearance: none;
+      resize: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-field:focus { border-color: rgba(220,38,38,0.5); }
+
+    /* ─── MESSAGES TAB ─── */
+    .msg-section {
+      margin: 20px 16px 0;
+    }
+
+    .msg-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .msg-card-title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .slot-select-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .slot-select-wrap select {
+      flex: 1;
+    }
+
+    /* ─── RECIPIENT PILLS ─── */
+    .recipient-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .rec-pill {
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--bg-raised);
+      color: var(--text-2);
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: all 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .rec-pill.selected {
+      background: var(--red-dim);
+      color: var(--red);
+      border-color: rgba(220,38,38,0.3);
+    }
+
+    /* ─── COPY TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: calc(var(--tab-h) + 16px);
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(34,197,94,0.9);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      z-index: 500;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── DELETE MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: flex-end;
+      z-index: 800;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      padding: 20px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-overlay.open .modal-sheet {
+      transform: translateY(0);
+    }
+
+    .modal-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--sep-strong);
+      border-radius: 2px;
+      align-self: center;
+      margin-bottom: 4px;
     }
 
     .modal-title {
       font-size: 17px;
-      font-weight: 800;
-      color: var(--gold-light);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .modal-close {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      transition: var(--transition);
-    }
-
-    .modal-close:hover { border-color: var(--red-light); color: var(--red-light); }
-
-    .modal-body { padding: 24px 26px; }
-
-    .modal-section-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
       font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .modal-textarea {
-      width: 100%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      font-size: 14px;
-      font-family: 'Montserrat', sans-serif;
-      color: var(--text-primary);
-      resize: vertical;
-      min-height: 120px;
-      outline: none;
-      line-height: 1.6;
-      transition: var(--transition);
-      margin-bottom: 12px;
-    }
-
-    .modal-textarea:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-glow);
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .btn-copy {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      border-radius: var(--radius-sm);
-      padding: 9px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: 'Montserrat', sans-serif;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      transition: var(--transition);
-    }
-
-    .btn-copy:hover { border-color: var(--gold); color: var(--gold-light); }
-    .btn-copy.copied { border-color: var(--green); color: var(--green-light); }
-
-    .modal-people-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .modal-person-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-    }
-
-    .modal-person-name {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .modal-person-phone {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .modal-divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 20px 0;
-    }
-
-    /* ===== CUSTOM MESSAGE SECTION ===== */
-    .custom-message-section {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-top: 36px;
-      box-shadow: var(--shadow-card);
-    }
-
-    .custom-message-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .custom-message-header h3 {
-      font-size: 16px;
-      font-weight: 800;
-    }
-
-    .recipients-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .recipient-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: var(--transition);
-      user-select: none;
-    }
-
-    .recipient-checkbox:hover { border-color: var(--gold); }
-    .recipient-checkbox.selected { border-color: var(--gold); background: rgba(212,160,23,0.08); }
-
-    .recipient-checkbox input { display: none; }
-
-    .recipient-checkbox .check-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      border: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      transition: var(--transition);
-      flex-shrink: 0;
-    }
-
-    .recipient-checkbox.selected .check-icon {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #1a1000;
-    }
-
-    .recipient-name { font-size: 13px; font-weight: 600; }
-    .recipient-phone { font-size: 11px; color: var(--text-muted); }
-
-    /* ===== LOADING / EMPTY STATES ===== */
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-      gap: 16px;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      color: var(--text-muted);
-      gap: 12px;
-      font-size: 15px;
-    }
-
-    .empty-state i { font-size: 40px; opacity: 0.4; }
-
-    /* ===== TOAST ===== */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: var(--bg-card);
-      border: 1px solid var(--green);
-      border-radius: var(--radius);
-      padding: 14px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--green-light);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 9999;
-      animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.5s forwards;
-      box-shadow: var(--shadow-card);
-    }
-
-    .toast.error {
-      border-color: var(--red-light);
-      color: var(--red-light);
-    }
-
-    /* ===== SEARCH ===== */
-    .search-input {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 16px 10px 40px;
-      font-size: 14px;
-      font-family: 'Montserrat', sans-serif;
-      color: var(--text-primary);
-      outline: none;
-      width: 280px;
-      transition: var(--transition);
-    }
-
-    .search-input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-glow);
-    }
-
-    .search-wrap {
-      position: relative;
-    }
-
-    .search-wrap i {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    /* ===== ANIMATIONS ===== */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; pointer-events: none; }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 900px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .slots-grid { grid-template-columns: 1fr; }
-      header { padding: 0 16px; }
-      .main-content { padding: 20px 16px; }
-      .header-title span:first-child { font-size: 16px; }
-      .people-table thead { display: none; }
-      .people-table tbody td { display: flex; padding: 8px 14px; gap: 8px; font-size: 13px; }
-      .people-table tbody td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: var(--text-muted);
-        min-width: 90px;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 1px;
-      }
-      .people-table tbody tr { display: block; border-bottom: 2px solid var(--border); margin-bottom: 4px; }
-      .search-input { width: 100%; }
-    }
-
-    /* ===== SECTION WRAPPER ===== */
-    .section-wrapper {
-      animation: fadeInUp 0.4s ease;
-    }
-
-    /* ===== NO RESULTS ===== */
-    .no-results {
       text-align: center;
-      color: var(--text-muted);
-      padding: 40px 20px;
-      font-size: 14px;
     }
+
+    .modal-sub {
+      font-size: 14px;
+      color: var(--text-2);
+      text-align: center;
+    }
+
+    /* ─── BOTTOM TAB BAR ─── */
+    #tab-bar {
+      flex-shrink: 0;
+      display: flex;
+      background: rgba(14,14,14,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid var(--sep);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 8px 4px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-3);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 500;
+      min-height: 56px;
+      transition: color 0.15s, transform 0.1s;
+      -webkit-appearance: none;
+    }
+
+    .tab-btn i {
+      font-size: 20px;
+      transition: color 0.15s;
+    }
+
+    .tab-btn.active { color: var(--red); }
+    .tab-btn:active { transform: scale(0.88); }
+
+    /* ─── PULL INDICATOR ─── */
+    .pull-indicator {
+      text-align: center;
+      padding: 12px;
+      font-size: 12px;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .pull-indicator i { animation: spin 1s linear infinite; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── EXPORT BTN ─── */
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      background: var(--bg-raised);
+      color: var(--text-2);
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      -webkit-appearance: none;
+    }
+
+    .export-btn:active { background: var(--sep-strong); transform: scale(0.95); }
+
+    /* ─── AVATAR COLORS ─── */
+    .av-0 { background: #DC2626; }
+    .av-1 { background: #7C3AED; }
+    .av-2 { background: #0EA5E9; }
+    .av-3 { background: #D97706; }
+    .av-4 { background: #059669; }
+    .av-5 { background: #DB2777; }
+    .av-6 { background: #2563EB; }
+    .av-7 { background: #EA580C; }
+
+    /* ─── INVITATION CARD ─── */
+    .invite-text {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6;
+      background: var(--bg-raised);
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+    }
+
+    /* ─── LOADING SKELETON ─── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-raised) 50%, var(--bg-card) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer { to { background-position: -200% 0; } }
+
+    /* ─── UTILITY ─── */
+    .text-red   { color: var(--red); }
+    .text-gold  { color: var(--gold); }
+    .text-green { color: var(--green); }
+    .text-muted { color: var(--text-2); }
+    .text-dim   { color: var(--text-3); }
+    .font-bold  { font-weight: 700; }
+    .mt-4  { margin-top: 4px; }
+    .mt-8  { margin-top: 8px; }
+    .mt-12 { margin-top: 12px; }
+
+    /* ─── CHEVRON ─── */
+    .chevron {
+      color: var(--text-3);
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+
+    .chevron.open { transform: rotate(90deg); }
+
+    /* iOS safe area top padding for pages */
+    .safe-top { padding-top: env(safe-area-inset-top, 0px); }
   </style>
 </head>
 <body>
 
-<!-- PASSWORD OVERLAY -->
-<div id="password-overlay">
-  <div class="password-box">
-    <span class="logo-icon">🥋</span>
-    <h2>KARATE 360</h2>
-    <p>Accesso riservato — Dashboard Admin</p>
-    <input type="password" id="pwd-input" placeholder="Password" autocomplete="off" />
-    <button id="pwd-submit"><i class="fa-solid fa-unlock"></i> ACCEDI</button>
-    <div class="password-error" id="pwd-error">Password errata. Riprova.</div>
+<!-- ════════════════════════════════════════
+     LOCK SCREEN
+═══════════════════════════════════════════ -->
+<div id="lock-screen">
+  <div class="lock-icon">🥋</div>
+  <div class="lock-title">Karate 360</div>
+  <div class="lock-subtitle">Dashboard Admin</div>
+  <div class="lock-input-wrap">
+    <input
+      id="lock-input"
+      class="lock-input"
+      type="password"
+      placeholder="password"
+      autocomplete="current-password"
+      inputmode="text"
+    />
+    <div class="lock-error" id="lock-error"></div>
   </div>
+  <button class="lock-btn" id="lock-btn">Accedi</button>
 </div>
 
-<!-- MAIN APP -->
-<div id="app-wrapper" style="display:none;">
+<!-- ════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════ -->
+<div id="app">
+  <div id="main">
 
-  <!-- HEADER -->
-  <header>
-    <div class="header-left">
-      <span class="header-logo">🥋</span>
-      <div class="header-title">
-        <span>KARATE 360</span>
-        <span>Dashboard Admin</span>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="live-indicator">
-        <span class="live-dot"></span>
-        LIVE
-      </div>
-      <button class="btn-logout" onclick="logout()">
-        <i class="fa-solid fa-arrow-right-from-bracket"></i> Esci
-      </button>
-    </div>
-  </header>
+    <!-- ── TAB CONTENTS ── -->
 
-  <!-- MAIN CONTENT -->
-  <div class="main-content">
-
-    <!-- STATS -->
-    <div class="stats-grid" id="stats-grid">
-      <div class="stat-card">
-        <i class="fa-solid fa-users stat-icon"></i>
-        <div class="stat-label">Totale Iscritti</div>
-        <div class="stat-value" id="stat-total">—</div>
-        <div class="stat-sub">registrazioni totali</div>
-      </div>
-      <div class="stat-card">
-        <i class="fa-solid fa-fire stat-icon"></i>
-        <div class="stat-label">Slot Più Richiesto</div>
-        <div class="stat-value" id="stat-top-slot">—</div>
-        <div class="stat-sub" id="stat-top-slot-sub"></div>
-      </div>
-      <div class="stat-card">
-        <i class="fa-solid fa-layer-group stat-icon"></i>
-        <div class="stat-label">Prossimo Gruppo Possibile</div>
-        <div class="stat-value" id="stat-next-group">—</div>
-        <div class="stat-sub" id="stat-next-group-sub"></div>
-      </div>
-    </div>
-
-    <!-- ACTION ROW -->
-    <div class="action-row">
-      <button class="btn-gold" onclick="exportCSV()">
-        <i class="fa-solid fa-file-csv"></i> Esporta CSV
-      </button>
-      <button class="btn-secondary" onclick="refreshData()">
-        <i class="fa-solid fa-rotate"></i> Aggiorna
-      </button>
-    </div>
-
-    <!-- VIEW TABS -->
-    <div class="view-tabs">
-      <button class="tab-btn active" id="tab-slot" onclick="switchView('slot')">
-        <i class="fa-solid fa-calendar-days"></i> Vista per Slot
-      </button>
-      <button class="tab-btn" id="tab-persone" onclick="switchView('persone')">
-        <i class="fa-solid fa-address-card"></i> Vista per Persona
-      </button>
-    </div>
-
-    <!-- VISTA PER SLOT -->
-    <div id="view-slot" class="section-wrapper">
-      <div class="section-header">
-        <div class="section-title">
-          <div class="icon-wrap"><i class="fa-solid fa-clock"></i></div>
-          <h2>Orari e Disponibilità</h2>
-        </div>
-        <div class="search-wrap">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" class="search-input" id="search-slot" placeholder="Cerca slot..." oninput="filterSlots()" />
-        </div>
-      </div>
-      <div class="slots-grid" id="slots-grid">
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <span>Caricamento dati...</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- VISTA PER PERSONA -->
-    <div id="view-persone" class="section-wrapper">
-      <div class="section-header">
-        <div class="section-title">
-          <div class="icon-wrap"><i class="fa-solid fa-user"></i></div>
-          <h2>Tutte le Iscrizioni</h2>
-        </div>
-        <div class="search-wrap">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" class="search-input" id="search-persone" placeholder="Cerca persona..." oninput="filterPersone()" />
-        </div>
-      </div>
-      <div class="people-table-wrap">
-        <table class="people-table">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Telefono</th>
-              <th>Slot Selezionati</th>
-              <th>Note</th>
-              <th>Data Iscrizione</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="people-tbody">
-            <tr>
-              <td colspan="6">
-                <div class="loading-state">
-                  <div class="spinner"></div>
-                  <span>Caricamento dati...</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- CUSTOM MESSAGE SECTION -->
-    <hr class="section-divider" />
-    <div class="custom-message-section" id="custom-msg-section">
-      <div class="custom-message-header">
-        <div class="icon-wrap"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></div>
-        <h3>Messaggio Personalizzato</h3>
-      </div>
-      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:18px;">
-        Seleziona i destinatari e scrivi un messaggio personalizzato da inviare su WhatsApp.
-      </p>
-      <div class="modal-section-label">Seleziona Destinatari</div>
-      <div class="recipients-grid" id="recipients-grid">
-        <!-- filled dynamically -->
-      </div>
-      <div style="display:flex; gap:10px; margin-bottom:16px;">
-        <button class="btn-secondary" style="padding:7px 14px; font-size:12px;" onclick="selectAllRecipients()">
-          <i class="fa-solid fa-check-double"></i> Tutti
-        </button>
-        <button class="btn-secondary" style="padding:7px 14px; font-size:12px;" onclick="deselectAllRecipients()">
-          <i class="fa-solid fa-xmark"></i> Nessuno
-        </button>
-      </div>
-      <div class="modal-section-label">Messaggio</div>
-      <textarea class="modal-textarea" id="custom-msg-text" placeholder="Scrivi il tuo messaggio qui..."></textarea>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn-primary" onclick="sendCustomMessages()">
-          <i class="fa-brands fa-whatsapp"></i> Invia a Selezionati
-        </button>
-        <button class="btn-copy" onclick="copyCustomMessage()">
-          <i class="fa-solid fa-copy"></i> Copia Messaggio
-        </button>
-      </div>
-    </div>
-
-  </div><!-- /main-content -->
-</div><!-- /app-wrapper -->
-
-<!-- FOLLOW-UP MODAL -->
-<div class="modal-overlay hidden" id="followup-modal">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title">
-        <i class="fa-brands fa-whatsapp" style="color:#25d366"></i>
-        Invia Follow-up — <span id="modal-slot-name"></span>
-      </div>
-      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-section-label">Messaggio pre-compilato</div>
-      <textarea class="modal-textarea" id="modal-message-text" rows="6"></textarea>
-      <div class="modal-actions">
-        <button class="btn-copy" id="copy-btn" onclick="copyModalMessage()">
-          <i class="fa-solid fa-copy"></i> Copia Messaggio
-        </button>
-      </div>
-      <hr class="modal-divider" />
-      <div class="modal-section-label" style="margin-bottom:12px;">
-        Invia individualmente (<span id="modal-count"></span> persone)
-      </div>
-      <div class="modal-people-list" id="modal-people-list">
-        <!-- filled dynamically -->
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-<script>
-  /* =============================================
-     CONFIG & INIT
-  ============================================= */
-  const ADMIN_PASSWORD = "karate360";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // In-memory data
-  let allRegistrations = [];
-  let slotMap = {};         // { slotName: [person, ...] }
-  let unsubscribeListener = null;
-  let currentModalSlot = null;
-  let currentView = 'slot';
-
-  /* =============================================
-     PASSWORD GATE
-  ============================================= */
-  const pwdOverlay = document.getElementById('password-overlay');
-  const appWrapper = document.getElementById('app-wrapper');
-  const pwdInput   = document.getElementById('pwd-input');
-  const pwdError   = document.getElementById('pwd-error');
-
-  // Check session
-  if (sessionStorage.getItem('k360_auth') === '1') {
-    unlockApp();
-  }
-
-  document.getElementById('pwd-submit').addEventListener('click', checkPassword);
-  pwdInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
-
-  function checkPassword() {
-    if (pwdInput.value === ADMIN_PASSWORD) {
-      sessionStorage.setItem('k360_auth', '1');
-      unlockApp();
-    } else {
-      pwdError.style.display = 'block';
-      pwdInput.value = '';
-      pwdInput.focus();
-      pwdInput.style.borderColor = 'var(--red-light)';
-      setTimeout(() => { pwdInput.style.borderColor = ''; }, 1000);
-    }
-  }
-
-  function unlockApp() {
-    pwdOverlay.classList.add('hidden');
-    appWrapper.style.display = 'block';
-    startRealtimeListener();
-  }
-
-  function logout() {
-    sessionStorage.removeItem('k360_auth');
-    if (unsubscribeListener) unsubscribeListener();
-    appWrapper.style.display = 'none';
-    pwdOverlay.classList.remove('hidden');
-    pwdInput.value = '';
-    pwdError.style.display = 'none';
-  }
-
-  /* =============================================
-     FIRESTORE REAL-TIME LISTENER
-  ============================================= */
-  function startRealtimeListener() {
-    if (unsubscribeListener) unsubscribeListener();
-    unsubscribeListener = db.collection('registrations')
-      .orderBy('timestamp', 'desc')
-      .onSnapshot(snapshot => {
-        allRegistrations = [];
-        snapshot.forEach(doc => {
-          allRegistrations.push({ id: doc.id, ...doc.data() });
-        });
-        processData();
-      }, err => {
-        console.error('Firestore error:', err);
-        showToast('Errore connessione Firestore', 'error');
-      });
-  }
-
-  function refreshData() {
-    startRealtimeListener();
-    showToast('Dati aggiornati');
-  }
-
-  /* =============================================
-     DATA PROCESSING
-  ============================================= */
-  function processData() {
-    // Build slot map
-    slotMap = {};
-    allRegistrations.forEach(person => {
-      const slots = Array.isArray(person.slots) ? person.slots : [];
-      slots.forEach(slot => {
-        if (!slotMap[slot]) slotMap[slot] = [];
-        slotMap[slot].push(person);
-      });
-    });
-
-    updateStats();
-    renderSlotView();
-    renderPersonView();
-    renderRecipientsGrid();
-  }
-
-  /* =============================================
-     STATS
-  ============================================= */
-  function updateStats() {
-    document.getElementById('stat-total').textContent = allRegistrations.length;
-
-    const sortedSlots = Object.entries(slotMap).sort((a, b) => b[1].length - a[1].length);
-
-    if (sortedSlots.length > 0) {
-      const [topSlot, topPeople] = sortedSlots[0];
-      document.getElementById('stat-top-slot').textContent = topSlot;
-      document.getElementById('stat-top-slot-sub').textContent = `${topPeople.length} persone disponibili`;
-
-      // Best group = slot with >= 3 people (most full)
-      const viableSlots = sortedSlots.filter(([, p]) => p.length >= 3);
-      if (viableSlots.length > 0) {
-        const [bestSlot, bestPeople] = viableSlots[0];
-        document.getElementById('stat-next-group').textContent = bestSlot;
-        document.getElementById('stat-next-group-sub').textContent = `${bestPeople.length} persone — pronto per un gruppo!`;
-      } else if (sortedSlots.length > 0) {
-        const [s, p] = sortedSlots[0];
-        document.getElementById('stat-next-group').textContent = s;
-        document.getElementById('stat-next-group-sub').textContent = `${p.length} person${p.length === 1 ? 'a' : 'e'} — serve qualcuno in più`;
-      }
-    } else {
-      document.getElementById('stat-top-slot').textContent = '—';
-      document.getElementById('stat-next-group').textContent = '—';
-      document.getElementById('stat-top-slot-sub').textContent = '';
-      document.getElementById('stat-next-group-sub').textContent = '';
-    }
-  }
-
-  /* =============================================
-     SLOT VIEW
-  ============================================= */
-  function renderSlotView() {
-    const grid = document.getElementById('slots-grid');
-    const query = document.getElementById('search-slot').value.toLowerCase();
-
-    const sortedSlots = Object.entries(slotMap)
-      .sort((a, b) => b[1].length - a[1].length)
-      .filter(([slot]) => !query || slot.toLowerCase().includes(query));
-
-    if (allRegistrations.length === 0) {
-      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-inbox"></i><span>Nessuna iscrizione ancora</span></div>`;
-      return;
-    }
-
-    if (sortedSlots.length === 0) {
-      grid.innerHTML = `<div class="no-results" style="grid-column:1/-1">Nessuno slot trovato per "<strong>${query}</strong>"</div>`;
-      return;
-    }
-
-    grid.innerHTML = sortedSlots.map(([slot, people]) => {
-      const count = people.length;
-      const badgeClass = count >= 3 ? 'green' : count === 2 ? 'yellow' : 'red';
-      const personHTML = people.map(p => {
-        const initial = (p.name || '?')[0].toUpperCase();
-        const clean = cleanPhone(p.phone);
-        return `
-          <div class="slot-person-item">
-            <div class="slot-person-info">
-              <div class="person-avatar">${initial}</div>
-              <div class="person-details">
-                <div class="person-name">${escHtml(p.name || '—')}</div>
-                <div class="person-phone">${escHtml(p.phone || '—')}</div>
-              </div>
-            </div>
-            <button class="btn-wa-individual" onclick="openWA('${clean}', '')">
-              <i class="fa-brands fa-whatsapp"></i> Chat
-            </button>
-          </div>
-        `;
-      }).join('');
-
-      const slotId = btoa(slot).replace(/[^a-zA-Z0-9]/g, '');
-
-      return `
-        <div class="slot-card" id="scard-${slotId}">
-          <div class="slot-card-header" onclick="toggleSlotCard('scard-${slotId}')">
-            <div class="slot-header-left">
-              <div class="slot-badge ${badgeClass}">${count}</div>
-              <div>
-                <div class="slot-name">${escHtml(slot)}</div>
-                <div class="slot-count-text">${count} person${count === 1 ? 'a' : 'e'} disponibil${count === 1 ? 'e' : 'i'}</div>
-              </div>
-            </div>
-            <div class="slot-header-right">
-              <button class="btn-whatsapp-group" onclick="event.stopPropagation(); openFollowupModal('${escAttr(slot)}')">
-                <i class="fa-brands fa-whatsapp"></i> Follow-up
-              </button>
-              <i class="fa-solid fa-chevron-down chevron"></i>
-            </div>
-          </div>
-          <div class="slot-card-body">
-            <div class="slot-person-list">
-              ${personHTML}
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function toggleSlotCard(id) {
-    const card = document.getElementById(id);
-    if (card) card.classList.toggle('expanded');
-  }
-
-  function filterSlots() { renderSlotView(); }
-
-  /* =============================================
-     PERSONA VIEW
-  ============================================= */
-  function renderPersonView() {
-    const tbody = document.getElementById('people-tbody');
-    const query = document.getElementById('search-persone').value.toLowerCase();
-
-    const filtered = allRegistrations.filter(p =>
-      !query ||
-      (p.name || '').toLowerCase().includes(query) ||
-      (p.phone || '').toLowerCase().includes(query)
-    );
-
-    if (filtered.length === 0 && allRegistrations.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-inbox"></i><span>Nessuna iscrizione ancora</span></div></td></tr>`;
-      return;
-    }
-
-    if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="no-results">Nessun risultato per "<strong>${query}</strong>"</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = filtered.map(p => {
-      const initial = (p.name || '?')[0].toUpperCase();
-      const clean = cleanPhone(p.phone);
-      const slotsHTML = (Array.isArray(p.slots) ? p.slots : [])
-        .map(s => `<span class="slot-tag">${escHtml(s)}</span>`).join('');
-      const dateStr = formatTimestamp(p.timestamp);
-
-      return `
-        <tr>
-          <td data-label="Nome">
-            <div class="person-name-cell">
-              <div class="person-avatar" style="width:30px;height:30px;font-size:12px;">${initial}</div>
-              ${escHtml(p.name || '—')}
-            </div>
-          </td>
-          <td data-label="Telefono">
-            <a class="phone-link" href="https://wa.me/${clean}" target="_blank" rel="noopener">
-              <i class="fa-brands fa-whatsapp"></i> ${escHtml(p.phone || '—')}
-            </a>
-          </td>
-          <td data-label="Slot">${slotsHTML || '<span style="color:var(--text-muted)">—</span>'}</td>
-          <td data-label="Note" class="notes-cell" title="${escAttr(p.notes || '')}">${p.notes ? escHtml(p.notes) : '<span style="color:var(--text-muted)">—</span>'}</td>
-          <td data-label="Data" class="date-cell">${dateStr}</td>
-          <td data-label="">
-            <button class="btn-delete" onclick="deleteRegistration('${p.id}', '${escAttr(p.name || '')}')">
-              <i class="fa-solid fa-trash-can"></i> Elimina
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-  }
-
-  function filterPersone() { renderPersonView(); }
-
-  /* =============================================
-     RECIPIENTS GRID (custom message)
-  ============================================= */
-  function renderRecipientsGrid() {
-    const grid = document.getElementById('recipients-grid');
-    if (allRegistrations.length === 0) {
-      grid.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">Nessuna iscrizione disponibile.</p>';
-      return;
-    }
-
-    grid.innerHTML = allRegistrations.map(p => `
-      <label class="recipient-checkbox" id="rc-${p.id}" onclick="toggleRecipient('${p.id}')">
-        <input type="checkbox" value="${p.id}" />
-        <div class="check-icon" id="rci-${p.id}"></div>
-        <div>
-          <div class="recipient-name">${escHtml(p.name || '—')}</div>
-          <div class="recipient-phone">${escHtml(p.phone || '—')}</div>
-        </div>
-      </label>
-    `).join('');
-  }
-
-  function toggleRecipient(id) {
-    const el = document.getElementById(`rc-${id}`);
-    const icon = document.getElementById(`rci-${id}`);
-    const isSelected = el.classList.contains('selected');
-    el.classList.toggle('selected', !isSelected);
-    icon.innerHTML = !isSelected ? '<i class="fa-solid fa-check"></i>' : '';
-  }
-
-  function selectAllRecipients() {
-    allRegistrations.forEach(p => {
-      const el = document.getElementById(`rc-${p.id}`);
-      const icon = document.getElementById(`rci-${p.id}`);
-      if (el) {
-        el.classList.add('selected');
-        icon.innerHTML = '<i class="fa-solid fa-check"></i>';
-      }
-    });
-  }
-
-  function deselectAllRecipients() {
-    allRegistrations.forEach(p => {
-      const el = document.getElementById(`rc-${p.id}`);
-      const icon = document.getElementById(`rci-${p.id}`);
-      if (el) {
-        el.classList.remove('selected');
-        icon.innerHTML = '';
-      }
-    });
-  }
-
-  function sendCustomMessages() {
-    const msg = document.getElementById('custom-msg-text').value.trim();
-    if (!msg) { showToast('Scrivi prima un messaggio!', 'error'); return; }
-
-    const selected = allRegistrations.filter(p => {
-      const el = document.getElementById(`rc-${p.id}`);
-      return el && el.classList.contains('selected');
-    });
-
-    if (selected.length === 0) { showToast('Seleziona almeno un destinatario', 'error'); return; }
-
-    selected.forEach((p, i) => {
-      setTimeout(() => {
-        const clean = cleanPhone(p.phone);
-        openWA(clean, msg);
-      }, i * 800);
-    });
-
-    showToast(`Apertura WhatsApp per ${selected.length} persone...`);
-  }
-
-  function copyCustomMessage() {
-    const msg = document.getElementById('custom-msg-text').value;
-    if (!msg) return;
-    navigator.clipboard.writeText(msg).then(() => showToast('Messaggio copiato!'));
-  }
-
-  /* =============================================
-     FOLLOW-UP MODAL
-  ============================================= */
-  function openFollowupModal(slot) {
-    currentModalSlot = slot;
-    const people = slotMap[slot] || [];
-
-    // Parse slot text for message
-    const parts = slot.split(' ');
-    const giorno = parts[0] || slot;
-    const ora = parts.slice(1).join(' ') || '';
-
-    const preMsg = `Ciao! 🥋 Siamo già in ${people.length} per la lezione di Karate 360 di ${giorno} alle ${ora}! Tu ci sei? Conferma rispondendo a questo messaggio. - Salvatore`;
-
-    document.getElementById('modal-slot-name').textContent = slot;
-    document.getElementById('modal-message-text').value = preMsg;
-    document.getElementById('modal-count').textContent = people.length;
-
-    const listEl = document.getElementById('modal-people-list');
-    listEl.innerHTML = people.map(p => {
-      const clean = cleanPhone(p.phone);
-      return `
-        <div class="modal-person-row">
-          <div>
-            <div class="modal-person-name">${escHtml(p.name || '—')}</div>
-            <div class="modal-person-phone">${escHtml(p.phone || '—')}</div>
-          </div>
-          <button class="btn-wa-individual" onclick="sendModalWA('${clean}')">
-            <i class="fa-brands fa-whatsapp"></i> Invia
+    <!-- TAB 1: PANORAMICA -->
+    <div class="tab-content active safe-top" id="tab-panoramica">
+      <div class="page-header">
+        <span class="page-title">Panoramica</span>
+        <div class="header-actions">
+          <button class="export-btn" id="export-btn">
+            <i class="fas fa-download"></i> CSV
           </button>
         </div>
-      `;
-    }).join('');
+      </div>
 
-    document.getElementById('followup-modal').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">Iscritti</span>
+          <span class="stat-value" id="stat-total">—</span>
+          <span class="stat-sub">totale</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Top Slot</span>
+          <span class="stat-value" style="font-size:14px;color:var(--gold)" id="stat-topslot">—</span>
+          <span class="stat-sub" id="stat-topslot-count">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Max Gruppo</span>
+          <span class="stat-value" style="color:var(--green)" id="stat-maxgroup">—</span>
+          <span class="stat-sub" id="stat-maxgroup-slot">persone</span>
+        </div>
+      </div>
+
+      <div class="section-group">
+        <div class="section-label">Popolarità Slot</div>
+        <div class="grouped-list chart-wrap" id="chart-bars">
+          <div class="chart-row">
+            <div class="skeleton" style="width:100%;height:36px;border-radius:8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-group" style="margin-bottom:8px;">
+        <div class="section-label">Ultimi Iscritti</div>
+        <div class="grouped-list" id="recent-list">
+          <div class="empty-state">Caricamento...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ORARI -->
+    <div class="tab-content safe-top" id="tab-orari">
+      <div class="page-header">
+        <span class="page-title">Orari</span>
+      </div>
+      <div id="orari-content">
+        <div class="section-group">
+          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PERSONE -->
+    <div class="tab-content safe-top" id="tab-persone">
+      <div class="page-header">
+        <span class="page-title">Persone</span>
+        <span class="badge" id="people-count">0</span>
+      </div>
+      <div class="search-wrap">
+        <div class="search-wrap-inner">
+          <i class="fas fa-magnifying-glass search-icon"></i>
+          <input
+            class="search-input"
+            id="people-search"
+            type="search"
+            placeholder="Cerca per nome..."
+          />
+        </div>
+      </div>
+      <div id="people-list" style="padding-bottom:8px;">
+        <div class="empty-state">Caricamento...</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: MESSAGGI -->
+    <div class="tab-content safe-top" id="tab-messaggi">
+      <div class="page-header">
+        <span class="page-title">Messaggi</span>
+      </div>
+
+      <!-- Section 1: Follow-up per Slot -->
+      <div class="msg-section">
+        <div class="section-label">Follow-up per Slot</div>
+        <div class="msg-card">
+          <div class="msg-card-title">Invia per Slot</div>
+          <div class="slot-select-wrap">
+            <select class="form-field" id="msg-slot-select">
+              <option value="">Seleziona slot...</option>
+            </select>
+          </div>
+          <div id="msg-slot-preview" style="display:none;">
+            <div style="font-size:13px;color:var(--text-2);margin-bottom:6px;" id="msg-slot-count-label"></div>
+            <textarea class="form-field" id="msg-slot-text" rows="4"></textarea>
+            <button class="btn btn-secondary btn-sm mt-8" onclick="copyMsgSlot()">
+              <i class="fas fa-copy"></i> Copia Messaggio
+            </button>
+            <div id="msg-slot-people" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Messaggio Personalizzato -->
+      <div class="msg-section">
+        <div class="section-label">Messaggio Personalizzato</div>
+        <div class="msg-card">
+          <div class="msg-card-title">Scegli destinatari</div>
+          <div class="recipient-pills" id="recipient-pills"></div>
+          <button class="btn btn-secondary btn-sm" id="select-all-btn" onclick="toggleSelectAll()">
+            Seleziona Tutti
+          </button>
+          <textarea class="form-field" id="custom-msg-text" rows="4" placeholder="Scrivi il tuo messaggio..."></textarea>
+          <button class="btn btn-primary btn-full" onclick="sendToSelected()">
+            <i class="fab fa-whatsapp"></i> Invia a Selezionati
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 3: Messaggio Iniziale -->
+      <div class="msg-section" style="margin-bottom:24px;">
+        <div class="section-label">Messaggio Invito</div>
+        <div class="msg-card">
+          <div class="msg-card-title">Copia e invia su WhatsApp</div>
+          <div class="invite-text" id="invite-text">Ciao! 🥋 Ti va di fare un'ora di Karate a 360° con me? Karate, Aikido, Judo e molto altro — per tutti i livelli! Scegli quando sei disponibile: [LINK] - Salvatore</div>
+          <button class="btn btn-gold btn-full mt-4" onclick="copyInvite()">
+            <i class="fas fa-copy"></i> Copia Invito
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BOTTOM TAB BAR ── -->
+    <nav id="tab-bar">
+      <button class="tab-btn active" data-tab="panoramica" onclick="switchTab('panoramica',this)">
+        <i class="fas fa-chart-bar"></i>
+        <span>Panoramica</span>
+      </button>
+      <button class="tab-btn" data-tab="orari" onclick="switchTab('orari',this)">
+        <i class="fas fa-clock"></i>
+        <span>Orari</span>
+      </button>
+      <button class="tab-btn" data-tab="persone" onclick="switchTab('persone',this)">
+        <i class="fas fa-users"></i>
+        <span>Persone</span>
+      </button>
+      <button class="tab-btn" data-tab="messaggi" onclick="switchTab('messaggi',this)">
+        <i class="fas fa-comment-dots"></i>
+        <span>Messaggi</span>
+      </button>
+    </nav>
+
+  </div><!-- /#main -->
+</div><!-- /#app -->
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── DELETE MODAL ── -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Elimina Iscrizione</div>
+    <div class="modal-sub" id="delete-modal-name">Sei sicuro di voler eliminare questa persona?</div>
+    <button class="btn btn-primary btn-full" id="confirm-delete-btn" style="background:var(--red);">
+      <i class="fas fa-trash"></i> Elimina
+    </button>
+    <button class="btn btn-secondary btn-full" onclick="closeDeleteModal()">Annulla</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let allRegistrations = [];
+let deleteTarget = null;
+let unsubscribe = null;
+
+// ─── SLOT DEFINITIONS ───────────────────
+const SLOTS = [
+  { day: 'LUNEDÌ',    time: '18:00 - 19:00', id: 'lun-18' },
+  { day: 'LUNEDÌ',    time: '19:00 - 20:00', id: 'lun-19' },
+  { day: 'MERCOLEDÌ', time: '18:00 - 19:00', id: 'mer-18' },
+  { day: 'MERCOLEDÌ', time: '19:00 - 20:00', id: 'mer-19' },
+  { day: 'VENERDÌ',   time: '18:00 - 19:00', id: 'ven-18' },
+  { day: 'VENERDÌ',   time: '19:00 - 20:00', id: 'ven-19' },
+  { day: 'SABATO',    time: '10:00 - 11:00', id: 'sab-10' },
+  { day: 'SABATO',    time: '11:00 - 12:00', id: 'sab-11' },
+];
+
+// day label → slot array
+function groupedSlots() {
+  const map = {};
+  SLOTS.forEach(s => {
+    if (!map[s.day]) map[s.day] = [];
+    map[s.day].push(s);
+  });
+  return map;
+}
+
+// slot display label
+function slotLabel(s) { return `${s.day} ${s.time}`; }
+
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+const PASSWORD = 'karate360';
+
+function checkAuth() {
+  return sessionStorage.getItem('k360auth') === '1';
+}
+
+function doLogin() {
+  const val = document.getElementById('lock-input').value.trim();
+  if (val === PASSWORD) {
+    sessionStorage.setItem('k360auth', '1');
+    const ls = document.getElementById('lock-screen');
+    ls.classList.add('hiding');
+    setTimeout(() => {
+      ls.style.display = 'none';
+      document.getElementById('main').classList.add('visible');
+      initFirebase();
+    }, 420);
+  } else {
+    const err = document.getElementById('lock-error');
+    err.textContent = 'Password errata';
+    const inp = document.getElementById('lock-input');
+    inp.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      err.textContent = '';
+      inp.style.borderColor = '';
+    }, 2000);
   }
+}
 
-  function closeModal() {
-    document.getElementById('followup-modal').classList.add('hidden');
-    document.body.style.overflow = '';
-    const copyBtn = document.getElementById('copy-btn');
-    if (copyBtn) { copyBtn.classList.remove('copied'); copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copia Messaggio'; }
-  }
+document.getElementById('lock-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('lock-btn').addEventListener('click', doLogin);
 
-  document.getElementById('followup-modal').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeModal();
+if (checkAuth()) {
+  document.getElementById('lock-screen').style.display = 'none';
+  document.getElementById('main').classList.add('visible');
+  initFirebase();
+}
+
+// ══════════════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════════════
+function initFirebase() {
+  try {
+    firebase.initializeApp(firebaseConfig);
+  } catch(e) {}
+  const db = firebase.firestore();
+  if (unsubscribe) unsubscribe();
+  unsubscribe = db.collection('registrations')
+    .orderBy('timestamp', 'desc')
+    .onSnapshot(snapshot => {
+      allRegistrations = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      renderAll();
+    }, err => {
+      console.error('Firestore error:', err);
+    });
+}
+
+// ══════════════════════════════════════════
+// RENDER ALL
+// ══════════════════════════════════════════
+function renderAll() {
+  renderPanoramica();
+  renderOrari();
+  renderPersone();
+  renderMessaggi();
+}
+
+// ══════════════════════════════════════════
+// TAB 1 — PANORAMICA
+// ══════════════════════════════════════════
+function renderPanoramica() {
+  const regs = allRegistrations;
+  document.getElementById('stat-total').textContent = regs.length;
+
+  // count slots
+  const slotCounts = {};
+  SLOTS.forEach(s => slotCounts[slotLabel(s)] = 0);
+  regs.forEach(r => {
+    (r.slots || []).forEach(sl => {
+      if (slotCounts[sl] !== undefined) slotCounts[sl]++;
+      else slotCounts[sl] = 1;
+    });
   });
 
-  function sendModalWA(cleanPhone) {
-    const msg = document.getElementById('modal-message-text').value;
-    openWA(cleanPhone, msg);
+  const sorted = Object.entries(slotCounts).sort((a,b) => b[1]-a[1]);
+  const top = sorted[0];
+  if (top && top[1] > 0) {
+    document.getElementById('stat-topslot').textContent = shortSlotLabel(top[0]);
+    document.getElementById('stat-topslot-count').textContent = top[1] + ' pers.';
+  } else {
+    document.getElementById('stat-topslot').textContent = '—';
+    document.getElementById('stat-topslot-count').textContent = 'nessuno';
   }
 
-  function copyModalMessage() {
-    const msg = document.getElementById('modal-message-text').value;
-    navigator.clipboard.writeText(msg).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.classList.add('copied');
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiato!';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copia Messaggio';
-      }, 2000);
+  document.getElementById('stat-maxgroup').textContent = top ? top[1] : 0;
+  document.getElementById('stat-maxgroup-slot').textContent = top ? shortSlotLabel(top[0]) : 'slot';
+
+  // chart
+  const maxCount = sorted.reduce((m, [,v]) => Math.max(m,v), 1) || 1;
+  const chartEl = document.getElementById('chart-bars');
+  chartEl.innerHTML = sorted.map(([label, count]) => {
+    const pct = Math.round((count / maxCount) * 100);
+    const pillClass = count >= 3 ? 'pill-green' : count === 2 ? 'pill-yellow' : count === 1 ? 'pill-red' : 'pill-gray';
+    return `
+      <div class="chart-row">
+        <span class="chart-label">${shortSlotLabel(label)}</span>
+        <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
+        <span class="chart-count">${count}</span>
+      </div>`;
+  }).join('');
+
+  // recent 5
+  const recent = [...regs].slice(0,5);
+  const recentEl = document.getElementById('recent-list');
+  if (recent.length === 0) {
+    recentEl.innerHTML = '<div class="empty-state">Nessun iscritto ancora</div>';
+    return;
+  }
+  recentEl.innerHTML = recent.map(r => `
+    <div class="person-row">
+      <div class="avatar av-${avatarColor(r.name)}">${initial(r.name)}</div>
+      <div class="person-info">
+        <div class="person-name">${esc(r.name)}</div>
+        <div class="person-phone">${esc(r.phone || '')}</div>
+      </div>
+      <div class="person-time">${timeAgo(r.timestamp)}</div>
+    </div>`).join('');
+}
+
+function shortSlotLabel(label) {
+  return label.replace('LUNEDÌ','Lun').replace('MERCOLEDÌ','Mer').replace('VENERDÌ','Ven').replace('SABATO','Sab');
+}
+
+// ══════════════════════════════════════════
+// TAB 2 — ORARI
+// ══════════════════════════════════════════
+function renderOrari() {
+  const grouped = groupedSlots();
+  const container = document.getElementById('orari-content');
+  let html = '';
+
+  Object.entries(grouped).forEach(([day, slots]) => {
+    html += `<div class="section-group"><div class="section-label">${day}</div><div class="grouped-list">`;
+    slots.forEach(s => {
+      const label = slotLabel(s);
+      const people = allRegistrations.filter(r => (r.slots||[]).includes(label));
+      const count = people.length;
+      const pillClass = count >= 3 ? 'pill-green' : count === 2 ? 'pill-yellow' : count === 1 ? 'pill-red' : 'pill-gray';
+
+      html += `
+        <div class="list-row" onclick="toggleSlot('${s.id}', this)">
+          <div class="row-left">
+            <div class="row-title">${s.time}</div>
+          </div>
+          <div class="row-right">
+            <span class="count-pill ${pillClass}">${count}</span>
+            <i class="fas fa-chevron-right chevron" id="chev-${s.id}"></i>
+          </div>
+        </div>
+        <div class="slot-expanded" id="exp-${s.id}">
+          ${count === 0
+            ? '<div class="empty-state">Nessuna iscrizione per questo slot</div>'
+            : people.map(p => `
+              <div class="slot-person-row">
+                <div class="avatar av-${avatarColor(p.name)}" style="width:30px;height:30px;font-size:12px;">${initial(p.name)}</div>
+                <div style="flex:1;min-width:0;">
+                  <div class="slot-person-name">${esc(p.name)}</div>
+                  <div class="slot-person-phone">${esc(p.phone||'')}</div>
+                </div>
+                <a class="wa-btn" href="${waLink(p.phone, '')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+              </div>`).join('')
+          }
+        </div>`;
     });
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleSlot(id, rowEl) {
+  const exp = document.getElementById('exp-'+id);
+  const chev = document.getElementById('chev-'+id);
+  const isOpen = exp.classList.contains('open');
+  exp.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+// ══════════════════════════════════════════
+// TAB 3 — PERSONE
+// ══════════════════════════════════════════
+function renderPersone(filter) {
+  let list = allRegistrations;
+  if (filter) {
+    const f = filter.toLowerCase();
+    list = list.filter(r => (r.name||'').toLowerCase().includes(f));
   }
 
-  /* =============================================
-     DELETE
-  ============================================= */
-  function deleteRegistration(id, name) {
-    if (!confirm(`Eliminare la registrazione di "${name}"?\nQuesta azione non è reversibile.`)) return;
-    db.collection('registrations').doc(id).delete()
-      .then(() => showToast(`"${name}" eliminato`))
-      .catch(err => { console.error(err); showToast('Errore durante eliminazione', 'error'); });
+  document.getElementById('people-count').textContent = list.length;
+
+  const container = document.getElementById('people-list');
+  if (list.length === 0) {
+    container.innerHTML = '<div class="empty-state">Nessun risultato</div>';
+    return;
   }
 
-  /* =============================================
-     EXPORT CSV
-  ============================================= */
-  function exportCSV() {
-    if (allRegistrations.length === 0) { showToast('Nessun dato da esportare', 'error'); return; }
+  container.innerHTML = list.map(r => `
+    <div class="person-card">
+      <div class="person-card-inner">
+        <div class="person-card-header">
+          <div class="avatar av-${avatarColor(r.name)}">${initial(r.name)}</div>
+          <div class="person-card-info">
+            <div class="person-name">${esc(r.name)}</div>
+            <a class="person-phone" href="${waLink(r.phone, '')}" target="_blank" rel="noopener">${esc(r.phone||'')}</a>
+          </div>
+          <div class="person-card-actions">
+            <a class="wa-btn" href="${waLink(r.phone, '')}" target="_blank" rel="noopener">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <button class="delete-btn" onclick="openDeleteModal('${r.id}', '${esc(r.name)}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        ${(r.slots||[]).length > 0 ? `
+        <div class="person-tags mt-8">
+          ${(r.slots||[]).map(sl => `<span class="slot-tag">${shortSlotLabel(sl)}</span>`).join('')}
+        </div>` : ''}
+        ${r.notes ? `<div class="person-notes mt-4">"${esc(r.notes)}"</div>` : ''}
+        <div class="person-time mt-4" style="font-size:12px;color:var(--text-3);">${timeAgo(r.timestamp)}</div>
+      </div>
+    </div>`).join('');
+}
 
-    const headers = ['Nome', 'Telefono', 'Slot', 'Note', 'Data Iscrizione'];
-    const rows = allRegistrations.map(p => [
-      `"${(p.name || '').replace(/"/g, '""')}"`,
-      `"${(p.phone || '').replace(/"/g, '""')}"`,
-      `"${(Array.isArray(p.slots) ? p.slots.join('; ') : '').replace(/"/g, '""')}"`,
-      `"${(p.notes || '').replace(/"/g, '""')}"`,
-      `"${formatTimestamp(p.timestamp)}"`
+document.getElementById('people-search').addEventListener('input', function() {
+  renderPersone(this.value);
+});
+
+// ══════════════════════════════════════════
+// TAB 4 — MESSAGGI
+// ══════════════════════════════════════════
+function renderMessaggi() {
+  // populate slot select
+  const sel = document.getElementById('msg-slot-select');
+  const prevVal = sel.value;
+  sel.innerHTML = '<option value="">Seleziona slot...</option>';
+  SLOTS.forEach(s => {
+    const label = slotLabel(s);
+    const opt = document.createElement('option');
+    opt.value = label;
+    opt.textContent = label;
+    sel.appendChild(opt);
+  });
+  if (prevVal) sel.value = prevVal;
+
+  // recipient pills
+  const pills = document.getElementById('recipient-pills');
+  pills.innerHTML = allRegistrations.map(r => `
+    <button class="rec-pill" data-id="${r.id}" data-phone="${esc(r.phone||'')}" data-name="${esc(r.name)}" onclick="toggleRecipient(this)">
+      ${esc(r.name)}
+    </button>`).join('');
+}
+
+document.getElementById('msg-slot-select').addEventListener('change', function() {
+  const slot = this.value;
+  const preview = document.getElementById('msg-slot-preview');
+  if (!slot) { preview.style.display = 'none'; return; }
+  preview.style.display = 'block';
+
+  const people = allRegistrations.filter(r => (r.slots||[]).includes(slot));
+  document.getElementById('msg-slot-count-label').textContent =
+    `${people.length} persona${people.length !== 1 ? 'e' : ''} in questo slot`;
+
+  // parse day and time from slot label: "LUNEDÌ 18:00 - 19:00"
+  const parts = slot.split(' ');
+  const giorno = parts[0] || '';
+  const ora = parts[1] || '';
+
+  document.getElementById('msg-slot-text').value =
+    `Ciao! 🥋 Siamo già in ${people.length} per Karate 360 ${giorno} alle ${ora}! Ci sei anche tu? Rispondi a questo messaggio! - Salvatore`;
+
+  const pplEl = document.getElementById('msg-slot-people');
+  pplEl.innerHTML = people.length === 0
+    ? '<div class="empty-state">Nessuno in questo slot</div>'
+    : people.map(p => `
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="flex:1;font-size:14px;font-weight:500;">${esc(p.name)}</div>
+        <a class="btn btn-green btn-sm" href="${waLink(p.phone, document.getElementById('msg-slot-text').value)}" target="_blank" rel="noopener">
+          <i class="fab fa-whatsapp"></i> Invia
+        </a>
+      </div>`).join('');
+});
+
+function copyMsgSlot() {
+  const text = document.getElementById('msg-slot-text').value;
+  copyToClipboard(text, 'Messaggio copiato!');
+}
+
+function toggleRecipient(btn) {
+  btn.classList.toggle('selected');
+}
+
+function toggleSelectAll() {
+  const pills = document.querySelectorAll('.rec-pill');
+  const allSelected = [...pills].every(p => p.classList.contains('selected'));
+  pills.forEach(p => p.classList.toggle('selected', !allSelected));
+  document.getElementById('select-all-btn').textContent =
+    allSelected ? 'Seleziona Tutti' : 'Deseleziona Tutti';
+}
+
+async function sendToSelected() {
+  const selected = [...document.querySelectorAll('.rec-pill.selected')];
+  if (selected.length === 0) { showToast('Nessun destinatario selezionato'); return; }
+  const msg = document.getElementById('custom-msg-text').value.trim();
+  if (!msg) { showToast('Scrivi un messaggio prima'); return; }
+
+  for (let i = 0; i < selected.length; i++) {
+    const phone = selected[i].dataset.phone;
+    if (i > 0) await sleep(500);
+    window.open(waLink(phone, msg), '_blank');
+  }
+}
+
+function copyInvite() {
+  const text = document.getElementById('invite-text').textContent;
+  copyToClipboard(text, 'Invito copiato!');
+}
+
+// ══════════════════════════════════════════
+// DELETE
+// ══════════════════════════════════════════
+function openDeleteModal(id, name) {
+  deleteTarget = id;
+  document.getElementById('delete-modal-name').textContent =
+    `Vuoi eliminare "${name}" da tutte le iscrizioni?`;
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+function closeDeleteModal() {
+  deleteTarget = null;
+  document.getElementById('delete-modal').classList.remove('open');
+}
+
+document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+  if (!deleteTarget) return;
+  try {
+    await firebase.firestore().collection('registrations').doc(deleteTarget).delete();
+    showToast('Iscrizione eliminata');
+  } catch(e) {
+    showToast('Errore nell\'eliminazione');
+  }
+  closeDeleteModal();
+});
+
+document.getElementById('delete-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeDeleteModal();
+});
+
+// ══════════════════════════════════════════
+// EXPORT CSV
+// ══════════════════════════════════════════
+document.getElementById('export-btn').addEventListener('click', () => {
+  if (allRegistrations.length === 0) { showToast('Nessun dato da esportare'); return; }
+  const rows = [['Nome','Telefono','Slot','Note','Data']];
+  allRegistrations.forEach(r => {
+    rows.push([
+      r.name || '',
+      r.phone || '',
+      (r.slots||[]).join('; '),
+      r.notes || '',
+      r.timestamp ? new Date(r.timestamp.toDate()).toLocaleString('it-IT') : ''
     ]);
+  });
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'karate360_iscritti.csv'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV scaricato!');
+});
 
-    const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `karate360-iscrizioni-${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('CSV esportato con successo!');
-  }
+// ══════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════
+function switchTab(tabName, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+tabName).classList.add('active');
+  btn.classList.add('active');
+  // scroll to top
+  document.getElementById('tab-'+tabName).scrollTop = 0;
+}
 
-  /* =============================================
-     VIEW SWITCHING
-  ============================================= */
-  function switchView(view) {
-    currentView = view;
-    document.getElementById('view-slot').style.display = view === 'slot' ? 'block' : 'none';
-    document.getElementById('view-persone').style.display = view === 'persone' ? 'block' : 'none';
-    document.getElementById('tab-slot').classList.toggle('active', view === 'slot');
-    document.getElementById('tab-persone').classList.toggle('active', view === 'persone');
-  }
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function initial(name) {
+  return (name || '?').trim().charAt(0).toUpperCase();
+}
 
-  /* =============================================
-     HELPERS
-  ============================================= */
-  function openWA(cleanPhone, msg) {
-    const encoded = encodeURIComponent(msg);
-    const url = msg
-      ? `https://wa.me/${cleanPhone}?text=${encoded}`
-      : `https://wa.me/${cleanPhone}`;
-    window.open(url, '_blank', 'noopener');
-  }
+function avatarColor(name) {
+  if (!name) return 0;
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i)) % 8;
+  return hash;
+}
 
-  function cleanPhone(phone) {
-    if (!phone) return '';
-    return phone.replace(/\s+/g, '').replace(/^\+/, '');
-  }
+function esc(str) {
+  return String(str||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
 
-  function formatTimestamp(ts) {
-    if (!ts) return '—';
-    try {
-      const d = ts.toDate ? ts.toDate() : new Date(ts);
-      return d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    } catch { return '—'; }
-  }
+function waLink(phone, msg) {
+  const clean = (phone||'').replace(/\D/g,'');
+  const num = clean.startsWith('39') ? clean : '39'+clean.replace(/^0+/,'');
+  return `https://wa.me/${num}?text=${encodeURIComponent(msg||'')}`;
+}
 
-  function escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+function timeAgo(ts) {
+  if (!ts) return '';
+  let date;
+  try { date = ts.toDate ? ts.toDate() : new Date(ts); } catch(e) { return ''; }
+  const diffMs = Date.now() - date.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffH   = Math.floor(diffMs / 3600000);
+  const diffD   = Math.floor(diffMs / 86400000);
+  if (diffMin < 1)  return 'adesso';
+  if (diffMin < 60) return `${diffMin} min fa`;
+  if (diffH < 24)   return `${diffH} ore fa`;
+  if (diffD === 1)  return 'ieri';
+  if (diffD < 7)    return `${diffD} giorni fa`;
+  return date.toLocaleDateString('it-IT');
+}
 
-  function escAttr(str) {
-    return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
-  }
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
 
-  function showToast(msg, type = 'success') {
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-    const toast = document.createElement('div');
-    toast.className = `toast${type === 'error' ? ' error' : ''}`;
-    toast.innerHTML = `<i class="fa-solid fa-${type === 'error' ? 'circle-exclamation' : 'circle-check'}"></i> ${msg}`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+function copyToClipboard(text, successMsg) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast(successMsg||'Copiato!')).catch(() => fallbackCopy(text, successMsg));
+  } else {
+    fallbackCopy(text, successMsg);
   }
+}
+
+function fallbackCopy(text, msg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast(msg||'Copiato!');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 </script>
 </body>
 </html>
