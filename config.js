@@ -1,8 +1,9 @@
 // ============================================
 // CONFIGURAZIONE KARATE 360
 // ============================================
-// Sostituisci l'URL qui sotto con quello del tuo Google Apps Script
-// (vedi google-apps-script.js per le istruzioni di setup)
+// Database JSON gratuito su jsonblob.com
+// NON modificare questo file a meno che non
+// sia necessario ricreare il database.
 // ============================================
 
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL';
+const API_URL = 'https://jsonblob.com/api/jsonBlob/019d02b5-ca99-7dde-bd6f-fbc4bf367498';

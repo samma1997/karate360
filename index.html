@@ -1150,25 +1150,27 @@
     btn.classList.add('loading');
     btn.disabled = true;
 
-    const data = {
+    const newReg = {
+      id:    Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
       name:  nameVal,
       phone: '+39' + phoneVal.replace(/\s+/g, ''),
-      slots: slots.join(', '),
-      notes: notesVal
+      slots: slots,
+      notes: notesVal,
+      timestamp: new Date().toISOString()
     };
 
     try {
-      if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL') {
-        await fetch(APPS_SCRIPT_URL + '?action=write', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      } else {
-        await new Promise(function(res) { setTimeout(res, 800); });
-        console.info('[K360] Demo mode — dati:', data);
-      }
+      // Read current data, append, write back
+      const res = await fetch(API_URL);
+      const db = await res.json();
+      const regs = db.registrations || [];
+      regs.push(newReg);
+
+      await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ registrations: regs })
+      });
 
       btn.classList.remove('loading');
       btn.disabled = false;

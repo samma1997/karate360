@@ -1155,23 +1155,15 @@ function groupedSlots() {
 function slotLabel(s) { return `${s.day} ${s.time}`; }
 
 // ══════════════════════════════════════════
-// GOOGLE SHEETS BACKEND
+// JSONBLOB BACKEND
 // ══════════════════════════════════════════
 async function loadData() {
   try {
-    if (typeof APPS_SCRIPT_URL === 'undefined' || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL') {
-      console.warn('[K360] Apps Script URL non configurato. Demo mode.');
-      allRegistrations = [];
-      renderAll();
-      return;
-    }
-    const res = await fetch(APPS_SCRIPT_URL + '?action=read');
-    const json = await res.json();
-    if (json.success) {
-      allRegistrations = (json.registrations || []).sort((a, b) => {
-        return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
-      });
-    }
+    const res = await fetch(API_URL);
+    const db = await res.json();
+    allRegistrations = (db.registrations || []).sort((a, b) => {
+      return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
+    });
     renderAll();
   } catch (err) {
     console.error('[K360] Errore caricamento dati:', err);
@@ -1182,7 +1174,14 @@ async function loadData() {
 
 async function deleteRegistration(id) {
   try {
-    await fetch(APPS_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id));
+    const res = await fetch(API_URL);
+    const db = await res.json();
+    db.registrations = (db.registrations || []).filter(r => r.id !== id);
+    await fetch(API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(db)
+    });
     await loadData();
   } catch (err) {
     console.error('[K360] Errore eliminazione:', err);
