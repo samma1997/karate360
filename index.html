@@ -15,10 +15,10 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* ── RESET ──────────────────────────────────── */
+    /* ── RESET ─────────────────────────── */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -26,28 +26,34 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* ── TOKENS ─────────────────────────────────── */
+    /* ── TOKENS ────────────────────────── */
     :root {
-      --bg:       #0A0A0A;
-      --card:     #1A1A1A;
-      --text:     #FFFFFF;
-      --text2:    #AAAAAA;
-      --sand:     #C8A87C;
-      --border:   rgba(255,255,255,0.10);
-      --r:        16px;
+      --bg:        #0A0A0A;
+      --surface:   #141414;
+      --surface2:  #1A1A1A;
+      --text:      #FFFFFF;
+      --text2:     #999999;
+      --muted:     #555555;
+      --sand:      #C8A87C;
+      --sand-dim:  rgba(200,168,124,0.15);
+      --border:    rgba(255,255,255,0.08);
+      --border-md: rgba(255,255,255,0.12);
+      --error:     #E55555;
+      --r:         16px;
+      --r-sm:      12px;
     }
 
-    /* ── BASE ───────────────────────────────────── */
+    /* ── BASE ──────────────────────────── */
     html {
       -webkit-text-size-adjust: 100%;
       scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 17px;
+      font-size: 16px;
       line-height: 1.5;
       min-height: 100dvh;
       overflow-x: hidden;
@@ -57,240 +63,124 @@
     ::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; }
 
-    /* ── WRAPPER ────────────────────────────────── */
-    .wrap {
+    /* ── LAYOUT ────────────────────────── */
+    .page {
       max-width: 480px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
-    /* ── HERO ───────────────────────────────────── */
+    /* ── HERO ──────────────────────────── */
     .hero {
-      padding: 48px 20px 40px;
+      padding: 52px 20px 44px;
       max-width: 480px;
       margin: 0 auto;
       text-align: center;
     }
 
-    /* ── CSS PIXEL ART KARATEKA ─────────────────── */
-    /*
-      Built with the box-shadow technique on a single 8x8px pixel div.
-      Each shadow entry = one pixel.  Origin (0,0) = top-left pixel.
-      Character is ~10 cols × 14 rows at 8px/pixel → ~80×112px visual.
-      Two keyframe sets alternate via animation-timing-function: steps(1).
-    */
-    .karateka-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 32px;
-      height: 112px;
-      align-items: flex-end;
+    .hero-image-wrap {
+      margin-bottom: 24px;
     }
 
-    .karateka {
-      width: 8px;
-      height: 8px;
-      position: relative;
-      /* The pixel itself is invisible; all drawing is done in box-shadow */
-      background: transparent;
-      animation: karate-kick 0.7s steps(1) infinite;
-    }
-
-    /*
-      Frame coordinate system: shadow X = col*8px, Y = row*8px
-      Color: #C8A87C (sand/gold)
-
-      FRAME A — fighting stance (weight on back leg, front arm guard)
-        Head:   col3-4, row0
-        Neck:   col3-4, row1
-        Body:   col2-5, row2-3
-        LArm:   col1, row2  (guard up)
-        RArm:   col5-6, row2
-        LLeg:   col2-3, row4-5 (bent)
-        RLeg:   col4-5, row4  → col5, row5-6 (weight back)
-        Feet:   col1-2, row6  col5-6, row6
-
-      FRAME B — kick (front leg raised, arm extends)
-        Head:   col3-4, row0
-        Neck:   col3-4, row1
-        Body:   col2-5, row2-3
-        LArm:   col0-1, row2  (punch extended)
-        RArm:   col5, row2
-        LLeg:   col2-3, row4-5
-        RLeg:   col5-6, row2-3 (kick!)
-        Foot:   col7, row2     (kick tip)
-        SFoot:  col2-3, row6
-    */
-
-    @keyframes karate-kick {
-      0%, 49% {
-        /* FRAME A — stance */
-        box-shadow:
-          /* head */
-          24px  0px var(--sand),
-          32px  0px var(--sand),
-          24px  8px var(--sand),
-          32px  8px var(--sand),
-          /* neck */
-          24px 16px var(--sand),
-          32px 16px var(--sand),
-          /* body */
-          16px 24px var(--sand),
-          24px 24px var(--sand),
-          32px 24px var(--sand),
-          40px 24px var(--sand),
-          16px 32px var(--sand),
-          24px 32px var(--sand),
-          32px 32px var(--sand),
-          40px 32px var(--sand),
-          /* left arm (guard up) */
-           8px 24px var(--sand),
-           8px 32px var(--sand),
-          /* right arm */
-          48px 24px var(--sand),
-          56px 24px var(--sand),
-          /* left leg */
-          16px 40px var(--sand),
-          24px 40px var(--sand),
-          16px 48px var(--sand),
-          24px 48px var(--sand),
-          /* right leg */
-          32px 40px var(--sand),
-          40px 40px var(--sand),
-          40px 48px var(--sand),
-          48px 48px var(--sand),
-          /* feet */
-           8px 56px var(--sand),
-          16px 56px var(--sand),
-          40px 56px var(--sand),
-          48px 56px var(--sand);
-      }
-      50%, 100% {
-        /* FRAME B — kick */
-        box-shadow:
-          /* head */
-          24px  0px var(--sand),
-          32px  0px var(--sand),
-          24px  8px var(--sand),
-          32px  8px var(--sand),
-          /* neck */
-          24px 16px var(--sand),
-          32px 16px var(--sand),
-          /* body */
-          16px 24px var(--sand),
-          24px 24px var(--sand),
-          32px 24px var(--sand),
-          40px 24px var(--sand),
-          16px 32px var(--sand),
-          24px 32px var(--sand),
-          32px 32px var(--sand),
-          40px 32px var(--sand),
-          /* left arm extended punch */
-           0px 24px var(--sand),
-           8px 24px var(--sand),
-          /* right arm down */
-          48px 32px var(--sand),
-          /* left leg grounded */
-          16px 40px var(--sand),
-          24px 40px var(--sand),
-          16px 48px var(--sand),
-          24px 48px var(--sand),
-          /* right leg KICK raised */
-          40px 16px var(--sand),
-          48px 16px var(--sand),
-          40px 24px var(--sand),
-          48px 24px var(--sand),
-          56px 24px var(--sand),
-          64px 24px var(--sand),
-          /* standing foot */
-          16px 56px var(--sand),
-          24px 56px var(--sand);
-      }
-    }
-
-    /* ── HERO TEXT ──────────────────────────────── */
     .hero-title {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      line-height: 1.15;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    .hero-sub {
-      font-size: 17px;
-      color: var(--text2);
-      line-height: 1.55;
-      margin-bottom: 16px;
-    }
-
-    .hero-tags {
-      font-size: 15px;
-      color: var(--sand);
-      font-weight: 500;
-      letter-spacing: 0.3px;
-    }
-
-    /* ── SECTION DIVIDER ────────────────────────── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── MAIN FORM CARD ─────────────────────────── */
-    .form-section {
-      padding: 36px 20px calc(env(safe-area-inset-bottom, 24px) + 24px);
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 28px 20px;
-    }
-
-    .card-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 28px;
-      letter-spacing: -0.3px;
-    }
-
-    /* ── FIELD ──────────────────────────────────── */
-    .field {
-      margin-bottom: 28px;
-    }
-
-    .field-label {
-      display: block;
-      font-size: 20px;
-      font-weight: 600;
+      letter-spacing: -0.6px;
+      line-height: 1.2;
       color: var(--text);
       margin-bottom: 10px;
     }
 
-    .field-label .opt {
+    .hero-sub {
       font-size: 15px;
-      font-weight: 400;
       color: var(--text2);
-      margin-left: 6px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      font-weight: 400;
+    }
+
+    .hero-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--sand);
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .hero-meta span {
+      color: rgba(200,168,124,0.4);
+      font-size: 10px;
+    }
+
+    /* ── RULE ──────────────────────────── */
+    .rule {
+      height: 1px;
+      background: var(--border);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── FORM SECTION ──────────────────── */
+    .form-section {
+      padding: 32px 20px calc(env(safe-area-inset-bottom, 24px) + 32px);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ──────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 22px 32px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 28px;
+      letter-spacing: -0.2px;
+    }
+
+    /* ── FIELD ─────────────────────────── */
+    .field {
+      margin-bottom: 24px;
+    }
+
+    .field-label {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sand);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+    }
+
+    .field-label .opt {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: 0;
     }
 
     .field-input {
       width: 100%;
-      min-height: 56px;
-      background: #0A0A0A;
-      border: 2px solid var(--border);
-      border-radius: 12px;
+      height: 52px;
+      background: var(--bg);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-sm);
       color: var(--text);
       font-family: inherit;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 400;
-      padding: 14px 16px;
+      padding: 0 16px;
       outline: none;
       appearance: none;
       -webkit-appearance: none;
@@ -298,102 +188,113 @@
     }
 
     .field-input::placeholder {
-      color: #555555;
+      color: var(--muted);
     }
 
     .field-input:focus {
       border-color: var(--sand);
-      box-shadow: 0 0 0 3px rgba(200,168,124,0.18);
+      box-shadow: 0 0 0 3px rgba(200,168,124,0.12);
     }
 
-    /* phone row */
+    /* phone */
     .phone-row {
       display: flex;
     }
 
     .phone-prefix {
       flex-shrink: 0;
-      min-height: 56px;
-      background: #0A0A0A;
-      border: 2px solid var(--border);
+      height: 52px;
+      background: var(--bg);
+      border: 1px solid var(--border-md);
       border-right: none;
-      border-radius: 12px 0 0 12px;
-      padding: 14px 14px;
-      font-size: 18px;
-      font-weight: 600;
+      border-radius: var(--r-sm) 0 0 var(--r-sm);
+      padding: 0 14px;
+      font-size: 17px;
+      font-weight: 500;
       color: var(--text2);
       display: flex;
       align-items: center;
       user-select: none;
+      letter-spacing: 0.2px;
     }
 
     .phone-row .field-input {
-      border-radius: 0 12px 12px 0;
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
     }
 
     textarea.field-input {
-      min-height: 96px;
+      height: auto;
+      min-height: 90px;
+      padding: 14px 16px;
       resize: none;
       line-height: 1.55;
     }
 
-    /* field error state */
     .field-err {
       display: none;
-      font-size: 15px;
-      color: #FF6B6B;
+      font-size: 13px;
+      color: var(--error);
       font-weight: 500;
-      margin-top: 8px;
+      margin-top: 6px;
+      letter-spacing: 0.1px;
     }
 
-    .field.error .field-input,
+    .field.error .field-input {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(229,85,85,0.1);
+    }
+
     .field.error .phone-prefix {
-      border-color: #FF6B6B;
+      border-color: var(--error);
     }
 
     .field.error .field-err {
       display: block;
     }
 
-    /* ── SLOTS ──────────────────────────────────── */
+    /* ── SLOTS ─────────────────────────── */
     .slots-section {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
-    .slots-label {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 8px;
+    .slots-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sand);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 6px;
     }
 
     .slots-hint {
-      font-size: 16px;
+      font-size: 14px;
       color: var(--text2);
       margin-bottom: 20px;
       line-height: 1.5;
     }
 
     .day-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
-    .day-heading {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text2);
+    .day-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 1.2px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .slots-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
-    /* hidden checkbox */
     .slot-cb {
       position: absolute;
       opacity: 0;
@@ -402,46 +303,55 @@
       pointer-events: none;
     }
 
-    /* slot card — unselected */
     .slot-card {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 64px;
-      border-radius: 14px;
-      border: 2px solid var(--border);
-      background: #111111;
-      font-size: 17px;
-      font-weight: 600;
+      height: 52px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border-md);
+      background: var(--surface2);
+      font-size: 15px;
+      font-weight: 500;
       color: var(--text);
       cursor: pointer;
       user-select: none;
       text-align: center;
       transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        color 0.15s ease,
+        background 0.14s ease,
+        border-color 0.14s ease,
+        color 0.14s ease,
         transform 0.1s ease;
-      padding: 12px 8px;
-      line-height: 1.3;
+      line-height: 1.2;
+      gap: 2px;
+    }
+
+    .slot-card small {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.6;
     }
 
     .slot-card:active {
-      transform: scale(0.95);
+      transform: scale(0.96);
     }
 
-    /* slot card — SELECTED: sand bg, black text, bold — very obvious */
     .slot-cb:checked + .slot-card {
       background: var(--sand);
       border-color: var(--sand);
       color: #000000;
-      font-weight: 700;
+      font-weight: 600;
+    }
+
+    .slot-cb:checked + .slot-card small {
+      opacity: 0.65;
     }
 
     .slots-err {
       display: none;
-      font-size: 15px;
-      color: #FF6B6B;
+      font-size: 13px;
+      color: var(--error);
       font-weight: 500;
       margin-top: 8px;
     }
@@ -450,86 +360,86 @@
       display: block;
     }
 
-    /* ── SUBMIT ──────────────────────────────────── */
+    /* ── SUBMIT ────────────────────────── */
     .submit-wrap {
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .submit-btn {
       width: 100%;
-      min-height: 60px;
+      height: 54px;
       background: #FFFFFF;
       border: none;
-      border-radius: 14px;
+      border-radius: var(--r-sm);
       color: #000000;
       font-family: inherit;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      transition: opacity 0.15s ease, transform 0.12s ease;
+      transition: opacity 0.15s ease, transform 0.1s ease;
     }
 
     .submit-btn:active {
-      transform: scale(0.97);
-      opacity: 0.88;
+      transform: scale(0.98);
+      opacity: 0.9;
     }
 
     .submit-btn:disabled {
-      opacity: 0.45;
+      opacity: 0.4;
       cursor: not-allowed;
     }
 
     .btn-spinner {
       display: none;
-      width: 20px;
-      height: 20px;
-      border: 2.5px solid rgba(0,0,0,0.25);
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(0,0,0,0.2);
       border-top-color: #000;
       border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.65s linear infinite;
       flex-shrink: 0;
     }
 
     .submit-btn.loading .btn-spinner { display: block; }
-    .submit-btn.loading .btn-label  { opacity: 0.6; }
+    .submit-btn.loading .btn-label  { opacity: 0.55; }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .submit-note {
       text-align: center;
-      font-size: 15px;
-      color: var(--text2);
-      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
       line-height: 1.5;
     }
 
-    /* ── FOOTER ─────────────────────────────────── */
+    /* ── FOOTER ────────────────────────── */
     .footer {
       text-align: center;
-      padding: 28px 20px calc(env(safe-area-inset-bottom, 0px) + 28px);
+      padding: 24px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
       border-top: 1px solid var(--border);
       max-width: 480px;
       margin: 0 auto;
     }
 
     .footer-text {
-      font-size: 14px;
-      color: #555555;
+      font-size: 13px;
+      color: var(--muted);
     }
 
-    /* ── SUCCESS OVERLAY ────────────────────────── */
+    /* ── SUCCESS OVERLAY ───────────────── */
     .success-overlay {
       position: fixed;
       inset: 0;
-      z-index: 200;
-      background: rgba(0,0,0,0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      z-index: 300;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -538,7 +448,7 @@
 
     .success-overlay.show {
       display: flex;
-      animation: fade-in 0.25s ease;
+      animation: fade-in 0.22s ease;
     }
 
     @keyframes fade-in {
@@ -547,55 +457,48 @@
     }
 
     .success-box {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1px solid var(--border-md);
       border-radius: 20px;
-      padding: 48px 28px 36px;
+      padding: 44px 28px 36px;
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
       text-align: center;
-      animation: pop-in 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+      animation: pop-in 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
     }
 
     @keyframes pop-in {
-      from { transform: scale(0.85); opacity: 0; }
+      from { transform: scale(0.88); opacity: 0; }
       to   { transform: scale(1);    opacity: 1; }
     }
 
-    .success-check {
-      font-size: 64px;
-      line-height: 1;
-      margin-bottom: 20px;
-      /* Use CSS checkmark via a circle + SVG-like trick */
-    }
-
     .check-ring {
-      width: 80px;
-      height: 80px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      border: 3px solid var(--sand);
-      background: rgba(200,168,124,0.12);
+      border: 2px solid var(--sand);
+      background: var(--sand-dim);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      animation: ring-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+      margin: 0 auto 22px;
+      animation: ring-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
     }
 
     @keyframes ring-pop {
-      from { transform: scale(0.4); opacity: 0; }
+      from { transform: scale(0.3); opacity: 0; }
       to   { transform: scale(1);   opacity: 1; }
     }
 
     .check-svg {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       stroke: var(--sand);
-      stroke-width: 3;
+      stroke-width: 2.5;
       fill: none;
-      stroke-dasharray: 60;
-      stroke-dashoffset: 60;
-      animation: draw-check 0.4s ease 0.28s forwards;
+      stroke-dasharray: 55;
+      stroke-dashoffset: 55;
+      animation: draw-check 0.38s ease 0.26s forwards;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -605,35 +508,35 @@
     }
 
     .success-title {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       letter-spacing: -0.3px;
-      animation: rise-in 0.3s ease 0.22s both;
+      animation: rise-in 0.28s ease 0.2s both;
     }
 
     .success-body {
-      font-size: 17px;
+      font-size: 15px;
       color: var(--text2);
       line-height: 1.6;
-      margin-bottom: 32px;
-      animation: rise-in 0.3s ease 0.32s both;
+      margin-bottom: 28px;
+      animation: rise-in 0.28s ease 0.3s both;
     }
 
     .success-btn {
       width: 100%;
-      min-height: 56px;
+      height: 52px;
       background: #FFFFFF;
       border: none;
-      border-radius: 14px;
+      border-radius: var(--r-sm);
       color: #000000;
       font-family: inherit;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.15s ease, transform 0.12s ease;
-      animation: rise-in 0.3s ease 0.40s both;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+      animation: rise-in 0.28s ease 0.38s both;
     }
 
     .success-btn:active {
@@ -642,8 +545,16 @@
     }
 
     @keyframes rise-in {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── UTILITY ───────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
@@ -651,18 +562,18 @@
 
   <!-- HERO -->
   <section class="hero">
-
-    <!-- CSS pixel-art karateka -->
-    <div class="karateka-wrap">
-      <div class="karateka"></div>
+    <div class="hero-image-wrap">
+      <img id="hero-img" src="karateka.png" alt="Karateka" style="max-width:120px;height:auto;margin-bottom:24px;image-rendering:pixelated" />
     </div>
 
-    <h1 class="hero-title">Fondamenti<br>del Karate</h1>
-    <p class="hero-sub">Tecniche base per tutti i livelli<br>— con Salvatore</p>
-    <p class="hero-tags">1 Ora &nbsp;·&nbsp; Karate &nbsp;·&nbsp; Aikido &nbsp;·&nbsp; Judo</p>
+    <h1 class="hero-title">Fondamenti del Karate</h1>
+    <p class="hero-sub">Karate, Aikido, Judo — per tutti i livelli</p>
+    <p class="hero-meta">
+      1 Ora <span>·</span> Con Salvatore
+    </p>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule"></div>
 
   <!-- FORM -->
   <section class="form-section">
@@ -673,7 +584,7 @@
 
         <!-- Nome -->
         <div class="field" id="field-name">
-          <label class="field-label" for="inputName">Il tuo nome</label>
+          <label class="field-label" for="inputName">Nome</label>
           <input
             class="field-input"
             type="text"
@@ -706,90 +617,90 @@
           <span class="field-err" id="err-phone">Inserisci un numero valido.</span>
         </div>
 
-        <!-- Time slots — all visible, 2-column grid -->
+        <!-- Time slots -->
         <div class="slots-section" id="slots-section">
-          <div class="slots-label">Scegli i tuoi orari</div>
-          <div class="slots-hint">Tocca gli orari in cui sei libero. Puoi sceglierne piu' di uno.</div>
+          <div class="slots-heading">Orari disponibili</div>
+          <div class="slots-hint">Seleziona tutti gli orari in cui sei libero.</div>
 
-          <!-- LUNEDI -->
+          <!-- Lunedi -->
           <div class="day-group">
-            <div class="day-heading">Lunedi</div>
+            <div class="day-label">Lunedi</div>
             <div class="slots-grid">
               <div>
                 <input class="slot-cb" type="checkbox" id="lun-18" name="slots" value="Lunedi 18:00-19:00" />
-                <label class="slot-card" for="lun-18">Lunedi<br>18:00–19:00</label>
+                <label class="slot-card" for="lun-18">18:00–19:00<small>Lunedi</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="lun-19" name="slots" value="Lunedi 19:00-20:00" />
-                <label class="slot-card" for="lun-19">Lunedi<br>19:00–20:00</label>
+                <label class="slot-card" for="lun-19">19:00–20:00<small>Lunedi</small></label>
               </div>
             </div>
           </div>
 
-          <!-- MERCOLEDI -->
+          <!-- Mercoledi -->
           <div class="day-group">
-            <div class="day-heading">Mercoledi</div>
+            <div class="day-label">Mercoledi</div>
             <div class="slots-grid">
               <div>
                 <input class="slot-cb" type="checkbox" id="mer-18" name="slots" value="Mercoledi 18:00-19:00" />
-                <label class="slot-card" for="mer-18">Mercoledi<br>18:00–19:00</label>
+                <label class="slot-card" for="mer-18">18:00–19:00<small>Mercoledi</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="mer-19" name="slots" value="Mercoledi 19:00-20:00" />
-                <label class="slot-card" for="mer-19">Mercoledi<br>19:00–20:00</label>
+                <label class="slot-card" for="mer-19">19:00–20:00<small>Mercoledi</small></label>
               </div>
             </div>
           </div>
 
-          <!-- VENERDI -->
+          <!-- Venerdi -->
           <div class="day-group">
-            <div class="day-heading">Venerdi</div>
+            <div class="day-label">Venerdi</div>
             <div class="slots-grid">
               <div>
                 <input class="slot-cb" type="checkbox" id="ven-18" name="slots" value="Venerdi 18:00-19:00" />
-                <label class="slot-card" for="ven-18">Venerdi<br>18:00–19:00</label>
+                <label class="slot-card" for="ven-18">18:00–19:00<small>Venerdi</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="ven-19" name="slots" value="Venerdi 19:00-20:00" />
-                <label class="slot-card" for="ven-19">Venerdi<br>19:00–20:00</label>
+                <label class="slot-card" for="ven-19">19:00–20:00<small>Venerdi</small></label>
               </div>
             </div>
           </div>
 
-          <!-- SABATO -->
+          <!-- Sabato -->
           <div class="day-group">
-            <div class="day-heading">Sabato</div>
+            <div class="day-label">Sabato</div>
             <div class="slots-grid">
               <div>
                 <input class="slot-cb" type="checkbox" id="sab-09" name="slots" value="Sabato 09:00-10:00" />
-                <label class="slot-card" for="sab-09">Sabato<br>09:00–10:00</label>
+                <label class="slot-card" for="sab-09">09:00–10:00<small>Sabato</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="sab-10" name="slots" value="Sabato 10:00-11:00" />
-                <label class="slot-card" for="sab-10">Sabato<br>10:00–11:00</label>
+                <label class="slot-card" for="sab-10">10:00–11:00<small>Sabato</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="sab-11" name="slots" value="Sabato 11:00-12:00" />
-                <label class="slot-card" for="sab-11">Sabato<br>11:00–12:00</label>
+                <label class="slot-card" for="sab-11">11:00–12:00<small>Sabato</small></label>
               </div>
             </div>
           </div>
 
-          <!-- DOMENICA -->
+          <!-- Domenica -->
           <div class="day-group">
-            <div class="day-heading">Domenica</div>
+            <div class="day-label">Domenica</div>
             <div class="slots-grid">
               <div>
                 <input class="slot-cb" type="checkbox" id="dom-09" name="slots" value="Domenica 09:00-10:00" />
-                <label class="slot-card" for="dom-09">Domenica<br>09:00–10:00</label>
+                <label class="slot-card" for="dom-09">09:00–10:00<small>Domenica</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="dom-10" name="slots" value="Domenica 10:00-11:00" />
-                <label class="slot-card" for="dom-10">Domenica<br>10:00–11:00</label>
+                <label class="slot-card" for="dom-10">10:00–11:00<small>Domenica</small></label>
               </div>
               <div>
                 <input class="slot-cb" type="checkbox" id="dom-11" name="slots" value="Domenica 11:00-12:00" />
-                <label class="slot-card" for="dom-11">Domenica<br>11:00–12:00</label>
+                <label class="slot-card" for="dom-11">11:00–12:00<small>Domenica</small></label>
               </div>
             </div>
           </div>
@@ -800,7 +711,7 @@
         <!-- Note -->
         <div class="field">
           <label class="field-label" for="inputNotes">
-            Vuoi aggiungere qualcosa?<span class="opt">(facoltativo)</span>
+            Note <span class="opt">(facoltativo)</span>
           </label>
           <textarea
             class="field-input"
@@ -814,9 +725,9 @@
         <div class="submit-wrap">
           <button type="submit" class="submit-btn" id="submitBtn">
             <div class="btn-spinner"></div>
-            <span class="btn-label">INVIA</span>
+            <span class="btn-label">Conferma</span>
           </button>
-          <p class="submit-note">Salvatore ti ricontatterra' su WhatsApp</p>
+          <p class="submit-note">Salvatore ti ricontattara su WhatsApp</p>
         </div>
 
       </form>
@@ -829,47 +740,47 @@
   </footer>
 
   <!-- SUCCESS OVERLAY -->
-  <div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true">
+  <div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true" aria-labelledby="success-title-text">
     <div class="success-box">
       <div class="check-ring">
         <svg class="check-svg" viewBox="0 0 24 24">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <div class="success-title">Fatto!</div>
-      <p class="success-body">Salvatore ti contatterra' su WhatsApp per confermare.</p>
+      <div class="success-title" id="success-title-text">Prenotazione inviata</div>
+      <p class="success-body">Salvatore ti contatterà su WhatsApp per confermare l'orario.</p>
       <button class="success-btn" id="successCloseBtn">Chiudi</button>
     </div>
   </div>
 
   <script src="config.js"></script>
   <script>
-    /* ── Input cleanup ──────────────────────────── */
-    document.getElementById('inputName').addEventListener('input', function() {
+    /* ── Live validation cleanup ─── */
+    document.getElementById('inputName').addEventListener('input', function () {
       document.getElementById('field-name').classList.remove('error');
     });
 
-    document.getElementById('inputPhone').addEventListener('input', function() {
+    document.getElementById('inputPhone').addEventListener('input', function () {
       document.getElementById('field-phone').classList.remove('error');
       this.value = this.value.replace(/[^\d\s\-]/g, '');
     });
 
-    document.querySelectorAll('[name="slots"]').forEach(function(cb) {
-      cb.addEventListener('change', function() {
+    document.querySelectorAll('[name="slots"]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
         if (document.querySelectorAll('[name="slots"]:checked').length > 0) {
           document.getElementById('err-slots').classList.remove('show');
         }
       });
     });
 
-    /* ── Form submit ────────────────────────────── */
-    document.getElementById('regForm').addEventListener('submit', async function(e) {
+    /* ── Form submit ─────────────── */
+    document.getElementById('regForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       var nameVal  = document.getElementById('inputName').value.trim();
       var phoneVal = document.getElementById('inputPhone').value.trim();
       var notesVal = document.getElementById('inputNotes').value.trim();
-      var slots    = Array.from(document.querySelectorAll('[name="slots"]:checked')).map(function(c) { return c.value; });
+      var slots    = Array.from(document.querySelectorAll('[name="slots"]:checked')).map(function (c) { return c.value; });
 
       var valid = true;
 
@@ -908,8 +819,8 @@
       };
 
       try {
-        var res = await fetch(API_URL);
-        var db  = await res.json();
+        var res  = await fetch(API_URL);
+        var db   = await res.json();
         var regs = db.registrations || [];
         regs.push(newReg);
 
@@ -932,17 +843,17 @@
       }
     });
 
-    /* ── Success close ──────────────────────────── */
+    /* ── Success close ───────────── */
     function closeSuccess() {
       document.getElementById('successOverlay').classList.remove('show');
       document.body.style.overflow = '';
       document.getElementById('regForm').reset();
-      document.querySelectorAll('.field.error').forEach(function(f) { f.classList.remove('error'); });
+      document.querySelectorAll('.field.error').forEach(function (f) { f.classList.remove('error'); });
       document.getElementById('err-slots').classList.remove('show');
     }
 
     document.getElementById('successCloseBtn').addEventListener('click', closeSuccess);
-    document.getElementById('successOverlay').addEventListener('click', function(e) {
+    document.getElementById('successOverlay').addEventListener('click', function (e) {
       if (e.target === this) closeSuccess();
     });
   </script>

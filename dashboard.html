@@ -23,21 +23,28 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #0A0A0A;
-      --card:   #1A1A1A;
-      --card2:  #222222;
-      --sep:    rgba(255,255,255,0.08);
-      --sep2:   rgba(255,255,255,0.13);
-      --sand:   #C8A87C;
-      --sand-d: rgba(200,168,124,0.15);
-      --sand-l: rgba(200,168,124,0.08);
-      --green:  #4CAF6E;
-      --yellow: #E8B84B;
-      --gray:   #555555;
-      --white:  #FFFFFF;
-      --dim:    #AAAAAA;
-      --dim2:   #666666;
-      --r:      16px;
+      --bg:        #0A0A0A;
+      --surface:   #141414;
+      --surface2:  #1A1A1A;
+      --surface3:  #212121;
+      --sep:       rgba(255,255,255,0.07);
+      --sep2:      rgba(255,255,255,0.12);
+      --sand:      #C8A87C;
+      --sand-dim:  rgba(200,168,124,0.12);
+      --sand-glow: rgba(200,168,124,0.08);
+      --green:     #4CAF6E;
+      --green-dim: rgba(76,175,110,0.12);
+      --yellow:    #D4A843;
+      --yellow-dim:rgba(212,168,67,0.12);
+      --gray:      #444;
+      --white:     #FFFFFF;
+      --t2:        #999999;
+      --t3:        #555555;
+      --red:       #E05252;
+      --red-dim:   rgba(224,82,82,0.12);
+      --r-sm:      10px;
+      --r:         14px;
+      --r-lg:      18px;
     }
 
     html { background: var(--bg); }
@@ -46,564 +53,19 @@
       background: var(--bg);
       color: var(--white);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 17px;
-      line-height: 1.55;
+      font-size: 15px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
     }
 
     ::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; }
 
-    /* ── STICKY HEADER ── */
-    #header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(10,10,10,0.88);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border-bottom: 1px solid var(--sep);
-      padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    #header-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.3px;
-      color: var(--white);
-    }
-
-    #header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .hbtn {
-      height: 44px;
-      min-width: 44px;
-      border-radius: 22px;
-      border: 1px solid var(--sep2);
-      background: var(--card);
-      color: var(--dim);
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      padding: 0 14px;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.15s, color 0.15s;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-    }
-    .hbtn:active { background: var(--card2); color: var(--sand); }
-    .hbtn i { font-size: 15px; }
-
-    /* ── NOTIFICATION BANNER ── */
-    #notif-banner {
-      display: none;
-      background: var(--sand-d);
-      border-bottom: 1px solid rgba(200,168,124,0.2);
-      padding: 14px 20px;
-      font-size: 15px;
-      color: var(--sand);
-      align-items: center;
-      gap: 12px;
-    }
-    #notif-banner i { font-size: 18px; flex-shrink: 0; }
-    #notif-banner-text { flex: 1; }
-    #notif-close {
-      background: none;
-      border: none;
-      color: var(--sand);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #notif-enable-btn {
-      background: var(--sand);
-      color: #000;
-      border: none;
-      border-radius: 22px;
-      padding: 8px 16px;
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* ── MAIN SCROLL ── */
-    #main {
-      padding: 0 0 60px;
-    }
-
-    /* ── SECTIONS ── */
-    .section {
-      padding: 28px 20px 0;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.9px;
-      text-transform: uppercase;
-      color: var(--dim2);
-      margin-bottom: 16px;
-    }
-
-    /* ── BIG COUNTER ── */
-    #big-counter {
-      padding: 32px 20px 0;
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-    }
-
-    #big-number {
-      font-size: 64px;
-      font-weight: 800;
-      letter-spacing: -3px;
-      color: var(--sand);
-      line-height: 1;
-    }
-
-    #big-label {
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--dim);
-      padding-bottom: 8px;
-    }
-
-    /* ── TOP SLOTS CARDS ── */
-    #top-slots {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 16px 20px 0;
-    }
-
-    .top-slot-card {
-      background: var(--card);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .top-slot-left { flex: 1; min-width: 0; }
-
-    .top-slot-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: -0.3px;
-    }
-
-    .top-slot-count {
-      font-size: 15px;
-      color: var(--dim);
-      margin-top: 3px;
-    }
-
-    .slot-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .dot-green  { background: var(--green); box-shadow: 0 0 8px rgba(76,175,110,0.5); }
-    .dot-yellow { background: var(--yellow); box-shadow: 0 0 8px rgba(232,184,75,0.5); }
-    .dot-gray   { background: var(--gray); }
-
-    /* ── PROSSIMA LEZIONE ── */
-    #next-lesson-card {
-      background: var(--card);
-      border: 1px solid var(--sep2);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-
-    #next-lesson-header {
-      padding: 20px 20px 16px;
-      border-bottom: 1px solid var(--sep);
-    }
-
-    #next-lesson-slot {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: -0.5px;
-    }
-
-    #next-lesson-subtitle {
-      font-size: 16px;
-      color: var(--dim);
-      margin-top: 4px;
-    }
-
-    #next-people-list {
-      padding: 16px 20px;
-    }
-
-    .person-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--sep);
-    }
-    .person-row:last-child { border-bottom: none; }
-
-    .person-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--sand-d);
-      color: var(--sand);
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .person-info { flex: 1; min-width: 0; }
-
-    .person-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .person-phone {
-      font-size: 15px;
-      color: var(--sand);
-      margin-top: 2px;
-      text-decoration: none;
-      display: block;
-    }
-
-    .confirmed-badge {
-      font-size: 13px;
-      color: var(--green);
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-
-    #next-lesson-actions {
-      padding: 0 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* ── CONFIRMED SUMMARY ── */
-    #confirmed-summary {
-      background: rgba(76,175,110,0.1);
-      border: 1px solid rgba(76,175,110,0.25);
-      border-radius: 12px;
-      padding: 14px 18px;
-      font-size: 17px;
-      color: var(--green);
-      font-weight: 600;
-      text-align: center;
-    }
-
-    /* ── BUTTONS ── */
-    .btn-big {
-      width: 100%;
-      height: 60px;
-      border-radius: 14px;
-      border: none;
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, opacity 0.1s;
-    }
-    .btn-big:active { transform: scale(0.97); opacity: 0.9; }
-
-    .btn-sand {
-      background: var(--sand);
-      color: #000000;
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--sand);
-      border: 1.5px solid var(--sand);
-    }
-
-    .btn-medium {
-      height: 52px;
-      border-radius: 12px;
-      border: none;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, opacity 0.1s;
-    }
-    .btn-medium:active { transform: scale(0.97); opacity: 0.9; }
-
-    .btn-small-text {
-      background: none;
-      border: none;
-      color: var(--dim);
-      font-family: 'Inter', sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 6px 0;
-      -webkit-tap-highlight-color: transparent;
-      text-align: center;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .btn-small-text:active { opacity: 0.6; }
-
-    /* ── TUTTI GLI ORARI ── */
-    #all-slots-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .slot-row {
-      background: var(--card);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-
-    .slot-row-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 20px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    .slot-row-name {
-      flex: 1;
-      font-size: 19px;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    .slot-badge {
-      background: var(--sand-d);
-      color: var(--sand);
-      font-size: 14px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 99px;
-      flex-shrink: 0;
-    }
-
-    .slot-chevron {
-      color: var(--dim2);
-      font-size: 14px;
-      transition: transform 0.2s;
-      flex-shrink: 0;
-    }
-    .slot-row.open .slot-chevron { transform: rotate(180deg); }
-
-    .slot-row-body {
-      display: none;
-      border-top: 1px solid var(--sep);
-      padding: 0 20px 16px;
-    }
-    .slot-row.open .slot-row-body { display: block; }
-
-    .slot-person-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--sep);
-      font-size: 16px;
-    }
-    .slot-person-item:last-of-type { border-bottom: none; }
-    .slot-person-item i { color: var(--dim2); font-size: 14px; flex-shrink: 0; }
-
-    .slot-send-btn {
-      width: 100%;
-      margin-top: 14px;
-      height: 52px;
-      background: var(--sand-d);
-      color: var(--sand);
-      border: 1.5px solid rgba(200,168,124,0.3);
-      border-radius: 12px;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, opacity 0.1s;
-    }
-    .slot-send-btn:active { transform: scale(0.97); opacity: 0.9; }
-
-    /* ── TUTTI GLI ISCRITTI ── */
-    #all-people-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .person-card {
-      background: var(--card);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .person-card-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--sand-d);
-      color: var(--sand);
-      font-size: 18px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .person-card-info { flex: 1; min-width: 0; }
-
-    .person-card-name {
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--white);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .person-card-phone {
-      font-size: 16px;
-      color: var(--sand);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 3px;
-    }
-
-    .person-card-slots {
-      font-size: 14px;
-      color: var(--dim);
-      margin-top: 4px;
-      line-height: 1.4;
-    }
-
-    .delete-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(255,59,48,0.12);
-      border: 1px solid rgba(255,59,48,0.2);
-      color: #FF3B30;
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      -webkit-tap-highlight-color: transparent;
-      transition: background 0.15s;
-    }
-    .delete-btn:active { background: rgba(255,59,48,0.25); }
-
-    /* ── TESTO INVITO ── */
-    #invite-box {
-      background: var(--card);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
-      padding: 20px;
-    }
-
-    #invite-text-preview {
-      font-size: 17px;
-      color: var(--dim);
-      line-height: 1.6;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
-
-    #invite-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* ── TOAST ── */
-    #toast {
-      position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(255,255,255,0.95);
-      color: #000;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 14px 24px;
-      border-radius: 99px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 9999;
-      transition: opacity 0.2s, transform 0.2s;
-      max-width: calc(100vw - 40px);
-      text-align: center;
-    }
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* ── LOADING ── */
+    /* ────────────────────────────────
+       LOADING
+    ──────────────────────────────── */
     #loading-screen {
       position: fixed;
       inset: 0;
@@ -612,69 +74,791 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 18px;
       z-index: 9999;
+      transition: opacity 0.3s;
     }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
 
-    #loading-screen .spin {
-      width: 48px;
-      height: 48px;
-      border: 3px solid var(--sep2);
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--sep2);
       border-top-color: var(--sand);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.75s linear infinite;
     }
-
     #loading-screen p {
-      font-size: 16px;
-      color: var(--dim);
+      font-size: 13px;
+      color: var(--t3);
+      letter-spacing: 0.3px;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ── EMPTY STATE ── */
-    .empty-state {
-      padding: 40px 20px;
+    /* ────────────────────────────────
+       TOAST
+    ──────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(28,28,28,0.95);
+      border: 1px solid var(--sep2);
+      backdrop-filter: blur(20px);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 99px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 9998;
+      transition: opacity 0.2s, transform 0.2s;
+      max-width: calc(100vw - 40px);
       text-align: center;
-      color: var(--dim2);
-      font-size: 16px;
     }
-    .empty-state i {
-      font-size: 36px;
-      display: block;
-      margin-bottom: 12px;
-      color: var(--dim2);
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ────────────────────────────────
+       NOTIFICATION BANNER
+    ──────────────────────────────── */
+    #notif-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--sand-dim);
+      border-bottom: 1px solid rgba(200,168,124,0.15);
+      font-size: 13px;
+      color: var(--sand);
+    }
+    #notif-banner i { font-size: 14px; flex-shrink: 0; }
+    #notif-banner-text { flex: 1; line-height: 1.4; }
+    #notif-enable-btn {
+      background: var(--sand);
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #notif-close {
+      background: none;
+      border: none;
+      color: var(--t3);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px;
+      flex-shrink: 0;
+      line-height: 1;
     }
 
-    /* ── DIVIDER ── */
-    .divider {
+    /* ────────────────────────────────
+       HEADER
+    ──────────────────────────────── */
+    #header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--sep);
+      padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--sand-dim);
+      border: 1px solid rgba(200,168,124,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--sand);
+      flex-shrink: 0;
+    }
+
+    #header-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      color: var(--white);
+    }
+
+    #header-sub {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 1px;
+      letter-spacing: 0.1px;
+    }
+
+    #header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hbtn {
+      height: 34px;
+      min-width: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--sep2);
+      background: var(--surface2);
+      color: var(--t2);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 0 12px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s, color 0.12s;
+    }
+    .hbtn:active { background: var(--surface3); color: var(--sand); }
+    .hbtn i { font-size: 12px; }
+
+    /* ────────────────────────────────
+       MAIN CONTENT
+    ──────────────────────────────── */
+    #main {
+      padding-bottom: 60px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ────────────────────────────────
+       SECTION LABELS
+    ──────────────────────────────── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 28px 20px 12px;
+    }
+
+    /* ────────────────────────────────
+       RIEPILOGO — big counter
+    ──────────────────────────────── */
+    #summary-block {
+      padding: 28px 20px 0;
+    }
+
+    #counter-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    #big-number {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -2.5px;
+      color: var(--sand);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #big-label {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--t2);
+      letter-spacing: -0.2px;
+    }
+
+    #summary-sub {
+      font-size: 12px;
+      color: var(--t3);
+      margin-bottom: 20px;
+    }
+
+    /* ────────────────────────────────
+       TOP SLOTS
+    ──────────────────────────────── */
+    #top-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--sep);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .top-slot-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      transition: background 0.12s;
+    }
+    .top-slot-row:first-child { border-radius: var(--r) var(--r) 0 0; }
+    .top-slot-row:last-child  { border-radius: 0 0 var(--r) var(--r); }
+
+    .ts-rank {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--t3);
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ts-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .ts-dot.green  { background: var(--green); box-shadow: 0 0 6px rgba(76,175,110,0.6); }
+    .ts-dot.yellow { background: var(--yellow); box-shadow: 0 0 6px rgba(212,168,67,0.6); }
+    .ts-dot.gray   { background: var(--gray); }
+
+    .ts-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.1px;
+    }
+
+    .ts-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--t2);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ts-bar-track {
+      width: 60px;
+      height: 3px;
+      background: var(--sep2);
+      border-radius: 2px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ts-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .ts-bar-fill.green  { background: var(--green); }
+    .ts-bar-fill.yellow { background: var(--yellow); }
+    .ts-bar-fill.gray   { background: var(--gray); }
+
+    /* ────────────────────────────────
+       SEPARATOR
+    ──────────────────────────────── */
+    .sep-line {
       height: 1px;
       background: var(--sep);
       margin: 28px 20px 0;
     }
 
-    /* ── LAST UPDATE ── */
-    #last-update {
-      text-align: center;
-      font-size: 13px;
-      color: var(--dim2);
-      padding: 20px 20px 0;
+    /* ────────────────────────────────
+       PROSSIMA LEZIONE
+    ──────────────────────────────── */
+    #next-card {
+      margin: 0 20px;
+      background: var(--surface);
+      border: 1px solid var(--sep2);
+      border-radius: var(--r-lg);
+      overflow: hidden;
     }
 
-    /* ── RESPONSIVE ── */
+    #next-card-header {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--sep);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #next-slot-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.4px;
+      line-height: 1.2;
+    }
+
+    #next-slot-sub {
+      font-size: 13px;
+      color: var(--t2);
+      margin-top: 4px;
+    }
+
+    #next-slot-badge {
+      background: var(--sand-dim);
+      color: var(--sand);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(200,168,124,0.2);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* confirmed summary */
+    #confirmed-summary {
+      display: none;
+      margin: 16px 20px 0;
+      background: var(--green-dim);
+      border: 1px solid rgba(76,175,110,0.2);
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    #confirmed-summary i { font-size: 13px; }
+
+    /* people list in next lesson */
+    #next-people-list {
+      padding: 4px 20px 8px;
+    }
+
+    .person-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--sep);
+    }
+    .person-row:last-child { border-bottom: none; }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--sand-dim);
+      color: var(--sand);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
+    }
+
+    .person-info { flex: 1; min-width: 0; }
+
+    .person-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-phone {
+      font-size: 12px;
+      color: var(--sand);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+      opacity: 0.85;
+    }
+    .person-phone:active { opacity: 0.6; }
+
+    .confirmed-tag {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    /* next lesson actions */
+    #next-lesson-actions {
+      padding: 16px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--sep);
+    }
+
+    /* ────────────────────────────────
+       BUTTONS
+    ──────────────────────────────── */
+    .btn-primary {
+      width: 100%;
+      height: 50px;
+      border-radius: var(--r-sm);
+      border: none;
+      background: var(--sand);
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, opacity 0.1s;
+    }
+    .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+    .btn-primary:disabled { opacity: 0.55; pointer-events: none; }
+
+    .btn-secondary {
+      width: 100%;
+      height: 44px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--sep2);
+      background: var(--surface2);
+      color: var(--t2);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s, background 0.1s;
+    }
+    .btn-secondary:active { transform: scale(0.98); background: var(--surface3); }
+
+    .btn-ghost {
+      background: none;
+      border: none;
+      color: var(--t2);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-ghost:active { opacity: 0.5; }
+
+    /* ────────────────────────────────
+       TUTTI GLI ORARI
+    ──────────────────────────────── */
+    #all-slots-list {
+      margin: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--sep);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .slot-row {
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .slot-row:first-child { border-radius: var(--r) var(--r) 0 0; }
+    .slot-row:last-child  { border-radius: 0 0 var(--r) var(--r); }
+
+    .slot-row-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .slot-row-header:active { background: var(--surface2); }
+
+    .slot-row-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .slot-count-badge {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      background: var(--surface3);
+      border: 1px solid var(--sep2);
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .slot-chevron {
+      color: var(--t3);
+      font-size: 11px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .slot-row.open .slot-chevron { transform: rotate(180deg); }
+
+    .slot-row-body {
+      display: none;
+      border-top: 1px solid var(--sep);
+      padding: 8px 16px 16px;
+      background: var(--surface2);
+    }
+    .slot-row.open .slot-row-body { display: block; }
+
+    .slot-person-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--sep);
+      font-size: 13px;
+    }
+    .slot-person-item:last-of-type { border-bottom: none; }
+
+    .slot-person-name { flex: 1; color: var(--white); }
+
+    .slot-wa-link {
+      color: var(--green);
+      font-size: 16px;
+      text-decoration: none;
+      flex-shrink: 0;
+      opacity: 0.8;
+      transition: opacity 0.12s;
+    }
+    .slot-wa-link:active { opacity: 0.4; }
+
+    .slot-send-btn {
+      width: 100%;
+      margin-top: 12px;
+      height: 40px;
+      background: var(--surface3);
+      color: var(--t2);
+      border: 1px solid var(--sep2);
+      border-radius: var(--r-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s, color 0.1s;
+    }
+    .slot-send-btn:active { background: var(--sand-dim); color: var(--sand); }
+
+    /* ────────────────────────────────
+       TUTTI GLI ISCRITTI
+    ──────────────────────────────── */
+    #all-people-list {
+      margin: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--sep);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .person-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      transition: background 0.1s;
+    }
+    .person-card:first-child { border-radius: var(--r) var(--r) 0 0; }
+    .person-card:last-child  { border-radius: 0 0 var(--r) var(--r); }
+
+    .person-card-info { flex: 1; min-width: 0; }
+
+    .person-card-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .person-card-phone {
+      font-size: 12px;
+      color: var(--sand);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+      opacity: 0.8;
+    }
+
+    .person-card-slots {
+      font-size: 11px;
+      color: var(--t3);
+      margin-top: 3px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .delete-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--red-dim);
+      border: 1px solid rgba(224,82,82,0.15);
+      color: var(--red);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s;
+      opacity: 0.7;
+    }
+    .delete-btn:active { background: rgba(224,82,82,0.25); opacity: 1; }
+
+    /* ────────────────────────────────
+       TESTO INVITO
+    ──────────────────────────────── */
+    #invite-block {
+      margin: 0 20px;
+      background: var(--surface);
+      border: 1px solid var(--sep);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    #invite-preview {
+      padding: 16px;
+      border-bottom: 1px solid var(--sep);
+    }
+
+    #invite-preview p {
+      font-size: 13px;
+      color: var(--t2);
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    #invite-actions {
+      padding: 14px 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-invite {
+      flex: 1;
+      height: 40px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--sep2);
+      background: var(--surface2);
+      color: var(--t2);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s, color 0.1s;
+    }
+    .btn-invite:active { background: var(--surface3); }
+    .btn-invite.wa { color: #25D366; border-color: rgba(37,211,102,0.2); }
+    .btn-invite.wa:active { background: rgba(37,211,102,0.08); }
+
+    /* ────────────────────────────────
+       LAST UPDATE / FOOTER
+    ──────────────────────────────── */
+    #footer-info {
+      text-align: center;
+      font-size: 11px;
+      color: var(--t3);
+      padding: 24px 20px 0;
+    }
+
+    /* ────────────────────────────────
+       EMPTY STATE
+    ──────────────────────────────── */
+    .empty-state {
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .empty-state i {
+      font-size: 24px;
+      color: var(--t3);
+      display: block;
+      margin-bottom: 10px;
+    }
+    .empty-state p {
+      font-size: 13px;
+      color: var(--t3);
+    }
+
+    /* ────────────────────────────────
+       RESPONSIVE — wider screens
+    ──────────────────────────────── */
     @media (min-width: 480px) {
-      #big-number { font-size: 80px; }
+      #big-number { font-size: 56px; }
     }
   </style>
 </head>
 <body>
 
-<!-- LOADING -->
+<!-- LOADING SCREEN -->
 <div id="loading-screen">
-  <div class="spin"></div>
-  <p>Caricamento...</p>
+  <div class="spinner"></div>
+  <p>Caricamento</p>
 </div>
 
 <!-- TOAST -->
@@ -683,672 +867,717 @@
 <!-- NOTIFICATION BANNER -->
 <div id="notif-banner">
   <i class="fa-solid fa-bell"></i>
-  <span id="notif-banner-text">Attiva le notifiche per sapere quando si iscrive qualcuno</span>
+  <span id="notif-banner-text">Attiva le notifiche per le nuove iscrizioni</span>
   <button id="notif-enable-btn" onclick="enableNotifications()">Attiva</button>
   <button id="notif-close" onclick="dismissNotifBanner()"><i class="fa-solid fa-xmark"></i></button>
 </div>
 
-<!-- STICKY HEADER -->
+<!-- HEADER -->
 <div id="header">
-  <div id="header-title">Fondamenti del Karate</div>
+  <div id="header-brand">
+    <div id="header-icon"><i class="fa-solid fa-tornado"></i></div>
+    <div>
+      <div id="header-title">Fondamenti del Karate</div>
+      <div id="header-sub">Admin dashboard</div>
+    </div>
+  </div>
   <div id="header-actions">
     <button class="hbtn" onclick="exportCSV()" title="Esporta CSV">
-      <i class="fa-solid fa-file-csv"></i>
+      <i class="fa-solid fa-arrow-down-to-line"></i>
+      <span>CSV</span>
     </button>
     <button class="hbtn" onclick="loadData(true)" id="refresh-btn" title="Aggiorna">
-      <i class="fa-solid fa-rotate" id="refresh-icon"></i>
+      <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
     </button>
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div id="main">
 
-  <!-- 1. RIEPILOGO -->
-  <div id="big-counter">
-    <div id="big-number">—</div>
-    <div id="big-label">iscritti</div>
+  <!-- ═══════════════════════════
+       1. RIEPILOGO
+  ═══════════════════════════ -->
+  <div id="summary-block">
+    <div id="counter-row">
+      <div id="big-number">—</div>
+      <div id="big-label">iscritti</div>
+    </div>
+    <div id="summary-sub">Aggiornato adesso</div>
+    <div id="top-slots"></div>
   </div>
-  <div id="top-slots"></div>
 
-  <div class="divider"></div>
+  <div class="sep-line"></div>
 
-  <!-- 2. PROSSIMA LEZIONE -->
-  <div class="section">
-    <div class="section-title">Prossima lezione</div>
-    <div id="next-lesson-card">
-      <div id="next-lesson-header">
-        <div id="next-lesson-slot">—</div>
-        <div id="next-lesson-subtitle">—</div>
+  <!-- ═══════════════════════════
+       2. PROSSIMA LEZIONE
+  ═══════════════════════════ -->
+  <div class="section-label">Prossima lezione</div>
+
+  <div id="next-card">
+    <div id="next-card-header">
+      <div>
+        <div id="next-slot-name">—</div>
+        <div id="next-slot-sub">—</div>
       </div>
-      <div id="next-people-list"></div>
-      <div id="next-lesson-actions">
-        <div id="confirmed-summary" style="display:none"></div>
-        <button class="btn-big btn-sand" id="wa-btn" onclick="sendWhatsApp()">
-          <i class="fa-brands fa-whatsapp"></i>
-          INVIA SU WHATSAPP
-        </button>
-        <button class="btn-small-text" onclick="copyLessonLink()">
-          <i class="fa-solid fa-link"></i>
-          Copia link conferma
-        </button>
-      </div>
+      <div id="next-slot-badge">—</div>
+    </div>
+
+    <div id="confirmed-summary">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="confirmed-summary-text"></span>
+    </div>
+
+    <div id="next-people-list"></div>
+
+    <div id="next-lesson-actions">
+      <button class="btn-primary" id="wa-btn" onclick="sendWhatsApp()">
+        <i class="fa-brands fa-whatsapp"></i>
+        INVIA SU WHATSAPP
+      </button>
+      <button class="btn-ghost" onclick="copyLessonLink()">
+        <i class="fa-solid fa-link"></i>
+        Copia link conferma
+      </button>
     </div>
   </div>
 
-  <div class="divider"></div>
+  <div class="sep-line"></div>
 
-  <!-- 3. TUTTI GLI ORARI -->
-  <div class="section">
-    <div class="section-title">Tutti gli orari</div>
-    <div id="all-slots-list"></div>
-  </div>
+  <!-- ═══════════════════════════
+       3. TUTTI GLI ORARI
+  ═══════════════════════════ -->
+  <div class="section-label">Tutti gli orari</div>
+  <div id="all-slots-list"></div>
 
-  <div class="divider"></div>
+  <div class="sep-line"></div>
 
-  <!-- 4. TUTTI GLI ISCRITTI -->
-  <div class="section">
-    <div class="section-title">Tutti gli iscritti</div>
-    <div id="all-people-list"></div>
-  </div>
+  <!-- ═══════════════════════════
+       4. TUTTI GLI ISCRITTI
+  ═══════════════════════════ -->
+  <div class="section-label">Tutti gli iscritti</div>
+  <div id="all-people-list"></div>
 
-  <div class="divider"></div>
+  <div class="sep-line"></div>
 
-  <!-- 5. TESTO INVITO -->
-  <div class="section">
-    <div class="section-title">Testo invito</div>
-    <div id="invite-box">
-      <div id="invite-text-preview"></div>
-      <div id="invite-actions">
-        <button class="btn-big btn-sand" onclick="copyInviteText()">
-          <i class="fa-solid fa-copy"></i>
-          COPIA TESTO
-        </button>
-        <button class="btn-big btn-outline" onclick="sendInviteWhatsApp()">
-          <i class="fa-brands fa-whatsapp"></i>
-          INVIA SU WHATSAPP
-        </button>
-      </div>
+  <!-- ═══════════════════════════
+       5. TESTO INVITO
+  ═══════════════════════════ -->
+  <div class="section-label">Testo invito</div>
+  <div id="invite-block">
+    <div id="invite-preview">
+      <p id="invite-text-preview"></p>
+    </div>
+    <div id="invite-actions">
+      <button class="btn-invite" onclick="copyInviteText()">
+        <i class="fa-solid fa-copy"></i>
+        Copia
+      </button>
+      <button class="btn-invite wa" onclick="sendInviteWhatsApp()">
+        <i class="fa-brands fa-whatsapp"></i>
+        WhatsApp
+      </button>
     </div>
   </div>
 
-  <div id="last-update"></div>
-
-  <div style="height: 40px;"></div>
+  <div id="footer-info">—</div>
+  <div style="height:48px;"></div>
 
 </div><!-- /main -->
 
 <script>
-  // ─────────────────────────────────────────────
-  // SLOTS
-  // ─────────────────────────────────────────────
-  const SLOTS = [
-    { day: 'Lunedì',    time: '18:00-19:00' },
-    { day: 'Lunedì',    time: '19:00-20:00' },
-    { day: 'Mercoledì', time: '18:00-19:00' },
-    { day: 'Mercoledì', time: '19:00-20:00' },
-    { day: 'Venerdì',   time: '18:00-19:00' },
-    { day: 'Venerdì',   time: '19:00-20:00' },
-    { day: 'Sabato',    time: '09:00-10:00' },
-    { day: 'Sabato',    time: '10:00-11:00' },
-    { day: 'Sabato',    time: '11:00-12:00' },
-    { day: 'Domenica',  time: '09:00-10:00' },
-    { day: 'Domenica',  time: '10:00-11:00' },
-    { day: 'Domenica',  time: '11:00-12:00' },
-  ];
+// ─────────────────────────────────────────────────────────────
+// SLOTS
+// ─────────────────────────────────────────────────────────────
+const SLOTS = [
+  { day: 'Lunedì',    time: '18:00-19:00' },
+  { day: 'Lunedì',    time: '19:00-20:00' },
+  { day: 'Mercoledì', time: '18:00-19:00' },
+  { day: 'Mercoledì', time: '19:00-20:00' },
+  { day: 'Venerdì',   time: '18:00-19:00' },
+  { day: 'Venerdì',   time: '19:00-20:00' },
+  { day: 'Sabato',    time: '09:00-10:00' },
+  { day: 'Sabato',    time: '10:00-11:00' },
+  { day: 'Sabato',    time: '11:00-12:00' },
+  { day: 'Domenica',  time: '09:00-10:00' },
+  { day: 'Domenica',  time: '10:00-11:00' },
+  { day: 'Domenica',  time: '11:00-12:00' },
+];
 
-  // ─────────────────────────────────────────────
-  // STATE
-  // ─────────────────────────────────────────────
-  let _data = { registrations: [], lessons: [] };
-  let _bestSlot = null;
-  let _lastCount = null;
-  let _notifDismissed = false;
-  let _openSlots = new Set();
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let _data            = { registrations: [], lessons: [] };
+let _bestSlot        = null;
+let _lastCount       = null;
+let _notifDismissed  = false;
+let _openSlots       = new Set();
 
-  // ─────────────────────────────────────────────
-  // HELPERS
-  // ─────────────────────────────────────────────
-  function esc(s) {
-    if (s == null) return '';
-    return String(s)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function waLink(phone, msg) {
+  const p = (phone || '').replace(/\D/g, '');
+  const num = p.startsWith('39') ? p : (p.startsWith('0') ? '39' + p.slice(1) : '39' + p);
+  return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+}
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const diff = Date.now() - new Date(ts).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'adesso';
+  if (m < 60) return `${m} min fa`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h fa`;
+  return `${Math.floor(h / 24)}g fa`;
+}
+
+function initials(name) {
+  if (!name) return '?';
+  return name.trim().split(/\s+/).map(w => w[0] || '').join('').toUpperCase().slice(0, 2);
+}
+
+function slotKey(s) { return `${s.day} ${s.time}`; }
+function slotLabel(s) { return `${s.day} ${s.time}`; }
+function formatSlotForMessage(s) { return `${s.day} alle ${s.time.split('-')[0]}`; }
+
+function showToast(msg, duration = 2400) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+async function copyToClipboard(text, msg) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast(msg || 'Copiato!');
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast(msg || 'Copiato!'); } catch {}
+    document.body.removeChild(ta);
   }
+}
 
-  function waLink(phone, msg) {
-    const p = phone.replace(/\D/g, '');
-    const num = p.startsWith('39') ? p : (p.startsWith('0') ? '39' + p.slice(1) : '39' + p);
-    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+function getRegistrationLink() {
+  return window.location.href.replace('dashboard.html', 'index.html');
+}
+
+function getLessonConfirmLink(lessonId) {
+  const base = window.location.href.replace('dashboard.html', 'conferma.html');
+  return `${base}?id=${lessonId}`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────
+async function loadData(manual = false) {
+  if (manual) {
+    const icon = document.getElementById('refresh-icon');
+    icon.style.animation = 'spin 0.75s linear infinite';
   }
-
-  function timeAgo(ts) {
-    if (!ts) return '';
-    const diff = Date.now() - new Date(ts).getTime();
-    const m = Math.floor(diff / 60000);
-    if (m < 1) return 'adesso';
-    if (m < 60) return `${m} min fa`;
-    const h = Math.floor(m / 60);
-    if (h < 24) return `${h} ore fa`;
-    const d = Math.floor(h / 24);
-    return `${d} giorni fa`;
-  }
-
-  function initials(name) {
-    if (!name) return '?';
-    return name.trim().split(' ').map(w => w[0] || '').join('').toUpperCase().slice(0, 2);
-  }
-
-  function slotKey(s) {
-    return `${s.day} ${s.time}`;
-  }
-
-  function slotLabel(s) {
-    return `${s.day} ${s.time}`;
-  }
-
-  function formatSlotForMessage(s) {
-    const startTime = s.time.split('-')[0];
-    return `${s.day} alle ${startTime}`;
-  }
-
-  function showToast(msg, duration = 2400) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), duration);
-  }
-
-  async function copyToClipboard(text, msg) {
-    try {
-      await navigator.clipboard.writeText(text);
-      showToast(msg || 'Copiato!');
-    } catch {
-      // fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); showToast(msg || 'Copiato!'); } catch {}
-      document.body.removeChild(ta);
-    }
-  }
-
-  function getRegistrationLink() {
-    const base = window.location.href.replace('dashboard.html', 'index.html');
-    return base;
-  }
-
-  function getLessonConfirmLink(lessonId) {
-    const base = window.location.href.replace('dashboard.html', 'index.html');
-    return `${base}?confirm=${lessonId}`;
-  }
-
-  // ─────────────────────────────────────────────
-  // DATA LOADING
-  // ─────────────────────────────────────────────
-  async function loadData(manual = false) {
-    if (manual) {
-      const icon = document.getElementById('refresh-icon');
-      icon.style.animation = 'spin 0.8s linear infinite';
-    }
-    try {
-      const res = await fetch(API_URL, {
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        cache: 'no-store'
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      _data = await res.json();
-      if (!Array.isArray(_data.registrations)) _data.registrations = [];
-      if (!Array.isArray(_data.lessons)) _data.lessons = [];
-      render();
-      checkNewRegistrations();
-      document.getElementById('last-update').textContent =
-        'Aggiornato: ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    } catch (err) {
-      if (manual) showToast('Errore di rete. Riprova.');
-      console.error(err);
-    } finally {
-      if (manual) {
-        setTimeout(() => {
-          const icon = document.getElementById('refresh-icon');
-          icon.style.animation = '';
-        }, 400);
-      }
-    }
-    document.getElementById('loading-screen').style.display = 'none';
-  }
-
-  async function putData() {
-    await fetch(API_URL, {
-      method: 'PUT',
+  try {
+    const res = await fetch(API_URL, {
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(_data)
+      cache: 'no-store'
     });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    _data = await res.json();
+    if (!Array.isArray(_data.registrations)) _data.registrations = [];
+    if (!Array.isArray(_data.lessons)) _data.lessons = [];
+    render();
+    checkNewRegistrations();
+    const now = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('footer-info').textContent = `Aggiornato alle ${now}`;
+    document.getElementById('summary-sub').textContent =
+      `${_data.registrations.length === 1 ? '1 persona iscritta' : `${_data.registrations.length} persone iscritte`} · aggiornato ${now}`;
+  } catch (err) {
+    if (manual) showToast('Errore di rete');
+    console.error(err);
+  } finally {
+    if (manual) {
+      setTimeout(() => {
+        const icon = document.getElementById('refresh-icon');
+        icon.style.animation = '';
+      }, 500);
+    }
+    const ls = document.getElementById('loading-screen');
+    ls.classList.add('hidden');
+    setTimeout(() => { ls.style.display = 'none'; }, 300);
+  }
+}
+
+async function putData() {
+  await fetch(API_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(_data)
+  });
+}
+
+function checkNewRegistrations() {
+  const count = _data.registrations.length;
+  if (_lastCount !== null && count > _lastCount) {
+    const diff = count - _lastCount;
+    const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
+    showToast(msg, 3500);
+    if (Notification.permission === 'granted') {
+      try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
+    }
+  }
+  _lastCount = count;
+}
+
+// ─────────────────────────────────────────────────────────────
+// LESSON MANAGEMENT
+// ─────────────────────────────────────────────────────────────
+async function createLesson(slot) {
+  const key = slotKey(slot);
+  let lesson = _data.lessons.find(l => l.slotKey === key);
+  if (lesson) return lesson;
+  lesson = {
+    id: 'lesson_' + Date.now(),
+    slotKey: key,
+    slotDay: slot.day,
+    slotTime: slot.time,
+    createdAt: new Date().toISOString(),
+    confirmedIds: []
+  };
+  _data.lessons.push(lesson);
+  await putData();
+  return lesson;
+}
+
+function getLessonForSlot(slot) {
+  return _data.lessons.find(l => l.slotKey === slotKey(slot)) || null;
+}
+
+// ─────────────────────────────────────────────────────────────
+// SLOT COUNTS
+// ─────────────────────────────────────────────────────────────
+function getSlotCounts() {
+  const counts = {};
+  SLOTS.forEach(s => { counts[slotKey(s)] = []; });
+  _data.registrations.forEach(r => {
+    if (Array.isArray(r.slots)) {
+      r.slots.forEach(sk => {
+        if (counts[sk] !== undefined) counts[sk].push(r);
+      });
+    }
+  });
+  return counts;
+}
+
+function getBestSlot(counts) {
+  let best = null, bestCount = 0;
+  SLOTS.forEach(s => {
+    const c = (counts[slotKey(s)] || []).length;
+    if (c > bestCount) { bestCount = c; best = s; }
+  });
+  return best;
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────
+function render() {
+  const counts = getSlotCounts();
+  _bestSlot = getBestSlot(counts);
+
+  renderBigCounter();
+  renderTopSlots(counts);
+  renderNextLesson(counts);
+  renderAllSlots(counts);
+  renderAllPeople();
+  renderInviteText();
+}
+
+function renderBigCounter() {
+  document.getElementById('big-number').textContent = _data.registrations.length;
+}
+
+function renderTopSlots(counts) {
+  const sorted = SLOTS
+    .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
+    .sort((a, b) => b.people.length - a.people.length)
+    .slice(0, 3);
+
+  const container = document.getElementById('top-slots');
+
+  if (sorted.every(x => x.people.length === 0)) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-calendar-xmark"></i>
+        <p>Nessuna iscrizione ancora</p>
+      </div>`;
+    return;
   }
 
-  function checkNewRegistrations() {
-    const count = _data.registrations.length;
+  const maxCount = Math.max(...sorted.map(x => x.people.length), 1);
+
+  container.innerHTML = sorted.map(({ slot, people }, i) => {
+    const n = people.length;
+    const color = n >= 5 ? 'green' : n >= 3 ? 'yellow' : 'gray';
+    const pct = Math.round((n / maxCount) * 100);
+    return `
+      <div class="top-slot-row">
+        <span class="ts-rank">${i + 1}</span>
+        <span class="ts-dot ${color}"></span>
+        <span class="ts-name">${esc(slotLabel(slot))}</span>
+        <div class="ts-bar-track">
+          <div class="ts-bar-fill ${color}" style="width:${pct}%"></div>
+        </div>
+        <span class="ts-count">${n}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderNextLesson(counts) {
+  if (!_bestSlot) {
+    document.getElementById('next-slot-name').textContent = 'Nessuno slot';
+    document.getElementById('next-slot-sub').textContent = 'Aspetta le prime iscrizioni';
+    document.getElementById('next-slot-badge').textContent = '0';
+    document.getElementById('next-people-list').innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-users-slash"></i>
+        <p>Nessun iscritto</p>
+      </div>`;
+    return;
+  }
+
+  const key = slotKey(_bestSlot);
+  const people = counts[key] || [];
+  const lesson = getLessonForSlot(_bestSlot);
+
+  document.getElementById('next-slot-name').textContent = slotLabel(_bestSlot);
+  document.getElementById('next-slot-sub').textContent =
+    `${people.length} ${people.length === 1 ? 'persona disponibile' : 'persone disponibili'}`;
+  document.getElementById('next-slot-badge').textContent =
+    `${people.length} ${people.length === 1 ? 'persona' : 'persone'}`;
+
+  // Confirmed summary
+  const summaryEl = document.getElementById('confirmed-summary');
+  const summaryText = document.getElementById('confirmed-summary-text');
+  if (lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.length > 0) {
+    summaryEl.style.display = 'flex';
+    summaryText.textContent =
+      `${lesson.confirmedIds.length} su ${people.length} ${lesson.confirmedIds.length === 1 ? 'ha confermato' : 'hanno confermato'}`;
+  } else {
+    summaryEl.style.display = 'none';
+  }
+
+  // People list
+  const listEl = document.getElementById('next-people-list');
+  if (people.length === 0) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <i class="fa-solid fa-users-slash"></i>
+        <p>Nessuno per questo orario</p>
+      </div>`;
+    return;
+  }
+
+  listEl.innerHTML = people.map(p => {
+    const confirmed = lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.includes(p.id);
+    return `
+      <div class="person-row">
+        <div class="avatar">${esc(initials(p.name))}</div>
+        <div class="person-info">
+          <div class="person-name">${esc(p.name)}</div>
+          ${p.phone
+            ? `<a class="person-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}
+               </a>`
+            : `<span class="person-phone" style="color:var(--t3);cursor:default">Nessun numero</span>`
+          }
+        </div>
+        ${confirmed
+          ? `<span class="confirmed-tag"><i class="fa-solid fa-check"></i> confermato</span>`
+          : ''
+        }
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAllSlots(counts) {
+  const container = document.getElementById('all-slots-list');
+  const sorted = SLOTS
+    .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
+    .sort((a, b) => b.people.length - a.people.length);
+
+  if (sorted.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-calendar"></i><p>Nessuno slot</p></div>`;
+    return;
+  }
+
+  container.innerHTML = sorted.map(({ slot, people }) => {
+    const key = slotKey(slot);
+    const isOpen = _openSlots.has(key);
+    const n = people.length;
+    return `
+      <div class="slot-row${isOpen ? ' open' : ''}" id="slot-row-${encodeURIComponent(key)}">
+        <div class="slot-row-header" onclick="toggleSlot('${esc(key)}')">
+          <span class="slot-row-name">${esc(slotLabel(slot))}</span>
+          <span class="slot-count-badge">${n}</span>
+          <i class="fa-solid fa-chevron-down slot-chevron"></i>
+        </div>
+        <div class="slot-row-body">
+          ${n === 0
+            ? `<div style="padding:8px 0;font-size:13px;color:var(--t3)">Nessuno per questo orario</div>`
+            : people.map(p => `
+                <div class="slot-person-item">
+                  <div class="avatar" style="width:28px;height:28px;font-size:10px;">${esc(initials(p.name))}</div>
+                  <span class="slot-person-name">${esc(p.name)}</span>
+                  ${p.phone
+                    ? `<a class="slot-wa-link" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
+                        <i class="fa-brands fa-whatsapp"></i>
+                       </a>`
+                    : ''
+                  }
+                </div>
+              `).join('')
+          }
+          <button class="slot-send-btn" onclick="sendSlotWhatsApp('${esc(key)}')">
+            <i class="fa-brands fa-whatsapp"></i>
+            Invia messaggio
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleSlot(key) {
+  if (_openSlots.has(key)) _openSlots.delete(key);
+  else _openSlots.add(key);
+  const el = document.getElementById('slot-row-' + encodeURIComponent(key));
+  if (el) el.classList.toggle('open');
+}
+
+function renderAllPeople() {
+  const container = document.getElementById('all-people-list');
+  const people = [..._data.registrations].sort((a, b) =>
+    (a.name || '').localeCompare(b.name || '', 'it')
+  );
+
+  if (people.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="border-radius:var(--r);background:var(--surface);border:1px solid var(--sep);">
+        <i class="fa-solid fa-user-slash"></i>
+        <p>Nessun iscritto</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = people.map(p => {
+    const slotsText = Array.isArray(p.slots) && p.slots.length > 0
+      ? p.slots.join(' · ')
+      : 'Nessun orario';
+    return `
+      <div class="person-card">
+        <div class="avatar">${esc(initials(p.name))}</div>
+        <div class="person-card-info">
+          <div class="person-card-name">${esc(p.name)}</div>
+          ${p.phone
+            ? `<a class="person-card-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}
+               </a>`
+            : `<span style="font-size:12px;color:var(--t3)">Nessun numero</span>`
+          }
+          <div class="person-card-slots">${esc(slotsText)}</div>
+        </div>
+        <button class="delete-btn" onclick="deleteRegistration('${esc(p.id)}', '${esc(p.name)}')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderInviteText() {
+  const link = getRegistrationLink();
+  const text = `Ciao! Ti va di partecipare alle lezioni di Fondamenti del Karate? Scegli quando sei disponibile: ${link} — Salvatore`;
+  document.getElementById('invite-text-preview').textContent = `"${text}"`;
+  document.getElementById('invite-block').dataset.inviteText = text;
+}
+
+// ─────────────────────────────────────────────────────────────
+// ACTIONS
+// ─────────────────────────────────────────────────────────────
+async function sendWhatsApp() {
+  if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
+
+  const btn = document.getElementById('wa-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparazione...';
+
+  try {
+    const lesson = await createLesson(_bestSlot);
+    const counts = getSlotCounts();
+    const people = counts[slotKey(_bestSlot)] || [];
+    const link = getLessonConfirmLink(lesson.id);
+    const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(_bestSlot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    showToast('Messaggio pronto!');
+    await loadData();
+  } catch (e) {
+    showToast('Errore. Riprova.');
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> INVIA SU WHATSAPP';
+  }
+}
+
+async function copyLessonLink() {
+  if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
+  const lesson = await createLesson(_bestSlot);
+  const link = getLessonConfirmLink(lesson.id);
+  copyToClipboard(link, 'Link copiato!');
+}
+
+async function sendSlotWhatsApp(key) {
+  const slot = SLOTS.find(s => slotKey(s) === key);
+  if (!slot) return;
+  const lesson = await createLesson(slot);
+  const counts = getSlotCounts();
+  const people = counts[key] || [];
+  const link = getLessonConfirmLink(lesson.id);
+  const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(slot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  showToast('Messaggio pronto!');
+  await loadData();
+}
+
+async function deleteRegistration(id, name) {
+  if (!confirm(`Eliminare ${name}?`)) return;
+  _data.registrations = _data.registrations.filter(r => r.id !== id);
+  await putData();
+  showToast(`${name} rimosso`);
+  await loadData();
+}
+
+function copyInviteText() {
+  const text = document.getElementById('invite-block').dataset.inviteText;
+  copyToClipboard(text, 'Testo copiato!');
+}
+
+function sendInviteWhatsApp() {
+  const text = document.getElementById('invite-block').dataset.inviteText;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+// ─────────────────────────────────────────────────────────────
+// EXPORT CSV
+// ─────────────────────────────────────────────────────────────
+function exportCSV() {
+  const rows = [['Nome', 'Telefono', 'Orari', 'Iscritto il']];
+  _data.registrations.forEach(r => {
+    rows.push([
+      r.name || '',
+      r.phone || '',
+      Array.isArray(r.slots) ? r.slots.join(' | ') : '',
+      r.createdAt ? new Date(r.createdAt).toLocaleString('it-IT') : ''
+    ]);
+  });
+  const csv = rows.map(r =>
+    r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')
+  ).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `karate_iscritti_${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV esportato!');
+}
+
+// ─────────────────────────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────────────────────────
+function showNotifBanner() {
+  if (_notifDismissed) return;
+  if (Notification.permission === 'granted') return;
+  if (Notification.permission === 'denied') return;
+  if (localStorage.getItem('notif_dismissed')) return;
+  document.getElementById('notif-banner').style.display = 'flex';
+}
+
+function dismissNotifBanner() {
+  document.getElementById('notif-banner').style.display = 'none';
+  _notifDismissed = true;
+  localStorage.setItem('notif_dismissed', '1');
+}
+
+async function enableNotifications() {
+  try {
+    const perm = await Notification.requestPermission();
+    dismissNotifBanner();
+    showToast(perm === 'granted' ? 'Notifiche attivate!' : 'Notifiche non attivate');
+  } catch { dismissNotifBanner(); }
+}
+
+// ─────────────────────────────────────────────────────────────
+// SERVICE WORKER
+// ─────────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUTO REFRESH — 30s full reload, 15s silent poll
+// ─────────────────────────────────────────────────────────────
+setInterval(() => loadData(false), 30000);
+
+setInterval(() => {
+  fetch(API_URL, {
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    cache: 'no-store'
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (!Array.isArray(d.registrations)) return;
+    const count = d.registrations.length;
     if (_lastCount !== null && count > _lastCount) {
       const diff = count - _lastCount;
       const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
       showToast(msg, 3500);
       if (Notification.permission === 'granted') {
-        try {
-          new Notification('Fondamenti del Karate', {
-            body: msg,
-            icon: 'icon-192.png'
-          });
-        } catch {}
+        try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
       }
+      _data = d;
+      if (!Array.isArray(_data.lessons)) _data.lessons = [];
+      render();
     }
     _lastCount = count;
-  }
+  })
+  .catch(() => {});
+}, 15000);
 
-  // ─────────────────────────────────────────────
-  // LESSON MANAGEMENT
-  // ─────────────────────────────────────────────
-  async function createLesson(slot) {
-    const key = slotKey(slot);
-    let lesson = _data.lessons.find(l => l.slotKey === key);
-    if (lesson) return lesson;
-    lesson = {
-      id: 'lesson_' + Date.now(),
-      slotKey: key,
-      slotDay: slot.day,
-      slotTime: slot.time,
-      createdAt: new Date().toISOString(),
-      confirmedIds: []
-    };
-    _data.lessons.push(lesson);
-    await putData();
-    return lesson;
-  }
-
-  function getLessonForSlot(slot) {
-    return _data.lessons.find(l => l.slotKey === slotKey(slot)) || null;
-  }
-
-  // ─────────────────────────────────────────────
-  // SLOT COUNTS
-  // ─────────────────────────────────────────────
-  function getSlotCounts() {
-    const counts = {};
-    SLOTS.forEach(s => { counts[slotKey(s)] = []; });
-    _data.registrations.forEach(r => {
-      if (Array.isArray(r.slots)) {
-        r.slots.forEach(sk => {
-          if (counts[sk] !== undefined) counts[sk].push(r);
-        });
-      }
-    });
-    return counts;
-  }
-
-  function getBestSlot(counts) {
-    let best = null, bestCount = 0;
-    SLOTS.forEach(s => {
-      const c = (counts[slotKey(s)] || []).length;
-      if (c > bestCount) { bestCount = c; best = s; }
-    });
-    return best;
-  }
-
-  // ─────────────────────────────────────────────
-  // RENDER
-  // ─────────────────────────────────────────────
-  function render() {
-    const counts = getSlotCounts();
-    _bestSlot = getBestSlot(counts);
-
-    renderBigCounter();
-    renderTopSlots(counts);
-    renderNextLesson(counts);
-    renderAllSlots(counts);
-    renderAllPeople();
-    renderInviteText();
-  }
-
-  function renderBigCounter() {
-    document.getElementById('big-number').textContent = _data.registrations.length;
-  }
-
-  function renderTopSlots(counts) {
-    const sorted = SLOTS
-      .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
-      .sort((a, b) => b.people.length - a.people.length)
-      .slice(0, 3);
-
-    const container = document.getElementById('top-slots');
-    if (sorted.every(x => x.people.length === 0)) {
-      container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-calendar-xmark"></i>Nessun iscritto ancora</div>';
-      return;
-    }
-
-    container.innerHTML = sorted.map(({ slot, people }) => {
-      const n = people.length;
-      let dotClass = 'dot-gray';
-      if (n >= 5) dotClass = 'dot-green';
-      else if (n >= 3) dotClass = 'dot-yellow';
-      return `
-        <div class="top-slot-card">
-          <div class="top-slot-left">
-            <div class="top-slot-name">${esc(slotLabel(slot))}</div>
-            <div class="top-slot-count">${n} ${n === 1 ? 'persona' : 'persone'}</div>
-          </div>
-          <div class="slot-dot ${dotClass}"></div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderNextLesson(counts) {
-    if (!_bestSlot) {
-      document.getElementById('next-lesson-slot').textContent = 'Nessuno slot disponibile';
-      document.getElementById('next-lesson-subtitle').textContent = 'Aspetta le prime iscrizioni';
-      document.getElementById('next-people-list').innerHTML = '';
-      return;
-    }
-
-    const key = slotKey(_bestSlot);
-    const people = counts[key] || [];
-    const lesson = getLessonForSlot(_bestSlot);
-
-    document.getElementById('next-lesson-slot').textContent = slotLabel(_bestSlot);
-    document.getElementById('next-lesson-subtitle').textContent =
-      `${people.length} ${people.length === 1 ? 'persona disponibile' : 'persone disponibili'}`;
-
-    // People list
-    const listEl = document.getElementById('next-people-list');
-    if (people.length === 0) {
-      listEl.innerHTML = '<div class="empty-state" style="padding:20px 0"><i class="fa-solid fa-users-slash" style="font-size:28px;margin-bottom:8px;display:block;color:var(--dim2)"></i>Nessuno per questo orario</div>';
-    } else {
-      listEl.innerHTML = people.map(p => {
-        const confirmed = lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.includes(p.id);
-        return `
-          <div class="person-row">
-            <div class="person-avatar">${esc(initials(p.name))}</div>
-            <div class="person-info">
-              <div class="person-name">${esc(p.name)}</div>
-              ${p.phone ? `<a class="person-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank"><i class="fa-brands fa-whatsapp"></i> ${esc(p.phone)}</a>` : '<span class="person-phone" style="color:var(--dim2)">Nessun numero</span>'}
-            </div>
-            ${confirmed ? '<div class="confirmed-badge"><i class="fa-solid fa-check-circle"></i> Confermato</div>' : ''}
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Confirmed summary
-    const summaryEl = document.getElementById('confirmed-summary');
-    if (lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.length > 0) {
-      summaryEl.style.display = 'block';
-      summaryEl.textContent = `${lesson.confirmedIds.length} su ${people.length} hanno confermato`;
-    } else {
-      summaryEl.style.display = 'none';
-    }
-  }
-
-  function renderAllSlots(counts) {
-    const container = document.getElementById('all-slots-list');
-    const sorted = SLOTS
-      .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
-      .sort((a, b) => b.people.length - a.people.length);
-
-    container.innerHTML = sorted.map(({ slot, people }) => {
-      const key = slotKey(slot);
-      const isOpen = _openSlots.has(key);
-      const n = people.length;
-      return `
-        <div class="slot-row${isOpen ? ' open' : ''}" id="slot-row-${encodeURIComponent(key)}">
-          <div class="slot-row-header" onclick="toggleSlot('${esc(key)}')">
-            <div class="slot-row-name">${esc(slotLabel(slot))}</div>
-            <div class="slot-badge">${n}</div>
-            <i class="fa-solid fa-chevron-down slot-chevron"></i>
-          </div>
-          <div class="slot-row-body">
-            ${n === 0
-              ? '<div style="padding:12px 0;color:var(--dim2);font-size:15px">Nessuno per questo orario</div>'
-              : people.map(p => `
-                  <div class="slot-person-item">
-                    <i class="fa-solid fa-user"></i>
-                    <span style="flex:1;font-size:16px;color:var(--white)">${esc(p.name)}</span>
-                    ${p.phone ? `<a href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" style="color:var(--sand);font-size:15px" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>` : ''}
-                  </div>
-                `).join('')
-            }
-            <button class="slot-send-btn" onclick="sendSlotWhatsApp('${esc(key)}')">
-              <i class="fa-brands fa-whatsapp"></i>
-              Invia messaggio
-            </button>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function toggleSlot(key) {
-    if (_openSlots.has(key)) _openSlots.delete(key);
-    else _openSlots.add(key);
-    const el = document.getElementById('slot-row-' + encodeURIComponent(key));
-    if (el) el.classList.toggle('open');
-  }
-
-  function renderAllPeople() {
-    const container = document.getElementById('all-people-list');
-    const people = [..._data.registrations].sort((a, b) =>
-      (a.name || '').localeCompare(b.name || '', 'it')
-    );
-
-    if (people.length === 0) {
-      container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-user-slash"></i>Nessun iscritto</div>';
-      return;
-    }
-
-    container.innerHTML = people.map(p => {
-      const slotsText = Array.isArray(p.slots) && p.slots.length > 0
-        ? p.slots.join(', ')
-        : 'Nessun orario';
-      return `
-        <div class="person-card">
-          <div class="person-card-avatar">${esc(initials(p.name))}</div>
-          <div class="person-card-info">
-            <div class="person-card-name">${esc(p.name)}</div>
-            ${p.phone
-              ? `<a class="person-card-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank"><i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}</a>`
-              : '<span style="font-size:15px;color:var(--dim2)">Nessun numero</span>'
-            }
-            <div class="person-card-slots">${esc(slotsText)}</div>
-          </div>
-          <button class="delete-btn" onclick="deleteRegistration('${esc(p.id)}', '${esc(p.name)}')">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderInviteText() {
-    const link = getRegistrationLink();
-    const text = `Ciao! Ti va di partecipare alle lezioni di Fondamenti del Karate? Scegli quando sei disponibile: ${link} — Salvatore`;
-    document.getElementById('invite-text-preview').textContent = `"${text}"`;
-    document.getElementById('invite-box').dataset.inviteText = text;
-  }
-
-  // ─────────────────────────────────────────────
-  // ACTIONS
-  // ─────────────────────────────────────────────
-  async function sendWhatsApp() {
-    if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
-
-    const btn = document.getElementById('wa-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparazione...';
-
-    try {
-      const lesson = await createLesson(_bestSlot);
-      const counts = getSlotCounts();
-      const key = slotKey(_bestSlot);
-      const people = counts[key] || [];
-      const n = people.length;
-      const link = getLessonConfirmLink(lesson.id);
-      const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(_bestSlot)}. Siamo in ${n}! Conferma qui: ${link} — Salvatore`;
-      window.open(waLink('', msg).replace('wa.me//', 'api.whatsapp.com/send?text=').replace('?text=', ''), '_blank');
-      // fallback: direct wa.me without number for group share
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-      showToast('Messaggio pronto!');
-      await loadData();
-    } catch(e) {
-      showToast('Errore. Riprova.');
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-brands fa-whatsapp"></i> INVIA SU WHATSAPP';
-    }
-  }
-
-  async function copyLessonLink() {
-    if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
-    const lesson = await createLesson(_bestSlot);
-    const link = getLessonConfirmLink(lesson.id);
-    copyToClipboard(link, 'Link copiato!');
-  }
-
-  async function sendSlotWhatsApp(key) {
-    const slot = SLOTS.find(s => slotKey(s) === key);
-    if (!slot) return;
-    const lesson = await createLesson(slot);
-    const counts = getSlotCounts();
-    const people = counts[key] || [];
-    const n = people.length;
-    const link = getLessonConfirmLink(lesson.id);
-    const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(slot)}. Siamo in ${n}! Conferma qui: ${link} — Salvatore`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    showToast('Messaggio pronto!');
-    await loadData();
-  }
-
-  async function deleteRegistration(id, name) {
-    if (!confirm(`Eliminare ${name}?`)) return;
-    _data.registrations = _data.registrations.filter(r => r.id !== id);
-    await putData();
-    showToast(`${name} eliminato`);
-    await loadData();
-  }
-
-  function copyInviteText() {
-    const text = document.getElementById('invite-box').dataset.inviteText;
-    copyToClipboard(text, 'Testo copiato!');
-  }
-
-  function sendInviteWhatsApp() {
-    const text = document.getElementById('invite-box').dataset.inviteText;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-  }
-
-  // ─────────────────────────────────────────────
-  // EXPORT CSV
-  // ─────────────────────────────────────────────
-  function exportCSV() {
-    const rows = [['Nome', 'Telefono', 'Orari', 'Iscritto il']];
-    _data.registrations.forEach(r => {
-      rows.push([
-        r.name || '',
-        r.phone || '',
-        Array.isArray(r.slots) ? r.slots.join(' | ') : '',
-        r.createdAt ? new Date(r.createdAt).toLocaleString('it-IT') : ''
-      ]);
-    });
-    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `karate_iscritti_${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('CSV esportato!');
-  }
-
-  // ─────────────────────────────────────────────
-  // NOTIFICATIONS
-  // ─────────────────────────────────────────────
-  function showNotifBanner() {
-    if (_notifDismissed) return;
-    if (Notification.permission === 'granted') return;
-    if (Notification.permission === 'denied') return;
-    if (localStorage.getItem('notif_dismissed')) return;
-    const banner = document.getElementById('notif-banner');
-    banner.style.display = 'flex';
-  }
-
-  function dismissNotifBanner() {
-    document.getElementById('notif-banner').style.display = 'none';
-    _notifDismissed = true;
-    localStorage.setItem('notif_dismissed', '1');
-  }
-
-  async function enableNotifications() {
-    try {
-      const perm = await Notification.requestPermission();
-      if (perm === 'granted') {
-        dismissNotifBanner();
-        showToast('Notifiche attivate!');
-      } else {
-        dismissNotifBanner();
-        showToast('Notifiche non attivate');
-      }
-    } catch {
-      dismissNotifBanner();
-    }
-  }
-
-  // ─────────────────────────────────────────────
-  // SERVICE WORKER
-  // ─────────────────────────────────────────────
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
-
-  // ─────────────────────────────────────────────
-  // AUTO REFRESH
-  // ─────────────────────────────────────────────
-  setInterval(() => loadData(false), 30000);
-  setInterval(() => {
-    // silent poll for new registrations
-    fetch(API_URL, {
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      cache: 'no-store'
-    })
-    .then(r => r.json())
-    .then(d => {
-      if (!Array.isArray(d.registrations)) return;
-      const count = d.registrations.length;
-      if (_lastCount !== null && count > _lastCount) {
-        const diff = count - _lastCount;
-        const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
-        showToast(msg, 3500);
-        if (Notification.permission === 'granted') {
-          try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
-        }
-        _data = d;
-        if (!Array.isArray(_data.lessons)) _data.lessons = [];
-        render();
-      }
-      _lastCount = count;
-    })
-    .catch(() => {});
-  }, 15000);
-
-  // ─────────────────────────────────────────────
-  // INIT
-  // ─────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', () => {
-    loadData(false);
-    setTimeout(showNotifBanner, 3000);
-  });
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadData(false);
+  setTimeout(showNotifBanner, 3000);
+});
 </script>
 
 </body>
