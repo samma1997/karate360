@@ -19,7 +19,7 @@ self.addEventListener('fetch', (e) => {
 
 // Push notification received
 self.addEventListener('push', (e) => {
-  let data = { title: 'Karate 360', body: 'Nuova prenotazione ricevuta!' };
+  let data = { title: 'Fondamenti del Karate', body: 'Nuova prenotazione ricevuta!' };
   if (e.data) {
     try { data = e.data.json(); } catch (err) { data.body = e.data.text(); }
   }

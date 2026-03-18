@@ -6,290 +6,218 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#000000" />
   <link rel="manifest" href="manifest-admin.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>Karate 360 — Admin</title>
+  <title>Fondamenti del Karate — Admin</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <script src="config.js"></script>
 
   <style>
-    /* ─── RESET & BASE ─── */
+    /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #0a0a0a;
-      --bg-card:     #141414;
-      --bg-raised:   #1c1c1c;
-      --bg-input:    #1a1a1a;
-      --sep:         rgba(255,255,255,0.07);
-      --sep-strong:  rgba(255,255,255,0.12);
-      --red:         #DC2626;
-      --red-dim:     rgba(220,38,38,0.15);
-      --gold:        #D4A574;
-      --gold-dim:    rgba(212,165,116,0.15);
-      --green:       #22C55E;
-      --yellow:      #EAB308;
-      --text:        #F5F5F5;
-      --text-2:      #A1A1A1;
-      --text-3:      #606060;
-      --radius-lg:   16px;
-      --radius-md:   12px;
-      --radius-sm:   8px;
-      --radius-pill: 99px;
-      --tab-h:       calc(56px + env(safe-area-inset-bottom, 0px));
+      --bg:          #000000;
+      --bg-1:        #111111;
+      --bg-2:        #1a1a1a;
+      --bg-3:        #222222;
+      --sep:         rgba(255,255,255,0.06);
+      --sep-strong:  rgba(255,255,255,0.10);
+      --sand:        #B8A58C;
+      --sand-dim:    rgba(184,165,140,0.12);
+      --sand-dim2:   rgba(184,165,140,0.06);
+      --green-muted: #6B8F71;
+      --amber-muted: #C9A84C;
+      --gray-muted:  #555555;
+      --text:        #F0F0F0;
+      --text-2:      #888888;
+      --text-3:      #444444;
+      --r-lg:        14px;
+      --r-md:        10px;
+      --r-sm:        8px;
+      --tab-h:       calc(58px + env(safe-area-inset-bottom, 0px));
     }
 
-    html { height: 100%; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    html, body {
+      height: 100%;
       background: var(--bg);
       color: var(--text);
-      height: 100%;
-      overflow: hidden;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
     }
 
-    /* hide scrollbars */
+    /* ── SCROLLBAR HIDE ── */
     ::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; }
 
-    /* ─── APP SHELL ─── */
+    /* ── LAYOUT ── */
     #app {
       display: flex;
       flex-direction: column;
-      height: 100%;
-      height: -webkit-fill-available;
+      height: 100dvh;
+      position: relative;
     }
 
-    /* ─── MAIN CONTENT AREA ─── */
-    #main {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-height: 0;
-    }
-
-    /* ─── TAB CONTENT ─── */
+    /* ── TAB CONTENT ── */
     .tab-content {
-      display: none;
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
-      padding-bottom: 16px;
+      padding-bottom: var(--tab-h);
     }
 
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 0.22s ease;
+    .tab-panel {
+      display: none;
+      animation: fadeUp 0.22s ease both;
     }
+    .tab-panel.active { display: block; }
 
-    @keyframes fadeIn {
+    @keyframes fadeUp {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes slideDown {
-      from { transform: translateY(-100%); }
-      to   { transform: translateY(0); }
-    }
-
-    /* ─── STICKY HEADER ─── */
+    /* ── PAGE HEADER ── */
     .page-header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 16px 16px 12px;
+      z-index: 20;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--sep);
+      padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--sep);
+      gap: 10px;
     }
 
     .page-title {
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      color: var(--text);
     }
 
-    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
-    /* ─── PILL / BADGE ─── */
-    .badge {
-      display: inline-flex;
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 22px;
-      height: 22px;
-      padding: 0 6px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
-      font-weight: 700;
-      background: var(--red);
-      color: #fff;
+      cursor: pointer;
+      color: var(--text-2);
+      font-size: 14px;
+      transition: background 0.15s, color 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
+    .icon-btn:active { background: var(--bg-3); color: var(--sand); }
 
-    .count-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 28px;
-      height: 24px;
-      padding: 0 8px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .pill-green  { background: rgba(34,197,94,0.2);  color: var(--green); }
-    .pill-yellow { background: rgba(234,179,8,0.2);  color: var(--yellow); }
-    .pill-red    { background: rgba(220,38,38,0.2);  color: var(--red); }
-    .pill-gray   { background: rgba(255,255,255,0.07); color: var(--text-3); }
-
-    /* ─── CARDS & GROUPS ─── */
-    .section-group {
-      margin: 20px 16px 0;
+    /* ── SECTION ── */
+    .section {
+      padding: 20px 16px 0;
     }
 
     .section-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      color: var(--text-2);
+      letter-spacing: 0.8px;
       text-transform: uppercase;
-      margin-bottom: 8px;
-      padding: 0 4px;
+      color: var(--text-3);
+      margin-bottom: 10px;
     }
 
-    .grouped-list {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .list-row {
-      display: flex;
-      align-items: center;
-      padding: 13px 16px;
-      gap: 12px;
-      min-height: 50px;
-      position: relative;
-      cursor: pointer;
-      transition: background 0.12s;
-    }
-
-    .list-row:active { background: var(--bg-raised); }
-
-    .list-row + .list-row::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 16px;
-      right: 0;
-      height: 1px;
-      background: var(--sep);
-    }
-
-    .row-left { flex: 1; min-width: 0; }
-    .row-right { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
-
-    .row-title {
-      font-size: 15px;
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .row-sub {
-      font-size: 13px;
-      color: var(--text-2);
-      margin-top: 1px;
-    }
-
-    /* ─── STAT CARDS ─── */
-    .stats-row {
+    /* ── STAT CARDS ── */
+    .stat-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
       padding: 16px 16px 0;
     }
 
     .stat-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-md);
-      padding: 14px 10px;
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      padding: 14px 12px;
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
 
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--text);
+      line-height: 1;
+    }
+
     .stat-label {
-      font-size: 10px;
+      font-size: 11px;
+      color: var(--text-2);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .stat-accent { color: var(--sand); }
+
+    /* ── CHART ── */
+    .chart-wrap {
+      padding: 16px 16px 0;
+    }
+
+    .chart-container {
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .chart-title {
+      font-size: 12px;
       font-weight: 600;
-      text-transform: uppercase;
       letter-spacing: 0.4px;
       color: var(--text-2);
+      text-transform: uppercase;
+      margin-bottom: 14px;
     }
 
-    .stat-value {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--red);
-      letter-spacing: -0.5px;
-      line-height: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .stat-sub {
-      font-size: 11px;
-      color: var(--text-3);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* ─── BAR CHART ─── */
-    .chart-wrap {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-    }
-
-    .chart-row {
+    .chart-bar-row {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 14px;
-      position: relative;
+      margin-bottom: 9px;
     }
 
-    .chart-row + .chart-row::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 14px;
-      right: 0;
-      height: 1px;
-      background: var(--sep);
-    }
+    .chart-bar-row:last-child { margin-bottom: 0; }
 
     .chart-label {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-2);
-      width: 100px;
+      width: 90px;
       flex-shrink: 0;
       white-space: nowrap;
       overflow: hidden;
@@ -299,1331 +227,1470 @@
     .chart-bar-track {
       flex: 1;
       height: 6px;
-      background: var(--sep-strong);
-      border-radius: 3px;
+      background: var(--bg-3);
+      border-radius: 99px;
       overflow: hidden;
     }
 
     .chart-bar-fill {
       height: 100%;
-      background: var(--red);
-      border-radius: 3px;
-      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+      background: var(--sand);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
     }
 
     .chart-count {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      width: 20px;
+      font-size: 11px;
+      color: var(--text-2);
+      width: 16px;
       text-align: right;
       flex-shrink: 0;
     }
 
-    /* ─── RECENT LIST ─── */
-    .person-row {
+    /* ── RECENTI ── */
+    .recent-list {
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+
+    .recent-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 11px 16px;
-      position: relative;
-      cursor: pointer;
-      transition: background 0.12s;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--sep);
     }
+    .recent-item:last-child { border-bottom: none; }
 
-    .person-row:active { background: var(--bg-raised); }
-
-    .person-row + .person-row::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 58px;
-      right: 0;
-      height: 1px;
-      background: var(--sep);
-    }
-
+    /* ── AVATAR ── */
     .avatar {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 600;
       flex-shrink: 0;
-      color: #fff;
+      background: var(--sand-dim);
+      color: var(--sand);
     }
 
-    .person-info { flex: 1; min-width: 0; }
-
-    .person-name {
-      font-size: 15px;
-      font-weight: 600;
+    .recent-info { flex: 1; min-width: 0; }
+    .recent-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .recent-meta { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+    .recent-time { font-size: 11px; color: var(--text-3); flex-shrink: 0; }
 
-    .person-phone {
-      font-size: 13px;
+    /* ── ORARI ── */
+    .day-group {
+      padding: 20px 16px 0;
+    }
+
+    .day-header {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 8px;
+      padding: 0 2px;
+    }
+
+    .day-card {
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+
+    .slot-row {
+      border-bottom: 1px solid var(--sep);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .slot-row:last-child { border-bottom: none; }
+
+    .slot-header {
+      display: flex;
+      align-items: center;
+      padding: 13px 14px;
+      gap: 12px;
+      transition: background 0.12s;
+    }
+    .slot-header:active { background: var(--bg-2); }
+
+    .slot-time {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .count-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 99px;
+      line-height: 1.4;
+    }
+    .pill-green  { background: rgba(107,143,113,0.18); color: var(--green-muted); }
+    .pill-amber  { background: rgba(201,168,76,0.18);  color: var(--amber-muted); }
+    .pill-gray   { background: rgba(85,85,85,0.25);    color: var(--gray-muted);  }
+
+    .slot-chevron {
+      font-size: 12px;
+      color: var(--text-3);
+      transition: transform 0.2s;
+      width: 14px;
+    }
+    .slot-row.open .slot-chevron { transform: rotate(90deg); }
+
+    .slot-detail {
+      display: none;
+      background: var(--bg-2);
+      border-top: 1px solid var(--sep);
+      padding: 10px 14px 14px;
+    }
+    .slot-row.open .slot-detail { display: block; }
+
+    .slot-person {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--sep);
+    }
+    .slot-person:last-child { border-bottom: none; }
+
+    .slot-person-info { flex: 1; min-width: 0; }
+    .slot-person-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .slot-person-phone {
+      font-size: 12px;
       color: var(--text-2);
       margin-top: 1px;
     }
 
-    .person-time {
-      font-size: 12px;
-      color: var(--text-3);
-      flex-shrink: 0;
-    }
-
-    .person-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 5px;
-    }
-
-    .slot-tag {
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: var(--radius-pill);
-      background: var(--red-dim);
-      color: var(--red);
-      white-space: nowrap;
-    }
-
-    .person-notes {
-      font-size: 12px;
-      color: var(--text-2);
-      font-style: italic;
-      margin-top: 3px;
-    }
-
-    /* ─── SLOT EXPAND ─── */
-    .slot-expanded {
-      display: none;
-      background: var(--bg-raised);
-      padding: 8px 0;
-    }
-
-    .slot-expanded.open { display: block; }
-
-    .slot-person-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 16px 9px 20px;
-    }
-
-    .slot-person-row + .slot-person-row {
-      border-top: 1px solid var(--sep);
-    }
-
-    .slot-person-name { flex: 1; font-size: 14px; font-weight: 500; }
-
-    .slot-person-phone {
-      font-size: 13px;
-      color: var(--text-2);
-    }
-
-    .wa-btn {
+    .wa-btn-sm {
       width: 34px;
       height: 34px;
+      border-radius: 50%;
+      background: rgba(107,143,113,0.15);
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(37,211,102,0.15);
-      color: #25D366;
-      border-radius: 50%;
-      border: none;
       cursor: pointer;
-      text-decoration: none;
-      font-size: 16px;
-      transition: background 0.15s, transform 0.1s;
+      color: var(--green-muted);
+      font-size: 15px;
       flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s;
     }
+    .wa-btn-sm:active { background: rgba(107,143,113,0.28); }
 
-    .wa-btn:active { background: rgba(37,211,102,0.3); transform: scale(0.92); }
-
-    .empty-state {
-      padding: 16px;
+    .slot-empty {
       font-size: 13px;
       color: var(--text-3);
-      text-align: center;
+      padding: 6px 0 2px;
       font-style: italic;
     }
 
-    /* ─── SEARCH BAR ─── */
+    /* ── PERSONE ── */
     .search-wrap {
       position: sticky;
-      top: 65px;
-      z-index: 9;
-      padding: 8px 16px;
-      background: rgba(10,10,10,0.85);
+      top: 0;
+      z-index: 10;
+      padding: 10px 16px;
+      background: rgba(0,0,0,0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--sep);
     }
 
-    .search-input {
-      width: 100%;
-      background: var(--bg-raised);
-      border: none;
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 15px;
-      padding: 9px 12px 9px 36px;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    .search-wrap-inner {
+    .search-input-wrap {
       position: relative;
     }
 
     .search-icon {
       position: absolute;
-      left: 11px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-3);
-      font-size: 14px;
+      font-size: 13px;
       pointer-events: none;
     }
 
-    /* ─── PEOPLE FULL CARD ─── */
-    .person-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin: 8px 16px 0;
-      transition: background 0.12s;
-    }
-
-    .person-card-inner {
-      padding: 14px 16px;
-    }
-
-    .person-card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .person-card-info { flex: 1; min-width: 0; }
-
-    .person-card-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .delete-btn {
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--red-dim);
-      color: var(--red);
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      transition: background 0.15s, transform 0.1s;
-    }
-
-    .delete-btn:active { background: rgba(220,38,38,0.3); transform: scale(0.92); }
-
-    /* ─── BUTTONS ─── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 11px 16px;
-      border-radius: var(--radius-md);
-      border: none;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
-      -webkit-appearance: none;
-    }
-
-    .btn:active { opacity: 0.8; transform: scale(0.97); }
-
-    .btn-primary { background: var(--red); color: #fff; }
-    .btn-secondary { background: var(--bg-raised); color: var(--text); }
-    .btn-green { background: rgba(34,197,94,0.15); color: var(--green); }
-    .btn-gold { background: var(--gold-dim); color: var(--gold); }
-    .btn-full { width: 100%; }
-    .btn-sm { padding: 8px 12px; font-size: 13px; }
-
-    /* ─── TEXTAREA / SELECT / INPUT ─── */
-    .form-field {
+    .search-input {
       width: 100%;
-      background: var(--bg-raised);
+      background: var(--bg-2);
       border: 1px solid var(--sep-strong);
-      border-radius: var(--radius-md);
+      border-radius: var(--r-md);
+      padding: 10px 12px 10px 34px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
       color: var(--text);
-      font-family: inherit;
-      font-size: 14px;
-      padding: 11px 13px;
       outline: none;
       -webkit-appearance: none;
-      resize: none;
-      transition: border-color 0.2s;
+      min-height: 44px;
     }
+    .search-input::placeholder { color: var(--text-3); }
+    .search-input:focus { border-color: var(--sand); }
 
-    .form-field:focus { border-color: rgba(220,38,38,0.5); }
-
-    /* ─── MESSAGES TAB ─── */
-    .msg-section {
-      margin: 20px 16px 0;
-    }
-
-    .msg-card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 16px;
+    .person-list {
+      padding: 12px 16px 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .msg-card-title {
-      font-size: 15px;
-      font-weight: 700;
+    .person-card {
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      padding: 14px;
     }
 
-    .slot-select-wrap {
+    .person-top {
       display: flex;
-      gap: 8px;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .person-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--sand-dim);
+      color: var(--sand);
+      display: flex;
       align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      flex-shrink: 0;
     }
 
-    .slot-select-wrap select {
-      flex: 1;
+    .person-info { flex: 1; min-width: 0; }
+    .person-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.2px;
+    }
+    .person-phone {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+    .person-date {
+      font-size: 11px;
+      color: var(--text-3);
+      flex-shrink: 0;
+      margin-top: 2px;
     }
 
-    /* ─── RECIPIENT PILLS ─── */
-    .recipient-pills {
+    .person-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+      margin-bottom: 8px;
     }
 
-    .rec-pill {
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
+    .slot-tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: var(--sand-dim2);
+      color: var(--sand);
+      border: 1px solid rgba(184,165,140,0.2);
+    }
+
+    .person-note {
+      font-size: 13px;
+      color: var(--text-2);
+      font-style: italic;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .person-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .btn-wa {
+      flex: 1;
+      height: 40px;
+      background: rgba(107,143,113,0.12);
+      border: 1px solid rgba(107,143,113,0.25);
+      border-radius: var(--r-md);
+      color: var(--green-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s;
+    }
+    .btn-wa:active { background: rgba(107,143,113,0.22); }
+
+    .btn-delete {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--r-md);
+      color: var(--text-3);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s, color 0.12s;
+    }
+    .btn-delete:active { background: rgba(184,165,140,0.1); color: var(--sand); }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
+      color: var(--text-3);
+    }
+    .empty-state i { font-size: 32px; margin-bottom: 12px; display: block; }
+    .empty-state p { font-size: 15px; }
+
+    /* ── MESSAGGI ── */
+    .msg-section {
+      padding: 20px 16px 0;
+    }
+
+    .msg-card {
+      background: var(--bg-1);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-lg);
+      padding: 16px;
+    }
+
+    .msg-card-title {
+      font-size: 13px;
       font-weight: 600;
-      background: var(--bg-raised);
+      color: var(--text);
+      margin-bottom: 14px;
+      letter-spacing: -0.1px;
+    }
+
+    .form-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--r-md);
+      padding: 10px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      -webkit-appearance: none;
+      min-height: 44px;
+    }
+    .form-select { cursor: pointer; }
+    .form-textarea {
+      resize: none;
+      line-height: 1.5;
+      min-height: 90px;
+    }
+    .form-select:focus, .form-textarea:focus { border-color: var(--sand); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .msg-recipients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+
+    .recipient-pill {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 99px;
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
       color: var(--text-2);
       cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: all 0.15s;
-      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+    }
+    .recipient-pill.selected {
+      background: var(--sand-dim);
+      border-color: rgba(184,165,140,0.35);
+      color: var(--sand);
     }
 
-    .rec-pill.selected {
-      background: var(--red-dim);
-      color: var(--red);
-      border-color: rgba(220,38,38,0.3);
-    }
-
-    /* ─── COPY TOAST ─── */
-    .toast {
-      position: fixed;
-      bottom: calc(var(--tab-h) + 16px);
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(34,197,94,0.9);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: var(--radius-pill);
+    .btn-primary {
+      width: 100%;
+      height: 46px;
+      background: var(--sand);
+      border: none;
+      border-radius: var(--r-md);
+      color: #000;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.25s, transform 0.25s;
-      pointer-events: none;
-      z-index: 500;
-      white-space: nowrap;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.12s;
+      letter-spacing: 0.1px;
+    }
+    .btn-primary:active { opacity: 0.82; }
+    .btn-primary:disabled { opacity: 0.35; cursor: default; }
+
+    .btn-secondary {
+      width: 100%;
+      height: 46px;
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--r-md);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-secondary:active { background: var(--bg-3); }
+
+    .invite-box {
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--r-md);
+      padding: 14px;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .toast.show {
+    /* ── BOTTOM TAB BAR ── */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--tab-h);
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid var(--sep);
+      display: flex;
+      align-items: flex-start;
+      padding-top: 8px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      padding: 2px 0;
+      min-height: 44px;
+      transition: opacity 0.12s;
+    }
+    .tab-item:active { opacity: 0.7; }
+
+    .tab-icon {
+      font-size: 20px;
+      color: var(--gray-muted);
+      transition: color 0.18s;
+    }
+
+    .tab-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      color: var(--gray-muted);
+      transition: color 0.18s;
+    }
+
+    .tab-item.active .tab-icon,
+    .tab-item.active .tab-label {
+      color: var(--sand);
+    }
+
+    /* ── BOTTOM SHEET ── */
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s;
+    }
+    .sheet-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 201;
+      background: var(--bg-1);
+      border-top: 1px solid var(--sep-strong);
+      border-radius: 20px 20px 0 0;
+      padding: 8px 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    .bottom-sheet.open { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--bg-3);
+      border-radius: 99px;
+      margin: 0 auto 20px;
+    }
+
+    .sheet-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .sheet-body {
+      font-size: 14px;
+      color: var(--text-2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .sheet-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-danger {
+      width: 100%;
+      height: 50px;
+      background: rgba(184,165,140,0.08);
+      border: 1px solid rgba(184,165,140,0.2);
+      border-radius: var(--r-md);
+      color: var(--sand);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-danger:active { background: rgba(184,165,140,0.14); }
+
+    .btn-cancel {
+      width: 100%;
+      height: 50px;
+      background: var(--bg-2);
+      border: 1px solid var(--sep);
+      border-radius: var(--r-md);
+      color: var(--text-2);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-cancel:active { background: var(--bg-3); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: calc(var(--tab-h) + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--bg-2);
+      border: 1px solid var(--sep-strong);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border-radius: 99px;
+      white-space: nowrap;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+    }
+    #toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
 
-    /* ─── DELETE MODAL ─── */
-    .modal-overlay {
+    /* ── NOTIF BANNER ── */
+    #notif-banner {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
+      top: calc(env(safe-area-inset-top, 0px) + 60px);
+      left: 16px;
+      right: 16px;
+      z-index: 150;
+      background: var(--bg-1);
+      border: 1px solid var(--sep-strong);
+      border-radius: var(--r-lg);
+      padding: 14px 16px;
       display: flex;
-      align-items: flex-end;
-      z-index: 800;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-sheet {
-      width: 100%;
-      background: var(--bg-card);
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      padding: 20px 16px calc(24px + env(safe-area-inset-bottom, 0px));
-      transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-      display: flex;
-      flex-direction: column;
+      align-items: flex-start;
       gap: 12px;
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s;
+    }
+    #notif-banner.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+    .notif-icon { color: var(--sand); font-size: 18px; margin-top: 1px; }
+    .notif-body { flex: 1; }
+    .notif-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .notif-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .notif-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .notif-btn-yes {
+      flex: 1; height: 34px; background: var(--sand); border: none;
+      border-radius: var(--r-sm); color: #000; font-size: 13px; font-weight: 600;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .notif-btn-no {
+      height: 34px; padding: 0 14px; background: var(--bg-2);
+      border: 1px solid var(--sep); border-radius: var(--r-sm);
+      color: var(--text-2); font-size: 13px; cursor: pointer;
     }
 
-    .modal-overlay.open .modal-sheet {
-      transform: translateY(0);
-    }
-
-    .modal-handle {
-      width: 36px;
-      height: 4px;
-      background: var(--sep-strong);
-      border-radius: 2px;
-      align-self: center;
-      margin-bottom: 4px;
-    }
-
-    .modal-title {
-      font-size: 17px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .modal-sub {
-      font-size: 14px;
-      color: var(--text-2);
-      text-align: center;
-    }
-
-    /* ─── BOTTOM TAB BAR ─── */
-    #tab-bar {
-      flex-shrink: 0;
-      display: flex;
-      background: rgba(14,14,14,0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-top: 1px solid var(--sep);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    .tab-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      padding: 8px 4px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      color: var(--text-3);
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 500;
-      min-height: 56px;
-      transition: color 0.15s, transform 0.1s;
-      -webkit-appearance: none;
-    }
-
-    .tab-btn i {
-      font-size: 20px;
-      transition: color 0.15s;
-    }
-
-    .tab-btn.active { color: var(--red); }
-    .tab-btn:active { transform: scale(0.88); }
-
-    /* ─── PULL INDICATOR ─── */
-    .pull-indicator {
-      text-align: center;
-      padding: 12px;
-      font-size: 12px;
-      color: var(--text-3);
+    /* ── LOADING ── */
+    .loading-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      padding: 48px 24px;
     }
 
-    .pull-indicator i { animation: spin 1s linear infinite; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ─── EXPORT BTN ─── */
-    .export-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 7px 12px;
-      background: var(--bg-raised);
-      color: var(--text-2);
-      border-radius: var(--radius-sm);
-      border: none;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      -webkit-appearance: none;
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      width: 24px; height: 24px;
+      border: 2px solid var(--sep-strong);
+      border-top-color: var(--sand);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
     }
 
-    .export-btn:active { background: var(--sep-strong); transform: scale(0.95); }
-
-    /* ─── AVATAR COLORS ─── */
-    .av-0 { background: #DC2626; }
-    .av-1 { background: #7C3AED; }
-    .av-2 { background: #0EA5E9; }
-    .av-3 { background: #D97706; }
-    .av-4 { background: #059669; }
-    .av-5 { background: #DB2777; }
-    .av-6 { background: #2563EB; }
-    .av-7 { background: #EA580C; }
-
-    /* ─── INVITATION CARD ─── */
-    .invite-text {
-      font-size: 14px;
-      color: var(--text-2);
-      line-height: 1.6;
-      background: var(--bg-raised);
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-    }
-
-    /* ─── LOADING SKELETON ─── */
-    .skeleton {
-      background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-raised) 50%, var(--bg-card) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: 6px;
-    }
-
-    @keyframes shimmer { to { background-position: -200% 0; } }
-
-    /* ─── UTILITY ─── */
-    .text-red   { color: var(--red); }
-    .text-gold  { color: var(--gold); }
-    .text-green { color: var(--green); }
-    .text-muted { color: var(--text-2); }
-    .text-dim   { color: var(--text-3); }
-    .font-bold  { font-weight: 700; }
-    .mt-4  { margin-top: 4px; }
-    .mt-8  { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
-
-    /* ─── CHEVRON ─── */
-    .chevron {
-      color: var(--text-3);
-      font-size: 12px;
-      transition: transform 0.2s;
-    }
-
-    .chevron.open { transform: rotate(90deg); }
-
-    /* iOS safe area top padding for pages */
-    .safe-top { padding-top: env(safe-area-inset-top, 0px); }
+    /* ── MISC ── */
+    a { color: inherit; text-decoration: none; }
+    button { font-family: 'Inter', sans-serif; }
+    .mt-4 { margin-top: 4px; }
+    .mt-8 { margin-top: 8px; }
+    .pb-20 { padding-bottom: 20px; }
   </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════
-     MAIN APP
-═══════════════════════════════════════════ -->
 <div id="app">
-  <div id="main" class="visible">
 
-    <!-- ── TAB CONTENTS ── -->
+  <!-- ── TAB CONTENT ── -->
+  <div class="tab-content" id="tab-content">
 
     <!-- TAB 1: PANORAMICA -->
-    <div class="tab-content active safe-top" id="tab-panoramica">
+    <div class="tab-panel active" id="panel-panoramica">
       <div class="page-header">
         <span class="page-title">Panoramica</span>
         <div class="header-actions">
-          <button class="export-btn" onclick="loadData()" style="margin-right:4px">
-            <i class="fas fa-sync-alt"></i>
-          </button>
-          <button class="export-btn" id="export-btn">
-            <i class="fas fa-download"></i> CSV
-          </button>
-        </div>
-      </div>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <span class="stat-label">Iscritti</span>
-          <span class="stat-value" id="stat-total">—</span>
-          <span class="stat-sub">totale</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Top Slot</span>
-          <span class="stat-value" style="font-size:14px;color:var(--gold)" id="stat-topslot">—</span>
-          <span class="stat-sub" id="stat-topslot-count">—</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Max Gruppo</span>
-          <span class="stat-value" style="color:var(--green)" id="stat-maxgroup">—</span>
-          <span class="stat-sub" id="stat-maxgroup-slot">persone</span>
-        </div>
-      </div>
-
-      <div class="section-group">
-        <div class="section-label">Popolarità Slot</div>
-        <div class="grouped-list chart-wrap" id="chart-bars">
-          <div class="chart-row">
-            <div class="skeleton" style="width:100%;height:36px;border-radius:8px;"></div>
+          <div class="icon-btn" id="btn-refresh" title="Aggiorna">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </div>
+          <div class="icon-btn" id="btn-export" title="Esporta CSV">
+            <i class="fa-solid fa-arrow-down-to-line"></i>
           </div>
         </div>
       </div>
 
-      <div class="section-group" style="margin-bottom:8px;">
-        <div class="section-label">Ultimi Iscritti</div>
-        <div class="grouped-list" id="recent-list">
-          <div class="empty-state">Caricamento...</div>
+      <div class="stat-grid" id="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value stat-accent" id="stat-iscritti">—</div>
+          <div class="stat-label">Iscritti</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-top-slot" style="font-size:14px;letter-spacing:-0.3px;margin-top:4px">—</div>
+          <div class="stat-label">Slot Top</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-accent" id="stat-max-gruppo">—</div>
+          <div class="stat-label">Max Gruppo</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-container">
+          <div class="chart-title">Popolarità orari</div>
+          <div id="chart-bars"></div>
+        </div>
+      </div>
+
+      <div class="section pb-20">
+        <div class="section-label">Ultimi iscritti</div>
+        <div class="recent-list" id="recent-list">
+          <div class="loading-wrap"><div class="spinner"></div></div>
         </div>
       </div>
     </div>
 
     <!-- TAB 2: ORARI -->
-    <div class="tab-content safe-top" id="tab-orari">
+    <div class="tab-panel" id="panel-orari">
       <div class="page-header">
         <span class="page-title">Orari</span>
       </div>
-      <div id="orari-content">
-        <div class="section-group">
-          <div class="skeleton" style="height:120px;border-radius:16px;"></div>
-        </div>
+      <div id="orari-content" class="pb-20">
+        <div class="loading-wrap"><div class="spinner"></div></div>
       </div>
     </div>
 
     <!-- TAB 3: PERSONE -->
-    <div class="tab-content safe-top" id="tab-persone">
-      <div class="page-header">
+    <div class="tab-panel" id="panel-persone">
+      <div class="page-header" style="padding-top: calc(env(safe-area-inset-top, 0px) + 14px);">
         <span class="page-title">Persone</span>
-        <span class="badge" id="people-count">0</span>
       </div>
       <div class="search-wrap">
-        <div class="search-wrap-inner">
-          <i class="fas fa-magnifying-glass search-icon"></i>
-          <input
-            class="search-input"
-            id="people-search"
-            type="search"
-            placeholder="Cerca per nome..."
-          />
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="search" class="search-input" id="search-input" placeholder="Cerca per nome, telefono…" autocomplete="off" autocorrect="off" spellcheck="false" />
         </div>
       </div>
-      <div id="people-list" style="padding-bottom:8px;">
-        <div class="empty-state">Caricamento...</div>
+      <div class="person-list pb-20" id="person-list">
+        <div class="loading-wrap"><div class="spinner"></div></div>
       </div>
     </div>
 
     <!-- TAB 4: MESSAGGI -->
-    <div class="tab-content safe-top" id="tab-messaggi">
+    <div class="tab-panel" id="panel-messaggi">
       <div class="page-header">
         <span class="page-title">Messaggi</span>
       </div>
 
-      <!-- Section 1: Follow-up per Slot -->
+      <!-- Sezione 1: Follow-up slot -->
       <div class="msg-section">
-        <div class="section-label">Follow-up per Slot</div>
+        <div class="section-label">Messaggio per slot</div>
         <div class="msg-card">
-          <div class="msg-card-title">Invia per Slot</div>
-          <div class="slot-select-wrap">
-            <select class="form-field" id="msg-slot-select">
-              <option value="">Seleziona slot...</option>
+          <div class="form-group">
+            <label class="form-label">Slot</label>
+            <select class="form-select" id="msg-slot-select">
+              <option value="">— Seleziona orario —</option>
             </select>
           </div>
-          <div id="msg-slot-preview" style="display:none;">
-            <div style="font-size:13px;color:var(--text-2);margin-bottom:6px;" id="msg-slot-count-label"></div>
-            <textarea class="form-field" id="msg-slot-text" rows="4"></textarea>
-            <button class="btn btn-secondary btn-sm mt-8" onclick="copyMsgSlot()">
-              <i class="fas fa-copy"></i> Copia Messaggio
-            </button>
-            <div id="msg-slot-people" style="margin-top:12px; display:flex; flex-direction:column; gap:8px;"></div>
+          <div class="form-group">
+            <label class="form-label">Testo</label>
+            <textarea class="form-textarea" id="msg-slot-text" rows="4" placeholder="Scrivi il tuo messaggio…"></textarea>
+          </div>
+          <div id="slot-recipient-list" style="display:none">
+            <label class="form-label">Invia a</label>
+            <div id="slot-recipient-rows" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
           </div>
         </div>
       </div>
 
-      <!-- Section 2: Messaggio Personalizzato -->
+      <!-- Sezione 2: Messaggio personalizzato -->
       <div class="msg-section">
-        <div class="section-label">Messaggio Personalizzato</div>
+        <div class="section-label">Messaggio personalizzato</div>
         <div class="msg-card">
-          <div class="msg-card-title">Scegli destinatari</div>
-          <div class="recipient-pills" id="recipient-pills"></div>
-          <button class="btn btn-secondary btn-sm" id="select-all-btn" onclick="toggleSelectAll()">
-            Seleziona Tutti
-          </button>
-          <textarea class="form-field" id="custom-msg-text" rows="4" placeholder="Scrivi il tuo messaggio..."></textarea>
-          <button class="btn btn-primary btn-full" onclick="sendToSelected()">
-            <i class="fab fa-whatsapp"></i> Invia a Selezionati
+          <div class="form-group">
+            <label class="form-label">Destinatari</label>
+            <div class="msg-recipients" id="msg-custom-recipients"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Messaggio</label>
+            <textarea class="form-textarea" id="msg-custom-text" rows="4" placeholder="Scrivi il tuo messaggio…"></textarea>
+          </div>
+          <button class="btn-primary" id="btn-send-custom" disabled>
+            <i class="fa-brands fa-whatsapp" style="margin-right:6px"></i>Apri WhatsApp
           </button>
         </div>
       </div>
 
-      <!-- Section 3: Messaggio Iniziale -->
-      <div class="msg-section" style="margin-bottom:24px;">
-        <div class="section-label">Messaggio Invito</div>
+      <!-- Sezione 3: Testo invito -->
+      <div class="msg-section pb-20">
+        <div class="section-label">Testo invito</div>
         <div class="msg-card">
-          <div class="msg-card-title">Copia e invia su WhatsApp</div>
-          <div class="invite-text" id="invite-text">Ciao! 🥋 Ti va di fare un'ora di Karate a 360° con me? Karate, Aikido, Judo e molto altro — per tutti i livelli! Scegli quando sei disponibile: [LINK] - Salvatore</div>
-          <button class="btn btn-gold btn-full mt-4" onclick="copyInvite()">
-            <i class="fas fa-copy"></i> Copia Invito
+          <div class="invite-box" id="invite-text">Ciao! Ti invito a iscriverti alle lezioni di *Fondamenti del Karate*. Scegli il tuo orario preferito e prenota il tuo posto: [LINK]. A presto! 🥋</div>
+          <button class="btn-secondary" onclick="copyInvite()">
+            <i class="fa-regular fa-copy"></i> Copia testo
           </button>
         </div>
       </div>
     </div>
 
-    <!-- ── BOTTOM TAB BAR ── -->
-    <nav id="tab-bar">
-      <button class="tab-btn active" data-tab="panoramica" onclick="switchTab('panoramica',this)">
-        <i class="fas fa-chart-bar"></i>
-        <span>Panoramica</span>
-      </button>
-      <button class="tab-btn" data-tab="orari" onclick="switchTab('orari',this)">
-        <i class="fas fa-clock"></i>
-        <span>Orari</span>
-      </button>
-      <button class="tab-btn" data-tab="persone" onclick="switchTab('persone',this)">
-        <i class="fas fa-users"></i>
-        <span>Persone</span>
-      </button>
-      <button class="tab-btn" data-tab="messaggi" onclick="switchTab('messaggi',this)">
-        <i class="fas fa-comment-dots"></i>
-        <span>Messaggi</span>
-      </button>
-    </nav>
+  </div><!-- end tab-content -->
 
-  </div><!-- /#main -->
-</div><!-- /#app -->
+  <!-- ── BOTTOM TAB BAR ── -->
+  <nav class="tab-bar" id="tab-bar">
+    <div class="tab-item active" data-tab="panoramica">
+      <i class="fa-solid fa-chart-simple tab-icon"></i>
+      <span class="tab-label">Panoramica</span>
+    </div>
+    <div class="tab-item" data-tab="orari">
+      <i class="fa-regular fa-clock tab-icon"></i>
+      <span class="tab-label">Orari</span>
+    </div>
+    <div class="tab-item" data-tab="persone">
+      <i class="fa-solid fa-users tab-icon"></i>
+      <span class="tab-label">Persone</span>
+    </div>
+    <div class="tab-item" data-tab="messaggi">
+      <i class="fa-regular fa-comment tab-icon"></i>
+      <span class="tab-label">Messaggi</span>
+    </div>
+  </nav>
 
-<!-- ── TOAST ── -->
-<div class="toast" id="toast"></div>
+</div><!-- end app -->
 
-<!-- ── DELETE MODAL ── -->
-<div class="modal-overlay" id="delete-modal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Elimina Iscrizione</div>
-    <div class="modal-sub" id="delete-modal-name">Sei sicuro di voler eliminare questa persona?</div>
-    <button class="btn btn-primary btn-full" id="confirm-delete-btn" style="background:var(--red);">
-      <i class="fas fa-trash"></i> Elimina
-    </button>
-    <button class="btn btn-secondary btn-full" onclick="closeDeleteModal()">Annulla</button>
+<!-- ── DELETE BOTTOM SHEET ── -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeDeleteSheet()"></div>
+<div class="bottom-sheet" id="delete-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">Elimina iscritto</div>
+  <div class="sheet-body" id="sheet-body">Sei sicuro di voler eliminare questo iscritto? L'azione non può essere annullata.</div>
+  <div class="sheet-actions">
+    <button class="btn-danger" id="btn-confirm-delete">Elimina</button>
+    <button class="btn-cancel" onclick="closeDeleteSheet()">Annulla</button>
   </div>
 </div>
 
-<script>
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
-let allRegistrations = [];
-let deleteTarget = null;
-// Google Sheets polling
+<!-- ── NOTIF BANNER ── -->
+<div id="notif-banner">
+  <i class="fa-regular fa-bell notif-icon"></i>
+  <div class="notif-body">
+    <div class="notif-title">Abilita notifiche</div>
+    <div class="notif-sub">Ricevi una notifica ogni volta che arriva un nuovo iscritto.</div>
+    <div class="notif-actions">
+      <button class="notif-btn-yes" onclick="requestNotifPermission()">Abilita</button>
+      <button class="notif-btn-no" onclick="dismissNotifBanner()">Non ora</button>
+    </div>
+  </div>
+</div>
 
-// ─── SLOT DEFINITIONS ───────────────────
+<!-- ── TOAST ── -->
+<div id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════
+   SLOTS
+══════════════════════════════════════════════ */
 const SLOTS = [
-  { day: 'LUNEDÌ',    time: '18:00 - 19:00', id: 'lun-18' },
-  { day: 'LUNEDÌ',    time: '19:00 - 20:00', id: 'lun-19' },
-  { day: 'MERCOLEDÌ', time: '18:00 - 19:00', id: 'mer-18' },
-  { day: 'MERCOLEDÌ', time: '19:00 - 20:00', id: 'mer-19' },
-  { day: 'VENERDÌ',   time: '18:00 - 19:00', id: 'ven-18' },
-  { day: 'VENERDÌ',   time: '19:00 - 20:00', id: 'ven-19' },
-  { day: 'SABATO',    time: '10:00 - 11:00', id: 'sab-10' },
-  { day: 'SABATO',    time: '11:00 - 12:00', id: 'sab-11' },
+  { day: 'Lunedì',    time: '18:00-19:00' },
+  { day: 'Lunedì',    time: '19:00-20:00' },
+  { day: 'Mercoledì', time: '18:00-19:00' },
+  { day: 'Mercoledì', time: '19:00-20:00' },
+  { day: 'Venerdì',   time: '18:00-19:00' },
+  { day: 'Venerdì',   time: '19:00-20:00' },
+  { day: 'Sabato',    time: '09:00-10:00' },
+  { day: 'Sabato',    time: '10:00-11:00' },
+  { day: 'Sabato',    time: '11:00-12:00' },
+  { day: 'Domenica',  time: '09:00-10:00' },
+  { day: 'Domenica',  time: '10:00-11:00' },
+  { day: 'Domenica',  time: '11:00-12:00' },
 ];
 
-// day label → slot array
-function groupedSlots() {
-  const map = {};
-  SLOTS.forEach(s => {
-    if (!map[s.day]) map[s.day] = [];
-    map[s.day].push(s);
-  });
-  return map;
-}
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+let allRegistrations = [];
+let lastCount = -1;
+let pendingDeleteId = null;
+let activeTab = 'panoramica';
+let searchQuery = '';
 
-// slot display label
-function slotLabel(s) { return `${s.day} ${s.time}`; }
-
-// ══════════════════════════════════════════
-// JSONBLOB BACKEND
-// ══════════════════════════════════════════
-async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    const db = await res.json();
-    allRegistrations = (db.registrations || []).sort((a, b) => {
-      return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
-    });
-    renderAll();
-  } catch (err) {
-    console.error('[K360] Errore caricamento dati:', err);
-    allRegistrations = [];
-    renderAll();
-  }
-}
-
-async function deleteRegistration(id) {
-  try {
-    const res = await fetch(API_URL);
-    const db = await res.json();
-    db.registrations = (db.registrations || []).filter(r => r.id !== id);
-    await fetch(API_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(db)
-    });
-    await loadData();
-  } catch (err) {
-    console.error('[K360] Errore eliminazione:', err);
-  }
-}
-
-// Load data on start and refresh every 30 seconds
-loadData();
-setInterval(loadData, 30000);
-
-// ══════════════════════════════════════════
-// RENDER ALL
-// ══════════════════════════════════════════
-function renderAll() {
-  renderPanoramica();
-  renderOrari();
-  renderPersone();
-  renderMessaggi();
-}
-
-// ══════════════════════════════════════════
-// TAB 1 — PANORAMICA
-// ══════════════════════════════════════════
-function renderPanoramica() {
-  const regs = allRegistrations;
-  document.getElementById('stat-total').textContent = regs.length;
-
-  // count slots
-  const slotCounts = {};
-  SLOTS.forEach(s => slotCounts[slotLabel(s)] = 0);
-  regs.forEach(r => {
-    (r.slots || []).forEach(sl => {
-      if (slotCounts[sl] !== undefined) slotCounts[sl]++;
-      else slotCounts[sl] = 1;
-    });
-  });
-
-  const sorted = Object.entries(slotCounts).sort((a,b) => b[1]-a[1]);
-  const top = sorted[0];
-  if (top && top[1] > 0) {
-    document.getElementById('stat-topslot').textContent = shortSlotLabel(top[0]);
-    document.getElementById('stat-topslot-count').textContent = top[1] + ' pers.';
-  } else {
-    document.getElementById('stat-topslot').textContent = '—';
-    document.getElementById('stat-topslot-count').textContent = 'nessuno';
-  }
-
-  document.getElementById('stat-maxgroup').textContent = top ? top[1] : 0;
-  document.getElementById('stat-maxgroup-slot').textContent = top ? shortSlotLabel(top[0]) : 'slot';
-
-  // chart
-  const maxCount = sorted.reduce((m, [,v]) => Math.max(m,v), 1) || 1;
-  const chartEl = document.getElementById('chart-bars');
-  chartEl.innerHTML = sorted.map(([label, count]) => {
-    const pct = Math.round((count / maxCount) * 100);
-    const pillClass = count >= 3 ? 'pill-green' : count === 2 ? 'pill-yellow' : count === 1 ? 'pill-red' : 'pill-gray';
-    return `
-      <div class="chart-row">
-        <span class="chart-label">${shortSlotLabel(label)}</span>
-        <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
-        <span class="chart-count">${count}</span>
-      </div>`;
-  }).join('');
-
-  // recent 5
-  const recent = [...regs].slice(0,5);
-  const recentEl = document.getElementById('recent-list');
-  if (recent.length === 0) {
-    recentEl.innerHTML = '<div class="empty-state">Nessun iscritto ancora</div>';
-    return;
-  }
-  recentEl.innerHTML = recent.map(r => `
-    <div class="person-row">
-      <div class="avatar av-${avatarColor(r.name)}">${initial(r.name)}</div>
-      <div class="person-info">
-        <div class="person-name">${esc(r.name)}</div>
-        <div class="person-phone">${esc(r.phone || '')}</div>
-      </div>
-      <div class="person-time">${timeAgo(r.timestamp)}</div>
-    </div>`).join('');
-}
-
-function shortSlotLabel(label) {
-  return label.replace('LUNEDÌ','Lun').replace('MERCOLEDÌ','Mer').replace('VENERDÌ','Ven').replace('SABATO','Sab');
-}
-
-// ══════════════════════════════════════════
-// TAB 2 — ORARI
-// ══════════════════════════════════════════
-function renderOrari() {
-  const grouped = groupedSlots();
-  const container = document.getElementById('orari-content');
-  let html = '';
-
-  Object.entries(grouped).forEach(([day, slots]) => {
-    html += `<div class="section-group"><div class="section-label">${day}</div><div class="grouped-list">`;
-    slots.forEach(s => {
-      const label = slotLabel(s);
-      const people = allRegistrations.filter(r => (r.slots||[]).includes(label));
-      const count = people.length;
-      const pillClass = count >= 3 ? 'pill-green' : count === 2 ? 'pill-yellow' : count === 1 ? 'pill-red' : 'pill-gray';
-
-      html += `
-        <div class="list-row" onclick="toggleSlot('${s.id}', this)">
-          <div class="row-left">
-            <div class="row-title">${s.time}</div>
-          </div>
-          <div class="row-right">
-            <span class="count-pill ${pillClass}">${count}</span>
-            <i class="fas fa-chevron-right chevron" id="chev-${s.id}"></i>
-          </div>
-        </div>
-        <div class="slot-expanded" id="exp-${s.id}">
-          ${count === 0
-            ? '<div class="empty-state">Nessuna iscrizione per questo slot</div>'
-            : people.map(p => `
-              <div class="slot-person-row">
-                <div class="avatar av-${avatarColor(p.name)}" style="width:30px;height:30px;font-size:12px;">${initial(p.name)}</div>
-                <div style="flex:1;min-width:0;">
-                  <div class="slot-person-name">${esc(p.name)}</div>
-                  <div class="slot-person-phone">${esc(p.phone||'')}</div>
-                </div>
-                <a class="wa-btn" href="${waLink(p.phone, '')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
-                  <i class="fab fa-whatsapp"></i>
-                </a>
-              </div>`).join('')
-          }
-        </div>`;
-    });
-    html += '</div></div>';
-  });
-
-  container.innerHTML = html;
-}
-
-function toggleSlot(id, rowEl) {
-  const exp = document.getElementById('exp-'+id);
-  const chev = document.getElementById('chev-'+id);
-  const isOpen = exp.classList.contains('open');
-  exp.classList.toggle('open', !isOpen);
-  chev.classList.toggle('open', !isOpen);
-}
-
-// ══════════════════════════════════════════
-// TAB 3 — PERSONE
-// ══════════════════════════════════════════
-function renderPersone(filter) {
-  let list = allRegistrations;
-  if (filter) {
-    const f = filter.toLowerCase();
-    list = list.filter(r => (r.name||'').toLowerCase().includes(f));
-  }
-
-  document.getElementById('people-count').textContent = list.length;
-
-  const container = document.getElementById('people-list');
-  if (list.length === 0) {
-    container.innerHTML = '<div class="empty-state">Nessun risultato</div>';
-    return;
-  }
-
-  container.innerHTML = list.map(r => `
-    <div class="person-card">
-      <div class="person-card-inner">
-        <div class="person-card-header">
-          <div class="avatar av-${avatarColor(r.name)}">${initial(r.name)}</div>
-          <div class="person-card-info">
-            <div class="person-name">${esc(r.name)}</div>
-            <a class="person-phone" href="${waLink(r.phone, '')}" target="_blank" rel="noopener">${esc(r.phone||'')}</a>
-          </div>
-          <div class="person-card-actions">
-            <a class="wa-btn" href="${waLink(r.phone, '')}" target="_blank" rel="noopener">
-              <i class="fab fa-whatsapp"></i>
-            </a>
-            <button class="delete-btn" onclick="openDeleteModal('${r.id}', '${esc(r.name)}')">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-        ${(r.slots||[]).length > 0 ? `
-        <div class="person-tags mt-8">
-          ${(r.slots||[]).map(sl => `<span class="slot-tag">${shortSlotLabel(sl)}</span>`).join('')}
-        </div>` : ''}
-        ${r.notes ? `<div class="person-notes mt-4">"${esc(r.notes)}"</div>` : ''}
-        <div class="person-time mt-4" style="font-size:12px;color:var(--text-3);">${timeAgo(r.timestamp)}</div>
-      </div>
-    </div>`).join('');
-}
-
-document.getElementById('people-search').addEventListener('input', function() {
-  renderPersone(this.value);
-});
-
-// ══════════════════════════════════════════
-// TAB 4 — MESSAGGI
-// ══════════════════════════════════════════
-function renderMessaggi() {
-  // populate slot select
-  const sel = document.getElementById('msg-slot-select');
-  const prevVal = sel.value;
-  sel.innerHTML = '<option value="">Seleziona slot...</option>';
-  SLOTS.forEach(s => {
-    const label = slotLabel(s);
-    const opt = document.createElement('option');
-    opt.value = label;
-    opt.textContent = label;
-    sel.appendChild(opt);
-  });
-  if (prevVal) sel.value = prevVal;
-
-  // recipient pills
-  const pills = document.getElementById('recipient-pills');
-  pills.innerHTML = allRegistrations.map(r => `
-    <button class="rec-pill" data-id="${r.id}" data-phone="${esc(r.phone||'')}" data-name="${esc(r.name)}" onclick="toggleRecipient(this)">
-      ${esc(r.name)}
-    </button>`).join('');
-}
-
-document.getElementById('msg-slot-select').addEventListener('change', function() {
-  const slot = this.value;
-  const preview = document.getElementById('msg-slot-preview');
-  if (!slot) { preview.style.display = 'none'; return; }
-  preview.style.display = 'block';
-
-  const people = allRegistrations.filter(r => (r.slots||[]).includes(slot));
-  document.getElementById('msg-slot-count-label').textContent =
-    `${people.length} persona${people.length !== 1 ? 'e' : ''} in questo slot`;
-
-  // parse day and time from slot label: "LUNEDÌ 18:00 - 19:00"
-  const parts = slot.split(' ');
-  const giorno = parts[0] || '';
-  const ora = parts[1] || '';
-
-  document.getElementById('msg-slot-text').value =
-    `Ciao! 🥋 Siamo già in ${people.length} per Karate 360 ${giorno} alle ${ora}! Ci sei anche tu? Rispondi a questo messaggio! - Salvatore`;
-
-  const pplEl = document.getElementById('msg-slot-people');
-  pplEl.innerHTML = people.length === 0
-    ? '<div class="empty-state">Nessuno in questo slot</div>'
-    : people.map(p => `
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="flex:1;font-size:14px;font-weight:500;">${esc(p.name)}</div>
-        <a class="btn btn-green btn-sm" href="${waLink(p.phone, document.getElementById('msg-slot-text').value)}" target="_blank" rel="noopener">
-          <i class="fab fa-whatsapp"></i> Invia
-        </a>
-      </div>`).join('');
-});
-
-function copyMsgSlot() {
-  const text = document.getElementById('msg-slot-text').value;
-  copyToClipboard(text, 'Messaggio copiato!');
-}
-
-function toggleRecipient(btn) {
-  btn.classList.toggle('selected');
-}
-
-function toggleSelectAll() {
-  const pills = document.querySelectorAll('.rec-pill');
-  const allSelected = [...pills].every(p => p.classList.contains('selected'));
-  pills.forEach(p => p.classList.toggle('selected', !allSelected));
-  document.getElementById('select-all-btn').textContent =
-    allSelected ? 'Seleziona Tutti' : 'Deseleziona Tutti';
-}
-
-async function sendToSelected() {
-  const selected = [...document.querySelectorAll('.rec-pill.selected')];
-  if (selected.length === 0) { showToast('Nessun destinatario selezionato'); return; }
-  const msg = document.getElementById('custom-msg-text').value.trim();
-  if (!msg) { showToast('Scrivi un messaggio prima'); return; }
-
-  for (let i = 0; i < selected.length; i++) {
-    const phone = selected[i].dataset.phone;
-    if (i > 0) await sleep(500);
-    window.open(waLink(phone, msg), '_blank');
-  }
-}
-
-function copyInvite() {
-  const text = document.getElementById('invite-text').textContent;
-  copyToClipboard(text, 'Invito copiato!');
-}
-
-// ══════════════════════════════════════════
-// DELETE
-// ══════════════════════════════════════════
-function openDeleteModal(id, name) {
-  deleteTarget = id;
-  document.getElementById('delete-modal-name').textContent =
-    `Vuoi eliminare "${name}" da tutte le iscrizioni?`;
-  document.getElementById('delete-modal').classList.add('open');
-}
-
-function closeDeleteModal() {
-  deleteTarget = null;
-  document.getElementById('delete-modal').classList.remove('open');
-}
-
-document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-  if (!deleteTarget) return;
-  try {
-    await deleteRegistration(deleteTarget);
-    showToast('Iscrizione eliminata');
-  } catch(e) {
-    showToast('Errore nell\'eliminazione');
-  }
-  closeDeleteModal();
-});
-
-document.getElementById('delete-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeDeleteModal();
-});
-
-// ══════════════════════════════════════════
-// EXPORT CSV
-// ══════════════════════════════════════════
-document.getElementById('export-btn').addEventListener('click', () => {
-  if (allRegistrations.length === 0) { showToast('Nessun dato da esportare'); return; }
-  const rows = [['Nome','Telefono','Slot','Note','Data']];
-  allRegistrations.forEach(r => {
-    rows.push([
-      r.name || '',
-      r.phone || '',
-      (r.slots||[]).join('; '),
-      r.notes || '',
-      r.timestamp ? new Date(r.timestamp).toLocaleString('it-IT') : ''
-    ]);
-  });
-  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'karate360_iscritti.csv'; a.click();
-  URL.revokeObjectURL(url);
-  showToast('CSV scaricato!');
-});
-
-// ══════════════════════════════════════════
-// TAB SWITCHING
-// ══════════════════════════════════════════
-function switchTab(tabName, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+tabName).classList.add('active');
-  btn.classList.add('active');
-  // scroll to top
-  document.getElementById('tab-'+tabName).scrollTop = 0;
-}
-
-// ══════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════
-function initial(name) {
-  return (name || '?').trim().charAt(0).toUpperCase();
-}
-
-function avatarColor(name) {
-  if (!name) return 0;
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i)) % 8;
-  return hash;
-}
-
-function esc(str) {
-  return String(str||'')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
+/* ══════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════ */
+function esc(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function waLink(phone, msg) {
-  const clean = (phone||'').replace(/\D/g,'');
-  const num = clean.startsWith('39') ? clean : '39'+clean.replace(/^0+/,'');
-  return `https://wa.me/${num}?text=${encodeURIComponent(msg||'')}`;
+  const p = String(phone || '').replace(/\D/g, '');
+  const num = p.startsWith('39') ? p : '39' + p;
+  return 'https://wa.me/' + num + (msg ? '?text=' + encodeURIComponent(msg) : '');
 }
 
 function timeAgo(ts) {
   if (!ts) return '';
-  let date;
-  try { date = new Date(ts); } catch(e) { return ''; }
-  const diffMs = Date.now() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffH   = Math.floor(diffMs / 3600000);
-  const diffD   = Math.floor(diffMs / 86400000);
-  if (diffMin < 1)  return 'adesso';
-  if (diffMin < 60) return `${diffMin} min fa`;
-  if (diffH < 24)   return `${diffH} ore fa`;
-  if (diffD === 1)  return 'ieri';
-  if (diffD < 7)    return `${diffD} giorni fa`;
-  return date.toLocaleDateString('it-IT');
+  const now = Date.now();
+  const d = now - new Date(ts).getTime();
+  const s = Math.floor(d / 1000);
+  if (s < 60)   return 'ora';
+  const m = Math.floor(s / 60);
+  if (m < 60)   return m + ' min fa';
+  const h = Math.floor(m / 60);
+  if (h < 24)   return h + ' ore fa';
+  const days = Math.floor(h / 24);
+  if (days === 1) return 'ieri';
+  if (days < 7)  return days + ' giorni fa';
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) return weeks + ' sett. fa';
+  const months = Math.floor(days / 30);
+  return months + ' mesi fa';
 }
 
+function initial(name) {
+  if (!name) return '?';
+  return name.trim().charAt(0).toUpperCase();
+}
+
+let _toastTimer;
 function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2200);
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 function copyToClipboard(text, successMsg) {
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(() => showToast(successMsg||'Copiato!')).catch(() => fallbackCopy(text, successMsg));
+    navigator.clipboard.writeText(text).then(() => showToast(successMsg || 'Copiato!'));
   } else {
-    fallbackCopy(text, successMsg);
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast(successMsg || 'Copiato!');
   }
 }
 
-function fallbackCopy(text, msg) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed';
-  ta.style.opacity = '0';
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-  showToast(msg||'Copiato!');
+function copyInvite() {
+  const txt = document.getElementById('invite-text').textContent;
+  copyToClipboard(txt, 'Testo copiato!');
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// ══════════════════════════════════════════
-// SERVICE WORKER + NOTIFICHE
-// ══════════════════════════════════════════
-let lastKnownCount = null;
-
-async function initNotifications() {
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    try {
-      await navigator.serviceWorker.register('sw.js');
-    } catch (e) {
-      console.warn('[K360] SW registration failed:', e);
-    }
-  }
-
-  // Request notification permission
-  if ('Notification' in window && Notification.permission === 'default') {
-    // Show banner to ask for permission
-    showNotifBanner();
-  }
+function exportCSV() {
+  if (!allRegistrations.length) { showToast('Nessun dato da esportare'); return; }
+  const BOM = '\uFEFF';
+  const header = ['Nome', 'Telefono', 'Slot', 'Note', 'Data'];
+  const rows = allRegistrations.map(r => {
+    const slots = Array.isArray(r.slots) ? r.slots.join(' | ') : (r.slot || '');
+    return [
+      r.name || '', r.phone || '', slots, r.notes || '',
+      r.timestamp ? new Date(r.timestamp).toLocaleString('it-IT') : ''
+    ].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',');
+  });
+  const csv = BOM + [header.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'iscritti_fondamenti_karate_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV esportato');
 }
 
-function showNotifBanner() {
-  const banner = document.createElement('div');
-  banner.id = 'notif-banner';
-  banner.style.cssText = `
-    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-    background: linear-gradient(135deg, #DC2626, #991b1b);
-    color: #fff; padding: 14px 16px;
-    display: flex; align-items: center; gap: 12px;
-    font-family: inherit; font-size: 13px; font-weight: 500;
-    animation: slideDown 0.3s ease;
-    padding-top: calc(14px + env(safe-area-inset-top, 0px));
-  `;
-  banner.innerHTML = `
-    <i class="fas fa-bell" style="font-size:18px"></i>
-    <span style="flex:1">Attiva le notifiche per sapere quando qualcuno si iscrive!</span>
-    <button onclick="requestNotifPermission()" style="
-      background: #fff; color: #DC2626; border: none; border-radius: 8px;
-      padding: 8px 14px; font-family: inherit; font-size: 12px; font-weight: 700;
-      cursor: pointer; white-space: nowrap;
-    ">Attiva</button>
-    <button onclick="this.parentElement.remove()" style="
-      background: none; border: none; color: rgba(255,255,255,0.7); font-size: 18px;
-      cursor: pointer; padding: 4px;
-    ">&times;</button>
-  `;
-  document.body.appendChild(banner);
-}
-
-async function requestNotifPermission() {
-  const permission = await Notification.requestPermission();
-  const banner = document.getElementById('notif-banner');
-  if (banner) banner.remove();
-  if (permission === 'granted') {
-    showToast('Notifiche attivate!');
-  }
-}
-
-// Poll for new registrations and notify
-async function checkForNewRegistrations() {
+/* ══════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════ */
+async function loadData() {
   try {
-    const res = await fetch(API_URL);
-    const db = await res.json();
-    const currentCount = (db.registrations || []).length;
-
-    if (lastKnownCount !== null && currentCount > lastKnownCount) {
-      const newOnes = currentCount - lastKnownCount;
-      const latest = db.registrations[db.registrations.length - 1];
-      const name = latest ? latest.name : 'Qualcuno';
-
-      // Browser notification
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Karate 360 - Nuova iscrizione!', {
-          body: `${name} si e\' iscritto!${newOnes > 1 ? ` (+${newOnes - 1} altri)` : ''}`,
-          icon: 'icon-192.png',
-          tag: 'karate360-new-' + currentCount,
-          renotify: true
-        });
-      }
-
-      // Also refresh the dashboard data
-      allRegistrations = (db.registrations || []).sort((a, b) => {
-        return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
-      });
-      renderAll();
-      showToast('Nuova iscrizione: ' + name);
-    }
-
-    lastKnownCount = currentCount;
+    const res = await fetch(API_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const regs = data.registrations || [];
+    allRegistrations = regs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    renderAll();
+    rotateRefresh(false);
   } catch (e) {
-    // silent fail on polling
+    console.error('loadData:', e);
+    showToast('Errore caricamento dati');
+    rotateRefresh(false);
   }
 }
 
-// Init
-initNotifications();
+function rotateRefresh(on) {
+  const btn = document.getElementById('btn-refresh');
+  if (on) btn.style.animation = 'spin 0.7s linear infinite';
+  else    btn.style.animation = '';
+}
 
-// Set initial count
-fetch(API_URL).then(r => r.json()).then(db => {
-  lastKnownCount = (db.registrations || []).length;
-}).catch(() => {});
+async function deleteRegistration(id) {
+  try {
+    const res = await fetch(API_URL, { cache: 'no-store' });
+    const data = await res.json();
+    data.registrations = (data.registrations || []).filter(r => r.id !== id);
+    await fetch(API_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    showToast('Iscritto eliminato');
+    await loadData();
+  } catch (e) {
+    console.error('deleteRegistration:', e);
+    showToast('Errore eliminazione');
+  }
+}
 
-// Check every 15 seconds for new registrations
-setInterval(checkForNewRegistrations, 15000);
+/* ══════════════════════════════════════════════
+   RENDER ALL
+══════════════════════════════════════════════ */
+function renderAll() {
+  renderPanoramica();
+  renderOrari();
+  renderPersone();
+  renderMessaggiRecipients();
+}
+
+/* ── PANORAMICA ── */
+function renderPanoramica() {
+  const total = allRegistrations.length;
+  document.getElementById('stat-iscritti').textContent = total;
+
+  // Count per slot
+  const slotMap = {};
+  SLOTS.forEach(s => { slotMap[s.day + ' ' + s.time] = 0; });
+  allRegistrations.forEach(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+    slots.forEach(sl => { if (slotMap[sl] !== undefined) slotMap[sl]++; });
+  });
+
+  let topKey = '', topVal = 0, maxGroup = 0;
+  Object.entries(slotMap).forEach(([k, v]) => {
+    if (v > topVal) { topVal = v; topKey = k; }
+    if (v > maxGroup) maxGroup = v;
+  });
+
+  const topParts = topKey.split(' ');
+  const topLabel = topKey ? topParts.slice(-1)[0] : '—';
+  document.getElementById('stat-top-slot').textContent = topKey ? topKey : '—';
+  document.getElementById('stat-top-slot').style.fontSize = topKey.length > 12 ? '11px' : '14px';
+  document.getElementById('stat-max-gruppo').textContent = maxGroup || '—';
+
+  // Chart
+  const maxVal = Math.max(...Object.values(slotMap), 1);
+  const chartHtml = SLOTS.map(s => {
+    const key = s.day + ' ' + s.time;
+    const count = slotMap[key] || 0;
+    const pct = Math.round((count / maxVal) * 100);
+    return `<div class="chart-bar-row">
+      <div class="chart-label">${esc(s.day)} ${esc(s.time)}</div>
+      <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%"></div></div>
+      <div class="chart-count">${count}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('chart-bars').innerHTML = chartHtml;
+
+  // Recent 5
+  const recent = allRegistrations.slice(0, 5);
+  if (!recent.length) {
+    document.getElementById('recent-list').innerHTML = '<div class="loading-wrap" style="padding:28px"><p style="color:var(--text-3);font-size:14px">Nessun iscritto</p></div>';
+    return;
+  }
+  document.getElementById('recent-list').innerHTML = recent.map(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+    return `<div class="recent-item">
+      <div class="avatar">${esc(initial(r.name))}</div>
+      <div class="recent-info">
+        <div class="recent-name">${esc(r.name)}</div>
+        <div class="recent-meta">${esc(slots[0] || '—')}</div>
+      </div>
+      <div class="recent-time">${esc(timeAgo(r.timestamp))}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── ORARI ── */
+function renderOrari() {
+  const slotMap = {};
+  SLOTS.forEach(s => { slotMap[s.day + '_' + s.time] = []; });
+  allRegistrations.forEach(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+    slots.forEach(sl => {
+      const [day, time] = sl.split(' ');
+      const key = day + '_' + time;
+      if (slotMap[key] !== undefined) slotMap[key].push(r);
+    });
+  });
+
+  const days = [...new Set(SLOTS.map(s => s.day))];
+  const html = days.map(day => {
+    const daySlots = SLOTS.filter(s => s.day === day);
+    const rows = daySlots.map(s => {
+      const key = s.day + '_' + s.time;
+      const people = slotMap[key] || [];
+      const n = people.length;
+      const pillClass = n >= 3 ? 'pill-green' : n === 2 ? 'pill-amber' : 'pill-gray';
+      const uid = 'slot-' + key.replace(/[^a-z0-9]/gi, '-');
+
+      const peopleHtml = people.length
+        ? people.map(p => `<div class="slot-person">
+            <div class="avatar" style="width:32px;height:32px;font-size:12px">${esc(initial(p.name))}</div>
+            <div class="slot-person-info">
+              <div class="slot-person-name">${esc(p.name)}</div>
+              <div class="slot-person-phone">${esc(p.phone)}</div>
+            </div>
+            <a href="${waLink(p.phone, 'Ciao ' + (p.name||'') + ', ti scrivo riguardo alla lezione di Fondamenti del Karate del ' + s.day + ' ore ' + s.time + '.')}" target="_blank">
+              <button class="wa-btn-sm"><i class="fa-brands fa-whatsapp"></i></button>
+            </a>
+          </div>`).join('')
+        : '<div class="slot-empty">Nessun iscritto</div>';
+
+      return `<div class="slot-row" id="${uid}" onclick="toggleSlot('${uid}')">
+        <div class="slot-header">
+          <div class="slot-time">${esc(s.time)}</div>
+          <span class="count-pill ${pillClass}">${n}</span>
+          <i class="fa-solid fa-chevron-right slot-chevron"></i>
+        </div>
+        <div class="slot-detail">${peopleHtml}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="day-group">
+      <div class="day-header">${esc(day.toUpperCase())}</div>
+      <div class="day-card">${rows}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('orari-content').innerHTML = html + '<div style="height:8px"></div>';
+}
+
+function toggleSlot(uid) {
+  const el = document.getElementById(uid);
+  if (el) el.classList.toggle('open');
+}
+
+/* ── PERSONE ── */
+function renderPersone(query) {
+  query = (query || searchQuery || '').toLowerCase().trim();
+  let list = allRegistrations;
+  if (query) {
+    list = list.filter(r =>
+      (r.name  || '').toLowerCase().includes(query) ||
+      (r.phone || '').toLowerCase().includes(query)
+    );
+  }
+
+  if (!list.length) {
+    document.getElementById('person-list').innerHTML = `<div class="empty-state">
+      <i class="fa-regular fa-user"></i>
+      <p>${query ? 'Nessun risultato per "' + esc(query) + '"' : 'Nessun iscritto'}</p>
+    </div>`;
+    return;
+  }
+
+  document.getElementById('person-list').innerHTML = list.map(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+    const tags = slots.map(sl => `<span class="slot-tag">${esc(sl)}</span>`).join('');
+    const note = r.notes ? `<div class="person-note">${esc(r.notes)}</div>` : '';
+    const msg = 'Ciao ' + (r.name || '') + ', ti scrivo riguardo alle lezioni di Fondamenti del Karate.';
+    return `<div class="person-card">
+      <div class="person-top">
+        <div class="person-avatar">${esc(initial(r.name))}</div>
+        <div class="person-info">
+          <div class="person-name">${esc(r.name)}</div>
+          <div class="person-phone">${esc(r.phone)}</div>
+        </div>
+        <div class="person-date">${esc(timeAgo(r.timestamp))}</div>
+      </div>
+      ${tags ? '<div class="person-tags">' + tags + '</div>' : ''}
+      ${note}
+      <div class="person-actions">
+        <a href="${waLink(r.phone, msg)}" target="_blank" style="flex:1">
+          <button class="btn-wa" style="width:100%">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </button>
+        </a>
+        <button class="btn-delete" onclick="openDeleteSheet('${esc(r.id)}', '${esc(r.name)}')">
+          <i class="fa-regular fa-trash-can"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── MESSAGGI RECIPIENTS ── */
+function renderMessaggiRecipients() {
+  // Slot select
+  const sel = document.getElementById('msg-slot-select');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">— Seleziona orario —</option>';
+  SLOTS.forEach(s => {
+    const key = s.day + ' ' + s.time;
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = key;
+    sel.appendChild(opt);
+  });
+  if (prev) sel.value = prev;
+
+  // Custom recipients pills
+  const wrap = document.getElementById('msg-custom-recipients');
+  wrap.innerHTML = allRegistrations.map(r => {
+    return `<div class="recipient-pill" data-id="${esc(r.id)}" data-phone="${esc(r.phone)}" data-name="${esc(r.name)}" onclick="toggleRecipient(this)">${esc(r.name)}</div>`;
+  }).join('');
+
+  updateSendCustomBtn();
+}
+
+function onSlotSelect() {
+  const key = document.getElementById('msg-slot-select').value;
+  const container = document.getElementById('slot-recipient-list');
+  const rows = document.getElementById('slot-recipient-rows');
+
+  if (!key) { container.style.display = 'none'; return; }
+
+  const people = allRegistrations.filter(r => {
+    const slots = Array.isArray(r.slots) ? r.slots : (r.slot ? [r.slot] : []);
+    return slots.includes(key);
+  });
+
+  if (!people.length) {
+    rows.innerHTML = '<p style="font-size:13px;color:var(--text-3);padding:4px 0">Nessun iscritto in questo slot</p>';
+    container.style.display = 'block';
+    return;
+  }
+
+  rows.innerHTML = people.map(p => {
+    return `<div style="display:flex;align-items:center;gap:10px">
+      <div style="flex:1;font-size:13px;color:var(--text)">${esc(p.name)}</div>
+      <a href="javascript:void(0)" onclick="sendSlotMsg('${esc(p.phone)}', '${esc(p.name)}')">
+        <button class="btn-wa" style="width:auto;padding:0 14px;height:36px;font-size:12px">
+          <i class="fa-brands fa-whatsapp"></i> ${esc(p.name.split(' ')[0])}
+        </button>
+      </a>
+    </div>`;
+  }).join('');
+  container.style.display = 'block';
+}
+
+function sendSlotMsg(phone, name) {
+  const key = document.getElementById('msg-slot-select').value;
+  let text = document.getElementById('msg-slot-text').value.trim();
+  if (!text) text = 'Ciao ' + name + ', ti scrivo riguardo alla lezione di Fondamenti del Karate (' + key + ').';
+  window.open(waLink(phone, text), '_blank');
+}
+
+function toggleRecipient(el) {
+  el.classList.toggle('selected');
+  updateSendCustomBtn();
+}
+
+function updateSendCustomBtn() {
+  const selected = document.querySelectorAll('.recipient-pill.selected');
+  document.getElementById('btn-send-custom').disabled = selected.length === 0;
+}
+
+function sendCustomMsg() {
+  const selected = [...document.querySelectorAll('.recipient-pill.selected')];
+  const text = document.getElementById('msg-custom-text').value.trim();
+  if (!selected.length) { showToast('Seleziona almeno un destinatario'); return; }
+  if (!text) { showToast('Scrivi un messaggio'); return; }
+  // Open first, show toast for rest
+  selected.forEach((el, i) => {
+    setTimeout(() => {
+      window.open(waLink(el.dataset.phone, text.replace('{nome}', el.dataset.name || '')), '_blank');
+    }, i * 600);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   DELETE SHEET
+══════════════════════════════════════════════ */
+function openDeleteSheet(id, name) {
+  pendingDeleteId = id;
+  document.getElementById('sheet-body').textContent =
+    'Vuoi eliminare ' + (name || 'questo iscritto') + '? L\'azione non può essere annullata.';
+  document.getElementById('sheet-overlay').classList.add('visible');
+  document.getElementById('delete-sheet').classList.add('open');
+}
+
+function closeDeleteSheet() {
+  pendingDeleteId = null;
+  document.getElementById('sheet-overlay').classList.remove('visible');
+  document.getElementById('delete-sheet').classList.remove('open');
+}
+
+document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+  if (!pendingDeleteId) return;
+  closeDeleteSheet();
+  await deleteRegistration(pendingDeleteId);
+});
+
+/* ══════════════════════════════════════════════
+   TAB NAVIGATION
+══════════════════════════════════════════════ */
+function switchTab(name) {
+  if (activeTab === name) return;
+  activeTab = name;
+
+  document.querySelectorAll('.tab-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(el => {
+    const isActive = el.id === 'panel-' + name;
+    el.classList.toggle('active', isActive);
+  });
+
+  // Reset scroll
+  document.getElementById('tab-content').scrollTop = 0;
+}
+
+document.querySelectorAll('.tab-item').forEach(el => {
+  el.addEventListener('click', () => switchTab(el.dataset.tab));
+});
+
+/* ══════════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════════ */
+document.getElementById('search-input').addEventListener('input', function() {
+  searchQuery = this.value;
+  renderPersone(searchQuery);
+});
+
+/* ══════════════════════════════════════════════
+   HEADER BUTTONS
+══════════════════════════════════════════════ */
+document.getElementById('btn-refresh').addEventListener('click', () => {
+  rotateRefresh(true);
+  loadData();
+});
+
+document.getElementById('btn-export').addEventListener('click', exportCSV);
+
+document.getElementById('msg-slot-select').addEventListener('change', onSlotSelect);
+document.getElementById('msg-slot-text').addEventListener('input', () => {});
+document.getElementById('btn-send-custom').addEventListener('click', sendCustomMsg);
+
+/* ══════════════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════════════ */
+function showNotifBanner() {
+  const banner = document.getElementById('notif-banner');
+  banner.classList.add('show');
+}
+
+function dismissNotifBanner() {
+  document.getElementById('notif-banner').classList.remove('show');
+  localStorage.setItem('notif-dismissed', '1');
+}
+
+function requestNotifPermission() {
+  if (!('Notification' in window)) {
+    showToast('Notifiche non supportate');
+    dismissNotifBanner();
+    return;
+  }
+  Notification.requestPermission().then(p => {
+    if (p === 'granted') showToast('Notifiche abilitate');
+    dismissNotifBanner();
+  });
+}
+
+function checkForNewRegistrations() {
+  fetch(API_URL, { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      const regs = data.registrations || [];
+      const count = regs.length;
+      if (lastCount === -1) { lastCount = count; return; }
+      if (count > lastCount) {
+        const diff = count - lastCount;
+        lastCount = count;
+        allRegistrations = regs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        renderAll();
+        showToast((diff === 1 ? 'Nuovo iscritto!' : diff + ' nuovi iscritti!'));
+        if (Notification.permission === 'granted') {
+          new Notification('Fondamenti del Karate', {
+            body: diff === 1 ? 'Nuovo iscritto!' : diff + ' nuovi iscritti!',
+            icon: 'icon-192.png'
+          });
+        }
+      }
+    })
+    .catch(() => {});
+}
+
+/* ══════════════════════════════════════════════
+   SERVICE WORKER
+══════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+(function init() {
+  loadData();
+  setInterval(loadData, 30000);
+  setInterval(checkForNewRegistrations, 15000);
+
+  // Notif banner
+  if (!localStorage.getItem('notif-dismissed') && 'Notification' in window && Notification.permission === 'default') {
+    setTimeout(showNotifBanner, 3000);
+  }
+})();
 </script>
 </body>
 </html>

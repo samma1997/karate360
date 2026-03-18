@@ -1,7 +1,7 @@
 {
-  "name": "Karate 360 con Salvatore",
-  "short_name": "Karate 360",
-  "description": "Prenota la tua lezione di arti marziali con Salvatore",
+  "name": "Fondamenti del Karate",
+  "short_name": "Karate",
+  "description": "Prenota la tua lezione di arti marziali",
   "start_url": "/karate360/",
   "display": "standalone",
   "background_color": "#0a0a0a",

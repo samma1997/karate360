@@ -1,6 +1,6 @@
 {
-  "name": "Karate 360 - Admin",
-  "short_name": "K360 Admin",
+  "name": "Fondamenti del Karate - Admin",
+  "short_name": "Karate Admin",
   "description": "Dashboard admin per gestire le prenotazioni",
   "start_url": "/karate360/dashboard.html",
   "display": "standalone",
