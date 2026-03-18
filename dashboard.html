@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="theme-color" content="#000000" />
   <link rel="manifest" href="manifest-admin.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
@@ -23,33 +23,39 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0A0A0A;
-      --surface:   #141414;
-      --surface2:  #1A1A1A;
-      --surface3:  #212121;
-      --sep:       rgba(255,255,255,0.07);
-      --sep2:      rgba(255,255,255,0.12);
-      --sand:      #C8A87C;
-      --sand-dim:  rgba(200,168,124,0.12);
-      --sand-glow: rgba(200,168,124,0.08);
-      --green:     #4CAF6E;
-      --green-dim: rgba(76,175,110,0.12);
-      --yellow:    #D4A843;
-      --yellow-dim:rgba(212,168,67,0.12);
-      --gray:      #444;
-      --white:     #FFFFFF;
-      --t2:        #999999;
-      --t3:        #555555;
-      --red:       #E05252;
-      --red-dim:   rgba(224,82,82,0.12);
-      --r-sm:      10px;
-      --r:         14px;
-      --r-lg:      18px;
+      --bg:          #000000;
+      --s1:          #0D0D0D;
+      --s2:          #151515;
+      --s3:          #1E1E1E;
+      --s4:          #252525;
+      --border:      rgba(255,255,255,0.06);
+      --border-md:   rgba(255,255,255,0.10);
+      --border-hi:   rgba(255,255,255,0.14);
+      --amber:       #D4A574;
+      --amber-dim:   rgba(212,165,116,0.10);
+      --amber-glow:  rgba(212,165,116,0.06);
+      --amber-border:rgba(212,165,116,0.18);
+      --green:       #4CAF6E;
+      --green-dim:   rgba(76,175,110,0.10);
+      --green-border:rgba(76,175,110,0.18);
+      --yellow:      #D4A843;
+      --yellow-dim:  rgba(212,168,67,0.10);
+      --red:         #E05252;
+      --red-dim:     rgba(224,82,82,0.10);
+      --red-border:  rgba(224,82,82,0.16);
+      --white:       #FFFFFF;
+      --t1:          #EBEBEB;
+      --t2:          #8A8A8A;
+      --t3:          #4A4A4A;
+      --t4:          #2E2E2E;
+      --r-xs:        6px;
+      --r-sm:        8px;
+      --r:           12px;
+      --r-lg:        16px;
+      --r-xl:        20px;
     }
 
-    html { background: var(--bg); }
-
-    body {
+    html, body {
       background: var(--bg);
       color: var(--white);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -63,9 +69,18 @@
     ::-webkit-scrollbar { display: none; }
     * { scrollbar-width: none; }
 
-    /* ────────────────────────────────
-       LOADING
-    ──────────────────────────────── */
+    /* ─── KEYFRAMES ─── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ─── LOADING ─── */
     #loading-screen {
       position: fixed;
       inset: 0;
@@ -74,156 +89,146 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 18px;
+      gap: 16px;
       z-index: 9999;
-      transition: opacity 0.3s;
+      transition: opacity 0.25s ease;
     }
     #loading-screen.hidden { opacity: 0; pointer-events: none; }
-
     .spinner {
-      width: 36px;
-      height: 36px;
-      border: 2px solid var(--sep2);
-      border-top-color: var(--sand);
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--border-md);
+      border-top-color: var(--amber);
       border-radius: 50%;
-      animation: spin 0.75s linear infinite;
+      animation: spin 0.7s linear infinite;
     }
     #loading-screen p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--t3);
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ────────────────────────────────
-       TOAST
-    ──────────────────────────────── */
+    /* ─── TOAST ─── */
     #toast {
       position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
       left: 50%;
-      transform: translateX(-50%) translateY(12px);
-      background: rgba(28,28,28,0.95);
-      border: 1px solid var(--sep2);
-      backdrop-filter: blur(20px);
-      color: var(--white);
+      transform: translateX(-50%) translateY(10px);
+      background: var(--s3);
+      border: 1px solid var(--border-md);
+      backdrop-filter: blur(24px);
+      color: var(--t1);
       font-size: 13px;
       font-weight: 500;
-      padding: 10px 20px;
+      padding: 9px 18px;
       border-radius: 99px;
       white-space: nowrap;
       pointer-events: none;
       opacity: 0;
       z-index: 9998;
-      transition: opacity 0.2s, transform 0.2s;
+      transition: opacity 0.18s, transform 0.18s;
       max-width: calc(100vw - 40px);
       text-align: center;
+      letter-spacing: -0.1px;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ────────────────────────────────
-       NOTIFICATION BANNER
-    ──────────────────────────────── */
+    /* ─── NOTIF BANNER ─── */
     #notif-banner {
       display: none;
       align-items: center;
       gap: 10px;
-      padding: 12px 16px;
-      background: var(--sand-dim);
-      border-bottom: 1px solid rgba(200,168,124,0.15);
+      padding: 11px 20px;
+      background: var(--amber-glow);
+      border-bottom: 1px solid var(--amber-border);
       font-size: 13px;
-      color: var(--sand);
+      color: var(--amber);
     }
-    #notif-banner i { font-size: 14px; flex-shrink: 0; }
+    #notif-banner i { font-size: 13px; flex-shrink: 0; }
     #notif-banner-text { flex: 1; line-height: 1.4; }
     #notif-enable-btn {
-      background: var(--sand);
+      background: var(--amber);
       color: #000;
       border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
+      border-radius: var(--r-xs);
+      padding: 5px 11px;
       font-family: 'Inter', sans-serif;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
+      letter-spacing: 0.1px;
     }
     #notif-close {
       background: none;
       border: none;
       color: var(--t3);
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
-      padding: 2px;
+      padding: 2px 4px;
       flex-shrink: 0;
       line-height: 1;
+      opacity: 0.7;
     }
 
-    /* ────────────────────────────────
-       HEADER
-    ──────────────────────────────── */
+    /* ─── HEADER ─── */
     #header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom: 1px solid var(--sep);
-      padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px;
+      z-index: 200;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+      padding: calc(env(safe-area-inset-top, 0px) + 12px) 20px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
     }
-
     #header-brand {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     #header-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--sand-dim);
-      border: 1px solid rgba(200,168,124,0.2);
+      width: 30px;
+      height: 30px;
+      border-radius: var(--r-sm);
+      background: var(--amber-dim);
+      border: 1px solid var(--amber-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      color: var(--sand);
+      font-size: 13px;
+      color: var(--amber);
       flex-shrink: 0;
     }
-
     #header-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       letter-spacing: -0.2px;
       color: var(--white);
     }
-
     #header-sub {
       font-size: 11px;
       color: var(--t3);
       margin-top: 1px;
       letter-spacing: 0.1px;
     }
-
     #header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-
     .hbtn {
-      height: 34px;
-      min-width: 34px;
-      border-radius: 8px;
-      border: 1px solid var(--sep2);
-      background: var(--surface2);
+      height: 30px;
+      min-width: 30px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border-md);
+      background: var(--s2);
       color: var(--t2);
       font-family: 'Inter', sans-serif;
       font-size: 12px;
@@ -231,242 +236,245 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       cursor: pointer;
-      padding: 0 12px;
+      padding: 0 10px;
       -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s, color 0.12s;
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+      letter-spacing: -0.1px;
     }
-    .hbtn:active { background: var(--surface3); color: var(--sand); }
-    .hbtn i { font-size: 12px; }
+    .hbtn:active { background: var(--s3); color: var(--amber); border-color: var(--amber-border); }
+    .hbtn i { font-size: 11px; }
+    #refresh-btn { padding: 0 10px; }
 
-    /* ────────────────────────────────
-       MAIN CONTENT
-    ──────────────────────────────── */
+    /* ─── MAIN WRAPPER ─── */
     #main {
-      padding-bottom: 60px;
       max-width: 680px;
       margin: 0 auto;
+      padding-bottom: 64px;
+      animation: fadeUp 0.3s ease;
     }
 
-    /* ────────────────────────────────
-       SECTION LABELS
-    ──────────────────────────────── */
+    /* ─── SECTION LABEL ─── */
     .section-label {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.7px;
       text-transform: uppercase;
       color: var(--t3);
-      padding: 28px 20px 12px;
+      padding: 32px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
 
-    /* ────────────────────────────────
-       RIEPILOGO — big counter
-    ──────────────────────────────── */
-    #summary-block {
-      padding: 28px 20px 0;
+    /* ─── OVERVIEW BLOCK ─── */
+    #overview-block {
+      padding: 32px 20px 0;
     }
-
     #counter-row {
       display: flex;
       align-items: baseline;
       gap: 10px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
-
     #big-number {
-      font-size: 48px;
+      font-size: 52px;
       font-weight: 800;
-      letter-spacing: -2.5px;
-      color: var(--sand);
+      letter-spacing: -3px;
+      color: var(--amber);
       line-height: 1;
       font-variant-numeric: tabular-nums;
     }
-
     #big-label {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 500;
       color: var(--t2);
-      letter-spacing: -0.2px;
+      letter-spacing: -0.3px;
     }
-
-    #summary-sub {
+    #overview-sub {
       font-size: 12px;
       color: var(--t3);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      letter-spacing: -0.1px;
     }
 
-    /* ────────────────────────────────
-       TOP SLOTS
-    ──────────────────────────────── */
+    /* ─── TOP SLOTS ─── */
     #top-slots {
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      background: var(--sep);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
       overflow: hidden;
+      background: var(--s1);
     }
-
-    .top-slot-row {
+    .ts-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 16px;
-      background: var(--surface);
-      transition: background 0.12s;
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
     }
-    .top-slot-row:first-child { border-radius: var(--r) var(--r) 0 0; }
-    .top-slot-row:last-child  { border-radius: 0 0 var(--r) var(--r); }
-
+    .ts-row:last-child { border-bottom: none; }
     .ts-rank {
       font-size: 11px;
       font-weight: 700;
-      color: var(--t3);
-      width: 16px;
+      color: var(--t4);
+      width: 14px;
       text-align: center;
       flex-shrink: 0;
       font-variant-numeric: tabular-nums;
     }
-
     .ts-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .ts-dot.green  { background: var(--green); box-shadow: 0 0 6px rgba(76,175,110,0.6); }
-    .ts-dot.yellow { background: var(--yellow); box-shadow: 0 0 6px rgba(212,168,67,0.6); }
-    .ts-dot.gray   { background: var(--gray); }
-
+    .ts-dot.green  { background: var(--green);  box-shadow: 0 0 6px rgba(76,175,110,0.5); }
+    .ts-dot.yellow { background: var(--yellow); box-shadow: 0 0 6px rgba(212,168,67,0.5); }
+    .ts-dot.gray   { background: var(--t4); }
     .ts-name {
       flex: 1;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      color: var(--white);
+      color: var(--t1);
       letter-spacing: -0.1px;
     }
-
-    .ts-count {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--t2);
-      font-variant-numeric: tabular-nums;
-    }
-
     .ts-bar-track {
-      width: 60px;
-      height: 3px;
-      background: var(--sep2);
+      width: 56px;
+      height: 2px;
+      background: var(--border-md);
       border-radius: 2px;
       overflow: hidden;
       flex-shrink: 0;
     }
-
     .ts-bar-fill {
       height: 100%;
       border-radius: 2px;
-      transition: width 0.4s ease;
+      transition: width 0.5s ease;
     }
     .ts-bar-fill.green  { background: var(--green); }
     .ts-bar-fill.yellow { background: var(--yellow); }
-    .ts-bar-fill.gray   { background: var(--gray); }
-
-    /* ────────────────────────────────
-       SEPARATOR
-    ──────────────────────────────── */
-    .sep-line {
-      height: 1px;
-      background: var(--sep);
-      margin: 28px 20px 0;
+    .ts-bar-fill.gray   { background: var(--t3); }
+    .ts-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--t2);
+      font-variant-numeric: tabular-nums;
+      min-width: 20px;
+      text-align: right;
     }
 
-    /* ────────────────────────────────
-       PROSSIMA LEZIONE
-    ──────────────────────────────── */
+    /* ─── DIVIDER ─── */
+    .divider { height: 1px; background: var(--border); margin: 0 20px; }
+
+    /* ─── PROSSIMA LEZIONE CARD ─── */
     #next-card {
       margin: 0 20px;
-      background: var(--surface);
-      border: 1px solid var(--sep2);
-      border-radius: var(--r-lg);
+      background: var(--s1);
+      border: 1px solid var(--border-md);
+      border-radius: var(--r-xl);
       overflow: hidden;
     }
-
     #next-card-header {
-      padding: 18px 20px 16px;
-      border-bottom: 1px solid var(--sep);
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
     }
-
+    #next-slot-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      animation: pulse-dot 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
     #next-slot-name {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--white);
-      letter-spacing: -0.4px;
-      line-height: 1.2;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
     }
-
     #next-slot-sub {
       font-size: 13px;
       color: var(--t2);
       margin-top: 4px;
+      letter-spacing: -0.1px;
     }
-
     #next-slot-badge {
-      background: var(--sand-dim);
-      color: var(--sand);
-      font-size: 12px;
+      background: var(--amber-dim);
+      color: var(--amber);
+      font-size: 13px;
       font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid rgba(200,168,124,0.2);
+      padding: 6px 12px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--amber-border);
       white-space: nowrap;
       flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.2px;
     }
 
-    /* confirmed summary */
-    #confirmed-summary {
+    /* confirmed bar */
+    #confirmed-bar {
       display: none;
-      margin: 16px 20px 0;
-      background: var(--green-dim);
-      border: 1px solid rgba(76,175,110,0.2);
-      border-radius: var(--r-sm);
+      margin: 0 20px;
       padding: 10px 14px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      border-radius: var(--r-sm);
       font-size: 13px;
       color: var(--green);
       font-weight: 500;
-      display: none;
       align-items: center;
       gap: 8px;
+      letter-spacing: -0.1px;
     }
-    #confirmed-summary i { font-size: 13px; }
+    #confirmed-bar i { font-size: 12px; }
 
-    /* people list in next lesson */
+    /* people list */
     #next-people-list {
-      padding: 4px 20px 8px;
+      padding: 0 20px 4px;
     }
-
     .person-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--sep);
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
     }
     .person-row:last-child { border-bottom: none; }
-
     .avatar {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: var(--sand-dim);
-      color: var(--sand);
-      font-size: 12px;
+      background: var(--s3);
+      border: 1px solid var(--border-md);
+      color: var(--amber);
+      font-size: 11px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -474,9 +482,7 @@
       flex-shrink: 0;
       letter-spacing: 0.3px;
     }
-
     .person-info { flex: 1; min-width: 0; }
-
     .person-name {
       font-size: 14px;
       font-weight: 600;
@@ -484,20 +490,20 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      letter-spacing: -0.2px;
     }
-
     .person-phone {
       font-size: 12px;
-      color: var(--sand);
+      color: var(--amber);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 5px;
       margin-top: 2px;
-      opacity: 0.85;
+      opacity: 0.75;
+      letter-spacing: -0.1px;
     }
-    .person-phone:active { opacity: 0.6; }
-
+    .person-phone:active { opacity: 0.4; }
     .confirmed-tag {
       font-size: 11px;
       color: var(--green);
@@ -506,6 +512,7 @@
       align-items: center;
       gap: 4px;
       flex-shrink: 0;
+      letter-spacing: -0.1px;
     }
 
     /* next lesson actions */
@@ -513,41 +520,42 @@
       padding: 16px 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      border-top: 1px solid var(--sep);
+      gap: 8px;
+      border-top: 1px solid var(--border);
     }
 
-    /* ────────────────────────────────
-       BUTTONS
-    ──────────────────────────────── */
+    /* ─── BUTTONS ─── */
     .btn-primary {
       width: 100%;
-      height: 50px;
-      border-radius: var(--r-sm);
+      height: 52px;
+      border-radius: var(--r);
       border: none;
-      background: var(--sand);
+      background: var(--amber);
       color: #000;
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 700;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, opacity 0.1s;
+      transition: transform 0.1s, opacity 0.1s, box-shadow 0.1s;
+      box-shadow: 0 0 0 0 rgba(212,165,116,0);
     }
-    .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-    .btn-primary:disabled { opacity: 0.55; pointer-events: none; }
+    .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,165,116,0.22); }
+    .btn-primary:active { transform: scale(0.985); opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+    .btn-primary i { font-size: 16px; }
 
     .btn-secondary {
       width: 100%;
-      height: 44px;
+      height: 42px;
       border-radius: var(--r-sm);
-      border: 1px solid var(--sep2);
-      background: var(--surface2);
+      border: 1px solid var(--border-md);
+      background: var(--s2);
       color: var(--t2);
       font-family: 'Inter', sans-serif;
       font-size: 13px;
@@ -556,11 +564,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 7px;
       -webkit-tap-highlight-color: transparent;
-      transition: transform 0.1s, background 0.1s;
+      transition: background 0.1s, color 0.1s;
+      letter-spacing: -0.1px;
     }
-    .btn-secondary:active { transform: scale(0.98); background: var(--surface3); }
+    .btn-secondary:active { background: var(--s3); color: var(--t1); }
 
     .btn-ghost {
       background: none;
@@ -577,105 +586,133 @@
       gap: 6px;
       width: 100%;
       -webkit-tap-highlight-color: transparent;
+      letter-spacing: -0.1px;
     }
-    .btn-ghost:active { opacity: 0.5; }
+    .btn-ghost:active { opacity: 0.45; }
 
-    /* ────────────────────────────────
-       TUTTI GLI ORARI
-    ──────────────────────────────── */
+    /* ─── ALL SLOTS ─── */
     #all-slots-list {
       margin: 0 20px;
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      background: var(--sep);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
       overflow: hidden;
+      background: var(--s1);
     }
-
+    .slot-group {
+      border-bottom: 1px solid var(--border);
+    }
+    .slot-group:last-child { border-bottom: none; }
+    .slot-group-day {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      color: var(--t3);
+      padding: 10px 16px 8px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
     .slot-row {
-      background: var(--surface);
       overflow: hidden;
+      background: var(--s1);
     }
-    .slot-row:first-child { border-radius: var(--r) var(--r) 0 0; }
-    .slot-row:last-child  { border-radius: 0 0 var(--r) var(--r); }
-
+    .slot-row + .slot-row {
+      border-top: 1px solid var(--border);
+    }
     .slot-row-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 16px;
+      padding: 13px 16px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       transition: background 0.1s;
     }
-    .slot-row-header:active { background: var(--surface2); }
-
+    .slot-row-header:active { background: var(--s2); }
+    .slot-row-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .slot-row-dot.green  { background: var(--green);  box-shadow: 0 0 5px rgba(76,175,110,0.4); }
+    .slot-row-dot.yellow { background: var(--yellow); box-shadow: 0 0 5px rgba(212,168,67,0.4); }
+    .slot-row-dot.gray   { background: var(--t4); }
     .slot-row-name {
       flex: 1;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      color: var(--white);
+      color: var(--t1);
+      letter-spacing: -0.1px;
     }
-
     .slot-count-badge {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      color: var(--t2);
-      background: var(--surface3);
-      border: 1px solid var(--sep2);
-      padding: 3px 9px;
+      color: var(--t3);
+      background: var(--s3);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
       border-radius: 99px;
       font-variant-numeric: tabular-nums;
+      min-width: 28px;
+      text-align: center;
     }
-
     .slot-chevron {
-      color: var(--t3);
-      font-size: 11px;
+      color: var(--t4);
+      font-size: 10px;
       transition: transform 0.2s;
       flex-shrink: 0;
     }
     .slot-row.open .slot-chevron { transform: rotate(180deg); }
-
     .slot-row-body {
       display: none;
-      border-top: 1px solid var(--sep);
-      padding: 8px 16px 16px;
-      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      padding: 8px 16px 14px;
+      background: var(--s2);
     }
     .slot-row.open .slot-row-body { display: block; }
-
     .slot-person-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--sep);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
       font-size: 13px;
     }
     .slot-person-item:last-of-type { border-bottom: none; }
-
-    .slot-person-name { flex: 1; color: var(--white); }
-
-    .slot-wa-link {
-      color: var(--green);
-      font-size: 16px;
-      text-decoration: none;
-      flex-shrink: 0;
-      opacity: 0.8;
-      transition: opacity 0.12s;
+    .slot-person-name {
+      flex: 1;
+      color: var(--t1);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: -0.1px;
     }
-    .slot-wa-link:active { opacity: 0.4; }
-
+    .slot-wa-link {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.15);
+      color: #25D366;
+      font-size: 13px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.1s;
+    }
+    .slot-wa-link:active { background: rgba(37,211,102,0.18); }
     .slot-send-btn {
       width: 100%;
       margin-top: 12px;
-      height: 40px;
-      background: var(--surface3);
+      height: 38px;
+      background: var(--s3);
       color: var(--t2);
-      border: 1px solid var(--sep2);
+      border: 1px solid var(--border-md);
       border-radius: var(--r-sm);
       font-family: 'Inter', sans-serif;
       font-size: 13px;
@@ -687,36 +724,31 @@
       gap: 7px;
       -webkit-tap-highlight-color: transparent;
       transition: background 0.1s, color 0.1s;
+      letter-spacing: -0.1px;
     }
-    .slot-send-btn:active { background: var(--sand-dim); color: var(--sand); }
+    .slot-send-btn:active { background: var(--amber-dim); color: var(--amber); border-color: var(--amber-border); }
 
-    /* ────────────────────────────────
-       TUTTI GLI ISCRITTI
-    ──────────────────────────────── */
+    /* ─── ALL PEOPLE ─── */
     #all-people-list {
       margin: 0 20px;
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      background: var(--sep);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
       overflow: hidden;
+      background: var(--s1);
     }
-
     .person-card {
       display: flex;
       align-items: center;
       gap: 12px;
       padding: 12px 16px;
-      background: var(--surface);
+      background: var(--s1);
+      border-bottom: 1px solid var(--border);
       transition: background 0.1s;
     }
-    .person-card:first-child { border-radius: var(--r) var(--r) 0 0; }
-    .person-card:last-child  { border-radius: 0 0 var(--r) var(--r); }
-
+    .person-card:last-child { border-bottom: none; }
     .person-card-info { flex: 1; min-width: 0; }
-
     .person-card-name {
       font-size: 14px;
       font-weight: 600;
@@ -724,19 +756,19 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      letter-spacing: -0.2px;
     }
-
     .person-card-phone {
       font-size: 12px;
-      color: var(--sand);
+      color: var(--amber);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 5px;
       margin-top: 2px;
-      opacity: 0.8;
+      opacity: 0.75;
+      letter-spacing: -0.1px;
     }
-
     .person-card-slots {
       font-size: 11px;
       color: var(--t3);
@@ -746,14 +778,18 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
+    .person-card-meta {
+      font-size: 11px;
+      color: var(--t4);
+      margin-top: 2px;
+    }
     .delete-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--red-dim);
-      border: 1px solid rgba(224,82,82,0.15);
-      color: var(--red);
+      width: 30px;
+      height: 30px;
+      border-radius: var(--r-sm);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--t3);
       font-size: 12px;
       cursor: pointer;
       display: flex;
@@ -761,46 +797,71 @@
       justify-content: center;
       flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
-      transition: background 0.12s;
-      opacity: 0.7;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
     }
-    .delete-btn:active { background: rgba(224,82,82,0.25); opacity: 1; }
+    .delete-btn:active {
+      background: var(--red-dim);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
 
-    /* ────────────────────────────────
-       TESTO INVITO
-    ──────────────────────────────── */
+    /* ─── INVITE BLOCK ─── */
     #invite-block {
       margin: 0 20px;
-      background: var(--surface);
-      border: 1px solid var(--sep);
-      border-radius: var(--r);
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
       overflow: hidden;
     }
-
     #invite-preview {
-      padding: 16px;
-      border-bottom: 1px solid var(--sep);
+      padding: 18px 18px 16px;
+      border-bottom: 1px solid var(--border);
     }
-
-    #invite-preview p {
+    #invite-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: 10px;
+    }
+    #invite-text-preview {
       font-size: 13px;
       color: var(--t2);
-      line-height: 1.65;
+      line-height: 1.7;
       font-style: italic;
     }
-
+    #invite-link-row {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #invite-link-display {
+      flex: 1;
+      font-size: 12px;
+      color: var(--t3);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: var(--s3);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xs);
+      padding: 6px 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     #invite-actions {
-      padding: 14px 16px;
+      padding: 12px 18px;
       display: flex;
       gap: 8px;
     }
-
     .btn-invite {
       flex: 1;
-      height: 40px;
+      height: 38px;
       border-radius: var(--r-sm);
-      border: 1px solid var(--sep2);
-      background: var(--surface2);
+      border: 1px solid var(--border-md);
+      background: var(--s2);
       color: var(--t2);
       font-family: 'Inter', sans-serif;
       font-size: 13px;
@@ -809,47 +870,57 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 6px;
       -webkit-tap-highlight-color: transparent;
       transition: background 0.1s, color 0.1s;
+      letter-spacing: -0.1px;
     }
-    .btn-invite:active { background: var(--surface3); }
-    .btn-invite.wa { color: #25D366; border-color: rgba(37,211,102,0.2); }
-    .btn-invite.wa:active { background: rgba(37,211,102,0.08); }
+    .btn-invite:active { background: var(--s3); }
+    .btn-invite.wa { color: #25D366; border-color: rgba(37,211,102,0.18); }
+    .btn-invite.wa:active { background: rgba(37,211,102,0.07); }
 
-    /* ────────────────────────────────
-       LAST UPDATE / FOOTER
-    ──────────────────────────────── */
-    #footer-info {
+    /* ─── FOOTER ─── */
+    #footer-bar {
       text-align: center;
+      padding: 28px 20px 0;
+    }
+    #footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
-      color: var(--t3);
-      padding: 24px 20px 0;
+      color: var(--t4);
+      letter-spacing: -0.1px;
+    }
+    #footer-status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-dot 3s ease-in-out infinite;
     }
 
-    /* ────────────────────────────────
-       EMPTY STATE
-    ──────────────────────────────── */
+    /* ─── EMPTY STATE ─── */
     .empty-state {
-      padding: 28px 20px;
+      padding: 32px 20px;
       text-align: center;
     }
     .empty-state i {
-      font-size: 24px;
-      color: var(--t3);
+      font-size: 22px;
+      color: var(--t4);
       display: block;
       margin-bottom: 10px;
     }
     .empty-state p {
       font-size: 13px;
       color: var(--t3);
+      letter-spacing: -0.1px;
     }
 
-    /* ────────────────────────────────
-       RESPONSIVE — wider screens
-    ──────────────────────────────── */
+    /* ─── RESPONSIVE ─── */
     @media (min-width: 480px) {
-      #big-number { font-size: 56px; }
+      #big-number { font-size: 64px; letter-spacing: -4px; }
+      #next-slot-name { font-size: 26px; }
     }
   </style>
 </head>
@@ -886,7 +957,7 @@
       <i class="fa-solid fa-arrow-down-to-line"></i>
       <span>CSV</span>
     </button>
-    <button class="hbtn" onclick="loadData(true)" id="refresh-btn" title="Aggiorna">
+    <button class="hbtn" id="refresh-btn" onclick="loadData(true)" title="Aggiorna">
       <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
     </button>
   </div>
@@ -895,37 +966,39 @@
 <!-- MAIN -->
 <div id="main">
 
-  <!-- ═══════════════════════════
-       1. RIEPILOGO
-  ═══════════════════════════ -->
-  <div id="summary-block">
+  <!-- ═══════════════════════════════════════
+       SECTION 1 — OVERVIEW
+  ═══════════════════════════════════════ -->
+  <div id="overview-block">
     <div id="counter-row">
       <div id="big-number">—</div>
       <div id="big-label">iscritti</div>
     </div>
-    <div id="summary-sub">Aggiornato adesso</div>
+    <div id="overview-sub">Caricamento in corso…</div>
     <div id="top-slots"></div>
   </div>
 
-  <div class="sep-line"></div>
+  <div class="section-label" style="padding-top:36px;">Prossima lezione</div>
 
-  <!-- ═══════════════════════════
-       2. PROSSIMA LEZIONE
-  ═══════════════════════════ -->
-  <div class="section-label">Prossima lezione</div>
-
+  <!-- ═══════════════════════════════════════
+       SECTION 2 — PROSSIMA LEZIONE
+  ═══════════════════════════════════════ -->
   <div id="next-card">
     <div id="next-card-header">
       <div>
+        <div id="next-slot-label">
+          <span class="live-dot"></span>
+          Slot selezionato
+        </div>
         <div id="next-slot-name">—</div>
         <div id="next-slot-sub">—</div>
       </div>
       <div id="next-slot-badge">—</div>
     </div>
 
-    <div id="confirmed-summary">
+    <div id="confirmed-bar">
       <i class="fa-solid fa-circle-check"></i>
-      <span id="confirmed-summary-text"></span>
+      <span id="confirmed-bar-text"></span>
     </div>
 
     <div id="next-people-list"></div>
@@ -942,31 +1015,35 @@
     </div>
   </div>
 
-  <div class="sep-line"></div>
-
-  <!-- ═══════════════════════════
-       3. TUTTI GLI ORARI
-  ═══════════════════════════ -->
   <div class="section-label">Tutti gli orari</div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3 — TUTTI GLI ORARI
+  ═══════════════════════════════════════ -->
   <div id="all-slots-list"></div>
 
-  <div class="sep-line"></div>
-
-  <!-- ═══════════════════════════
-       4. TUTTI GLI ISCRITTI
-  ═══════════════════════════ -->
   <div class="section-label">Tutti gli iscritti</div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 4 — TUTTI GLI ISCRITTI
+  ═══════════════════════════════════════ -->
   <div id="all-people-list"></div>
 
-  <div class="sep-line"></div>
-
-  <!-- ═══════════════════════════
-       5. TESTO INVITO
-  ═══════════════════════════ -->
   <div class="section-label">Testo invito</div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 5 — TESTO INVITO
+  ═══════════════════════════════════════ -->
   <div id="invite-block">
     <div id="invite-preview">
+      <div id="invite-label">Messaggio di iscrizione</div>
       <p id="invite-text-preview"></p>
+    </div>
+    <div id="invite-link-row">
+      <div id="invite-link-display">—</div>
+      <button class="hbtn" style="flex-shrink:0;" onclick="copyRegLink()">
+        <i class="fa-solid fa-copy"></i>
+      </button>
     </div>
     <div id="invite-actions">
       <button class="btn-invite" onclick="copyInviteText()">
@@ -980,7 +1057,13 @@
     </div>
   </div>
 
-  <div id="footer-info">—</div>
+  <!-- FOOTER -->
+  <div id="footer-bar">
+    <div id="footer-status">
+      <span id="footer-status-dot"></span>
+      <span id="footer-status-text">In ascolto</span>
+    </div>
+  </div>
   <div style="height:48px;"></div>
 
 </div><!-- /main -->
@@ -1007,26 +1090,26 @@ const SLOTS = [
 // ─────────────────────────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────────────────────────
-let _data            = { registrations: [], lessons: [] };
-let _bestSlot        = null;
-let _lastCount       = null;
-let _notifDismissed  = false;
-let _openSlots       = new Set();
+let _data           = { registrations: [], lessons: [] };
+let _bestSlot       = null;
+let _lastCount      = null;
+let _notifDismissed = false;
+let _openSlots      = new Set();
 
 // ─────────────────────────────────────────────────────────────
-// HELPERS
+// UTILS
 // ─────────────────────────────────────────────────────────────
 function esc(s) {
   if (s == null) return '';
   return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/"/g,  '&quot;');
 }
 
 function waLink(phone, msg) {
-  const p = (phone || '').replace(/\D/g, '');
+  const p   = (phone || '').replace(/\D/g, '');
   const num = p.startsWith('39') ? p : (p.startsWith('0') ? '39' + p.slice(1) : '39' + p);
   return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
 }
@@ -1035,7 +1118,7 @@ function timeAgo(ts) {
   if (!ts) return '';
   const diff = Date.now() - new Date(ts).getTime();
   const m = Math.floor(diff / 60000);
-  if (m < 1) return 'adesso';
+  if (m < 1)  return 'adesso';
   if (m < 60) return `${m} min fa`;
   const h = Math.floor(m / 60);
   if (h < 24) return `${h}h fa`;
@@ -1047,15 +1130,15 @@ function initials(name) {
   return name.trim().split(/\s+/).map(w => w[0] || '').join('').toUpperCase().slice(0, 2);
 }
 
-function slotKey(s) { return `${s.day} ${s.time}`; }
-function slotLabel(s) { return `${s.day} ${s.time}`; }
-function formatSlotForMessage(s) { return `${s.day} alle ${s.time.split('-')[0]}`; }
+function slotKey(s)             { return `${s.day} ${s.time}`; }
+function slotLabel(s)           { return `${s.day} ${s.time}`; }
+function formatSlotForMsg(s)    { return `${s.day} alle ${s.time.split('-')[0]}`; }
 
-function showToast(msg, duration = 2400) {
+function showToast(msg, dur = 2400) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
 async function copyToClipboard(text, msg) {
@@ -1074,12 +1157,11 @@ async function copyToClipboard(text, msg) {
 }
 
 function getRegistrationLink() {
-  return window.location.href.replace('dashboard.html', 'index.html');
+  return window.location.href.replace(/dashboard\.html.*$/, 'index.html');
 }
 
-function getLessonConfirmLink(lessonId) {
-  const base = window.location.href.replace('dashboard.html', 'conferma.html');
-  return `${base}?id=${lessonId}`;
+function getLessonConfirmLink(id) {
+  return window.location.href.replace(/dashboard\.html.*$/, `conferma.html?id=${id}`);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1088,7 +1170,7 @@ function getLessonConfirmLink(lessonId) {
 async function loadData(manual = false) {
   if (manual) {
     const icon = document.getElementById('refresh-icon');
-    icon.style.animation = 'spin 0.75s linear infinite';
+    icon.style.animation = 'spin 0.7s linear infinite';
   }
   try {
     const res = await fetch(API_URL, {
@@ -1098,26 +1180,26 @@ async function loadData(manual = false) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     _data = await res.json();
     if (!Array.isArray(_data.registrations)) _data.registrations = [];
-    if (!Array.isArray(_data.lessons)) _data.lessons = [];
+    if (!Array.isArray(_data.lessons))       _data.lessons = [];
     render();
     checkNewRegistrations();
     const now = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('footer-info').textContent = `Aggiornato alle ${now}`;
-    document.getElementById('summary-sub').textContent =
-      `${_data.registrations.length === 1 ? '1 persona iscritta' : `${_data.registrations.length} persone iscritte`} · aggiornato ${now}`;
+    document.getElementById('footer-status-text').textContent = `Aggiornato alle ${now}`;
+    const n = _data.registrations.length;
+    document.getElementById('overview-sub').textContent =
+      `${n === 1 ? '1 persona iscritta' : `${n} persone iscritte`} · aggiornato ${now}`;
   } catch (err) {
     if (manual) showToast('Errore di rete');
     console.error(err);
   } finally {
     if (manual) {
       setTimeout(() => {
-        const icon = document.getElementById('refresh-icon');
-        icon.style.animation = '';
-      }, 500);
+        document.getElementById('refresh-icon').style.animation = '';
+      }, 600);
     }
     const ls = document.getElementById('loading-screen');
     ls.classList.add('hidden');
-    setTimeout(() => { ls.style.display = 'none'; }, 300);
+    setTimeout(() => ls.style.display = 'none', 260);
   }
 }
 
@@ -1133,7 +1215,7 @@ function checkNewRegistrations() {
   const count = _data.registrations.length;
   if (_lastCount !== null && count > _lastCount) {
     const diff = count - _lastCount;
-    const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
+    const msg  = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
     showToast(msg, 3500);
     if (Notification.permission === 'granted') {
       try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
@@ -1191,6 +1273,10 @@ function getBestSlot(counts) {
   return best;
 }
 
+function dotClass(n) {
+  return n >= 5 ? 'green' : n >= 3 ? 'yellow' : 'gray';
+}
+
 // ─────────────────────────────────────────────────────────────
 // RENDER
 // ─────────────────────────────────────────────────────────────
@@ -1216,79 +1302,65 @@ function renderTopSlots(counts) {
     .sort((a, b) => b.people.length - a.people.length)
     .slice(0, 3);
 
-  const container = document.getElementById('top-slots');
+  const el = document.getElementById('top-slots');
 
   if (sorted.every(x => x.people.length === 0)) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-calendar-xmark"></i>
-        <p>Nessuna iscrizione ancora</p>
-      </div>`;
+    el.innerHTML = `<div class="empty-state"><i class="fa-solid fa-calendar-xmark"></i><p>Nessuna iscrizione ancora</p></div>`;
     return;
   }
 
-  const maxCount = Math.max(...sorted.map(x => x.people.length), 1);
+  const maxN = Math.max(...sorted.map(x => x.people.length), 1);
 
-  container.innerHTML = sorted.map(({ slot, people }, i) => {
-    const n = people.length;
-    const color = n >= 5 ? 'green' : n >= 3 ? 'yellow' : 'gray';
-    const pct = Math.round((n / maxCount) * 100);
+  el.innerHTML = sorted.map(({ slot, people }, i) => {
+    const n   = people.length;
+    const cls = dotClass(n);
+    const pct = Math.round((n / maxN) * 100);
     return `
-      <div class="top-slot-row">
+      <div class="ts-row">
         <span class="ts-rank">${i + 1}</span>
-        <span class="ts-dot ${color}"></span>
+        <span class="ts-dot ${cls}"></span>
         <span class="ts-name">${esc(slotLabel(slot))}</span>
-        <div class="ts-bar-track">
-          <div class="ts-bar-fill ${color}" style="width:${pct}%"></div>
-        </div>
+        <div class="ts-bar-track"><div class="ts-bar-fill ${cls}" style="width:${pct}%"></div></div>
         <span class="ts-count">${n}</span>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
 function renderNextLesson(counts) {
+  const nameEl    = document.getElementById('next-slot-name');
+  const subEl     = document.getElementById('next-slot-sub');
+  const badgeEl   = document.getElementById('next-slot-badge');
+  const listEl    = document.getElementById('next-people-list');
+  const barEl     = document.getElementById('confirmed-bar');
+  const barText   = document.getElementById('confirmed-bar-text');
+
   if (!_bestSlot) {
-    document.getElementById('next-slot-name').textContent = 'Nessuno slot';
-    document.getElementById('next-slot-sub').textContent = 'Aspetta le prime iscrizioni';
-    document.getElementById('next-slot-badge').textContent = '0';
-    document.getElementById('next-people-list').innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-users-slash"></i>
-        <p>Nessun iscritto</p>
-      </div>`;
+    nameEl.textContent  = 'Nessuno slot';
+    subEl.textContent   = 'Aspetta le prime iscrizioni';
+    badgeEl.textContent = '—';
+    listEl.innerHTML    = `<div class="empty-state"><i class="fa-solid fa-users-slash"></i><p>Nessun iscritto</p></div>`;
+    barEl.style.display = 'none';
     return;
   }
 
-  const key = slotKey(_bestSlot);
+  const key    = slotKey(_bestSlot);
   const people = counts[key] || [];
   const lesson = getLessonForSlot(_bestSlot);
 
-  document.getElementById('next-slot-name').textContent = slotLabel(_bestSlot);
-  document.getElementById('next-slot-sub').textContent =
-    `${people.length} ${people.length === 1 ? 'persona disponibile' : 'persone disponibili'}`;
-  document.getElementById('next-slot-badge').textContent =
-    `${people.length} ${people.length === 1 ? 'persona' : 'persone'}`;
+  nameEl.textContent  = slotLabel(_bestSlot);
+  subEl.textContent   = `${people.length} ${people.length === 1 ? 'persona disponibile' : 'persone disponibili'}`;
+  badgeEl.textContent = `${people.length}`;
 
-  // Confirmed summary
-  const summaryEl = document.getElementById('confirmed-summary');
-  const summaryText = document.getElementById('confirmed-summary-text');
+  // Confirmed bar
   if (lesson && Array.isArray(lesson.confirmedIds) && lesson.confirmedIds.length > 0) {
-    summaryEl.style.display = 'flex';
-    summaryText.textContent =
-      `${lesson.confirmedIds.length} su ${people.length} ${lesson.confirmedIds.length === 1 ? 'ha confermato' : 'hanno confermato'}`;
+    barEl.style.display  = 'flex';
+    barText.textContent  = `${lesson.confirmedIds.length} su ${people.length} ${lesson.confirmedIds.length === 1 ? 'ha confermato' : 'hanno confermato'}`;
   } else {
-    summaryEl.style.display = 'none';
+    barEl.style.display = 'none';
   }
 
-  // People list
-  const listEl = document.getElementById('next-people-list');
   if (people.length === 0) {
-    listEl.innerHTML = `
-      <div class="empty-state">
-        <i class="fa-solid fa-users-slash"></i>
-        <p>Nessuno per questo orario</p>
-      </div>`;
+    listEl.innerHTML = `<div class="empty-state"><i class="fa-solid fa-users-slash"></i><p>Nessuno per questo orario</p></div>`;
     return;
   }
 
@@ -1303,64 +1375,76 @@ function renderNextLesson(counts) {
             ? `<a class="person-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
                 <i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}
                </a>`
-            : `<span class="person-phone" style="color:var(--t3);cursor:default">Nessun numero</span>`
+            : `<span class="person-phone" style="color:var(--t4);cursor:default;">Nessun numero</span>`
           }
         </div>
         ${confirmed
           ? `<span class="confirmed-tag"><i class="fa-solid fa-check"></i> confermato</span>`
           : ''
         }
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
 function renderAllSlots(counts) {
   const container = document.getElementById('all-slots-list');
-  const sorted = SLOTS
-    .map(s => ({ slot: s, people: counts[slotKey(s)] || [] }))
-    .sort((a, b) => b.people.length - a.people.length);
 
-  if (sorted.length === 0) {
-    container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-calendar"></i><p>Nessuno slot</p></div>`;
-    return;
-  }
+  // Group slots by day
+  const byDay = {};
+  SLOTS.forEach(s => {
+    if (!byDay[s.day]) byDay[s.day] = [];
+    byDay[s.day].push({ slot: s, people: counts[slotKey(s)] || [] });
+  });
 
-  container.innerHTML = sorted.map(({ slot, people }) => {
-    const key = slotKey(slot);
-    const isOpen = _openSlots.has(key);
-    const n = people.length;
-    return `
-      <div class="slot-row${isOpen ? ' open' : ''}" id="slot-row-${encodeURIComponent(key)}">
-        <div class="slot-row-header" onclick="toggleSlot('${esc(key)}')">
-          <span class="slot-row-name">${esc(slotLabel(slot))}</span>
-          <span class="slot-count-badge">${n}</span>
-          <i class="fa-solid fa-chevron-down slot-chevron"></i>
-        </div>
-        <div class="slot-row-body">
-          ${n === 0
-            ? `<div style="padding:8px 0;font-size:13px;color:var(--t3)">Nessuno per questo orario</div>`
-            : people.map(p => `
-                <div class="slot-person-item">
-                  <div class="avatar" style="width:28px;height:28px;font-size:10px;">${esc(initials(p.name))}</div>
-                  <span class="slot-person-name">${esc(p.name)}</span>
-                  ${p.phone
-                    ? `<a class="slot-wa-link" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
-                        <i class="fa-brands fa-whatsapp"></i>
-                       </a>`
-                    : ''
-                  }
-                </div>
-              `).join('')
-          }
-          <button class="slot-send-btn" onclick="sendSlotWhatsApp('${esc(key)}')">
-            <i class="fa-brands fa-whatsapp"></i>
-            Invia messaggio
-          </button>
-        </div>
-      </div>
-    `;
-  }).join('');
+  const dayOrder = [...new Set(SLOTS.map(s => s.day))];
+
+  let html = '';
+  dayOrder.forEach(day => {
+    const slots = byDay[day];
+    html += `<div class="slot-group">
+      <div class="slot-group-day">${esc(day)}</div>`;
+
+    slots.forEach(({ slot, people }) => {
+      const key    = slotKey(slot);
+      const isOpen = _openSlots.has(key);
+      const n      = people.length;
+      const cls    = dotClass(n);
+
+      html += `
+        <div class="slot-row${isOpen ? ' open' : ''}" id="slot-row-${encodeURIComponent(key)}">
+          <div class="slot-row-header" onclick="toggleSlot('${esc(key)}')">
+            <span class="slot-row-dot ${cls}"></span>
+            <span class="slot-row-name">${esc(slot.time)}</span>
+            <span class="slot-count-badge">${n}</span>
+            <i class="fa-solid fa-chevron-down slot-chevron"></i>
+          </div>
+          <div class="slot-row-body">
+            ${n === 0
+              ? `<div style="padding:6px 0 2px;font-size:13px;color:var(--t3);">Nessuno per questo orario</div>`
+              : people.map(p => `
+                  <div class="slot-person-item">
+                    <div class="avatar" style="width:26px;height:26px;font-size:10px;">${esc(initials(p.name))}</div>
+                    <span class="slot-person-name">${esc(p.name)}</span>
+                    ${p.phone
+                      ? `<a class="slot-wa-link" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
+                          <i class="fa-brands fa-whatsapp"></i>
+                         </a>`
+                      : ''
+                    }
+                  </div>`).join('')
+            }
+            <button class="slot-send-btn" onclick="sendSlotWhatsApp('${esc(key)}')">
+              <i class="fa-brands fa-whatsapp"></i>
+              Invia messaggio
+            </button>
+          </div>
+        </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  container.innerHTML = html;
 }
 
 function toggleSlot(key) {
@@ -1372,16 +1456,12 @@ function toggleSlot(key) {
 
 function renderAllPeople() {
   const container = document.getElementById('all-people-list');
-  const people = [..._data.registrations].sort((a, b) =>
+  const people    = [..._data.registrations].sort((a, b) =>
     (a.name || '').localeCompare(b.name || '', 'it')
   );
 
   if (people.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state" style="border-radius:var(--r);background:var(--surface);border:1px solid var(--sep);">
-        <i class="fa-solid fa-user-slash"></i>
-        <p>Nessun iscritto</p>
-      </div>`;
+    container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-user-slash"></i><p>Nessun iscritto</p></div>`;
     return;
   }
 
@@ -1389,6 +1469,7 @@ function renderAllPeople() {
     const slotsText = Array.isArray(p.slots) && p.slots.length > 0
       ? p.slots.join(' · ')
       : 'Nessun orario';
+    const metaText = p.createdAt ? timeAgo(p.createdAt) : '';
     return `
       <div class="person-card">
         <div class="avatar">${esc(initials(p.name))}</div>
@@ -1398,22 +1479,23 @@ function renderAllPeople() {
             ? `<a class="person-card-phone" href="${esc(waLink(p.phone, 'Ciao ' + p.name + '!'))}" target="_blank">
                 <i class="fa-brands fa-whatsapp"></i>${esc(p.phone)}
                </a>`
-            : `<span style="font-size:12px;color:var(--t3)">Nessun numero</span>`
+            : `<span style="font-size:12px;color:var(--t4);">Nessun numero</span>`
           }
           <div class="person-card-slots">${esc(slotsText)}</div>
+          ${metaText ? `<div class="person-card-meta">Iscritto ${metaText}</div>` : ''}
         </div>
-        <button class="delete-btn" onclick="deleteRegistration('${esc(p.id)}', '${esc(p.name)}')">
+        <button class="delete-btn" onclick="deleteRegistration('${esc(p.id)}', '${esc(p.name)}')" title="Rimuovi">
           <i class="fa-solid fa-xmark"></i>
         </button>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
 function renderInviteText() {
-  const link = getRegistrationLink();
-  const text = `Ciao! Ti va di partecipare alle lezioni di Fondamenti del Karate? Scegli quando sei disponibile: ${link} — Salvatore`;
+  const link  = getRegistrationLink();
+  const text  = `Ciao! Ti va di partecipare alle lezioni di Fondamenti del Karate? Scegli quando sei disponibile: ${link} — Salvatore`;
   document.getElementById('invite-text-preview').textContent = `"${text}"`;
+  document.getElementById('invite-link-display').textContent = link;
   document.getElementById('invite-block').dataset.inviteText = text;
 }
 
@@ -1423,16 +1505,16 @@ function renderInviteText() {
 async function sendWhatsApp() {
   if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
 
-  const btn = document.getElementById('wa-btn');
+  const btn  = document.getElementById('wa-btn');
   btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparazione...';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparazione…';
 
   try {
     const lesson = await createLesson(_bestSlot);
     const counts = getSlotCounts();
     const people = counts[slotKey(_bestSlot)] || [];
-    const link = getLessonConfirmLink(lesson.id);
-    const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(_bestSlot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
+    const link   = getLessonConfirmLink(lesson.id);
+    const msg    = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMsg(_bestSlot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     showToast('Messaggio pronto!');
     await loadData();
@@ -1448,8 +1530,7 @@ async function sendWhatsApp() {
 async function copyLessonLink() {
   if (!_bestSlot) { showToast('Nessuno slot disponibile'); return; }
   const lesson = await createLesson(_bestSlot);
-  const link = getLessonConfirmLink(lesson.id);
-  copyToClipboard(link, 'Link copiato!');
+  copyToClipboard(getLessonConfirmLink(lesson.id), 'Link copiato!');
 }
 
 async function sendSlotWhatsApp(key) {
@@ -1458,8 +1539,8 @@ async function sendSlotWhatsApp(key) {
   const lesson = await createLesson(slot);
   const counts = getSlotCounts();
   const people = counts[key] || [];
-  const link = getLessonConfirmLink(lesson.id);
-  const msg = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMessage(slot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
+  const link   = getLessonConfirmLink(lesson.id);
+  const msg    = `Ciao a tutti! Lezione di Fondamenti del Karate ${formatSlotForMsg(slot)}. Siamo in ${people.length}! Conferma qui: ${link} — Salvatore`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
   showToast('Messaggio pronto!');
   await loadData();
@@ -1474,8 +1555,11 @@ async function deleteRegistration(id, name) {
 }
 
 function copyInviteText() {
-  const text = document.getElementById('invite-block').dataset.inviteText;
-  copyToClipboard(text, 'Testo copiato!');
+  copyToClipboard(document.getElementById('invite-block').dataset.inviteText, 'Testo copiato!');
+}
+
+function copyRegLink() {
+  copyToClipboard(getRegistrationLink(), 'Link copiato!');
 }
 
 function sendInviteWhatsApp() {
@@ -1496,13 +1580,11 @@ function exportCSV() {
       r.createdAt ? new Date(r.createdAt).toLocaleString('it-IT') : ''
     ]);
   });
-  const csv = rows.map(r =>
-    r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')
-  ).join('\n');
+  const csv  = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
   a.download = `karate_iscritti_${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
   URL.revokeObjectURL(url);
@@ -1515,7 +1597,7 @@ function exportCSV() {
 function showNotifBanner() {
   if (_notifDismissed) return;
   if (Notification.permission === 'granted') return;
-  if (Notification.permission === 'denied') return;
+  if (Notification.permission === 'denied')  return;
   if (localStorage.getItem('notif_dismissed')) return;
   document.getElementById('notif-banner').style.display = 'flex';
 }
@@ -1557,7 +1639,7 @@ setInterval(() => {
     const count = d.registrations.length;
     if (_lastCount !== null && count > _lastCount) {
       const diff = count - _lastCount;
-      const msg = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
+      const msg  = diff === 1 ? 'Nuova iscrizione!' : `${diff} nuove iscrizioni!`;
       showToast(msg, 3500);
       if (Notification.permission === 'granted') {
         try { new Notification('Fondamenti del Karate', { body: msg, icon: 'icon-192.png' }); } catch {}
